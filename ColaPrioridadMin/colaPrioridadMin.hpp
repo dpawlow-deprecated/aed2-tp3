@@ -1,11 +1,13 @@
 #ifndef COLAPRIORIDADMIN_H_
 #define COLAPRIORIDADMIN_H_
 
+#include <stddef.h>
+
 
 
 template <class T>
 
-class ColaPriodad{
+class ColaPrioridad{
 
     public:
 
@@ -49,7 +51,7 @@ class ColaPriodad{
             Nodo* izq;
             //Puntero a la raiz del subarbol derecho.
             Nodo* der;
-        }
+        };
 
         //Puntero a la raíz del árbol (se representa con un heap).
         Nodo* raiz_;
@@ -65,13 +67,31 @@ class ColaPriodad{
         void buscarPadreInsertar();
 
         //
-        void siftUP(Nodo*);
+        void siftUp(Nodo*);
 
         void siftDown(Nodo*);
 
         //Eliminar deberia llevar iterador o puntero a nodo?
         //void eliminar(??);
 
+};
+
+template <class T>
+ColaPrioridad<T>::Nodo::Nodo(const T& v)
+    : valor(v), izq(NULL), der(NULL), padre(NULL)
+{}
+
+template <class T>
+ColaPrioridad<T>::ColaPrioridad() : raiz_(NULL)
+{
+    raiz_ = NULL;
+    padreParaAgregar_ = raiz_;
 }
+
+template <class T>
+ColaPrioridad<T>::~ColaPrioridad(){
+}
+
+
 
 #endif
