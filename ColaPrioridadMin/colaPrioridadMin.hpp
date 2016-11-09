@@ -5,8 +5,7 @@
 
 
 
-template <class T>
-
+template <typename T>
 class ColaPrioridad{
 
     public:
@@ -21,15 +20,17 @@ class ColaPrioridad{
         //Es la funcion "EsVacia?()"
         const bool preguntarVacia();
 
+        //PRE: NO es vacia
+        //POST: Retorna el valor del primer elemento.
+        const T& proximo();
+
         //Agrega un elemento.
         //PRE: el elemento no existe en la cola.
+        //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
         void encolar(const T&);
 
         //Elimina el proximo elemento de la cola.
         void desencolar();
-
-        //Retorna el valor del primer elemento.
-        const T& proximo();
 
         //Elimina el elemento al que apunta el puntero del parametro
         //Deberíamos hacer esto con un iterador?
@@ -82,16 +83,43 @@ ColaPrioridad<T>::Nodo::Nodo(const T& v)
 {}
 
 template <class T>
-ColaPrioridad<T>::ColaPrioridad() : raiz_(NULL)
-{
-    raiz_ = NULL;
-    padreParaAgregar_ = raiz_;
+ColaPrioridad<T>::ColaPrioridad(){
+    this->raiz_ = NULL;
+    this->padreParaAgregar_ = this->raiz_;
 }
 
 template <class T>
 ColaPrioridad<T>::~ColaPrioridad(){
 }
 
+template <class T>
+const bool ColaPrioridad<T>::preguntarVacia(){
+    return this->raiz_ == NULL;
+}
 
+template <class T>
+const T& ColaPrioridad<T>::proximo(){
+    return this->raiz_->valor;
+}
+
+template <class T>
+void ColaPrioridad<T>::encolar(const T& value){
+    this.buscarPadreInsertar();
+
+    Nodo* insertado = new Nodo(value);
+    insertado->padre = this->padreParaAgregar_;
+
+    if (this->padreParaAgregar_->izq == NULL){
+        this->padreParaAgregar_->izq = insertado;
+    }else{
+        this->padreParaAgregar_->der = insertado;
+    }
+
+    while (insertado->valor < insertado->padre->valor){
+        this.siftUp(insertado);
+    }
+
+    //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
+}
 
 #endif
