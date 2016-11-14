@@ -79,7 +79,7 @@ class ColaPrioridad{
 
 template <class T>
 ColaPrioridad<T>::Nodo::Nodo(const T& v)
-    : valor(v), izq(NULL), der(NULL), padre(NULL)
+    : valor(v), padre(NULL), izq(NULL), der(NULL)
 {}
 
 template <class T>
@@ -90,6 +90,7 @@ ColaPrioridad<T>::ColaPrioridad(){
 
 template <class T>
 ColaPrioridad<T>::~ColaPrioridad(){
+    //TODO
 }
 
 template <class T>
@@ -104,7 +105,7 @@ const T& ColaPrioridad<T>::proximo(){
 
 template <class T>
 void ColaPrioridad<T>::encolar(const T& value){
-    this.buscarPadreInsertar();
+    buscarPadreInsertar();
 
     Nodo* insertado = new Nodo(value);
     insertado->padre = this->padreParaAgregar_;
@@ -116,10 +117,57 @@ void ColaPrioridad<T>::encolar(const T& value){
     }
 
     while (insertado->valor < insertado->padre->valor){
-        this.siftUp(insertado);
+        siftUp(insertado);
     }
 
     //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
 }
+
+template <class T>
+void ColaPrioridad<T>::desencolar(){
+    //TODO
+}
+
+
+/************   AUXILIARES **************/
+
+
+// Auxiliares de encolar
+template <class T>
+void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
+
+    Nodo* aux = NULL;
+
+    if (nodoEvaluado->der->valor < nodoEvaluado->valor){
+        aux->der = nodoEvaluado->der->der;
+        aux->izq = nodoEvaluado->der->izq;
+        aux->padre = nodoEvaluado->der;
+
+        nodoEvaluado->der->der = nodoEvaluado->der;
+        nodoEvaluado->der->izq = aux;
+        nodoEvaluado->der->padre = nodoEvaluado->padre;
+
+    }else{
+        aux->der = nodoEvaluado->izq->der;
+        aux->izq = nodoEvaluado->izq->izq;
+        aux->padre = nodoEvaluado->izq;
+
+        nodoEvaluado->izq->der = nodoEvaluado->der;
+        nodoEvaluado->izq->izq = aux;
+        nodoEvaluado->izq->padre = nodoEvaluado->padre;
+    }
+
+    nodoEvaluado = aux;
+}
+
+template <class T>
+void ColaPrioridad<T>::buscarPadreInsertar(){
+    //TODO
+}
+template <class T>
+void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
+    //TODO
+}
+
 
 #endif
