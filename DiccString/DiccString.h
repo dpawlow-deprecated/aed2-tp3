@@ -49,7 +49,7 @@ class DiccString {
 
                         const_Iterador();
 
-                        const_Iterador(const typename Lista<T>::const_Iterador& otro);
+                        const_Iterador(const typename DiccString<T>::const_Iterador& otro);
 
                         bool HayMas() const;
                         
@@ -57,7 +57,7 @@ class DiccString {
 
                         void Avanzar();
 
-                        Lista<String> Siguientes();
+                        Lista<String> Siguientes() const;
                     private:
 
                         const DiccString* Dicc_;
@@ -65,7 +65,7 @@ class DiccString {
                         const typename Lista<T>::const_Iterador it;
 
                         /// El constructor es privado, necesitamos el friend.
-                        const_Iterador(const DiccString* dicc, const typename Lista<T>::const_Iterador iterador);
+                        const_Iterador(const DiccString<T>* dicc, const typename Lista<T>::const_Iterador it);
 
                         friend typename DiccString::const_Iterador DiccString::CrearIt() const;
                 };
@@ -92,6 +92,8 @@ class DiccString {
                 Lista<string> claves;
                 
 };
+
+//OPERACIONES DEL TRIE
 
 template <typename T>
 DiccString<T>::DiccString()
@@ -121,47 +123,47 @@ void DiccString<T>::Borrar(const string& clave) {
     Nodo* hastaDondeEliminar = NULL;
     Nodo* padreHDE = NULL;
     Nat iHDE = 0;
-
     //Contador para recorrer la clave 
     int i = 0; 
     while (i < clave.size()){
-        //Me guardo hasta donde guardar, el segundo if para algunos casos en donde se recetea las variables
-        if (buscar->definicion == NULL && cuenta_hijos(buscar) == 1 && hastaDondeEliminar == NULL) {
+    	//Me guardo hasta donde guardar, el segundo if para algunos casos en donde se recetea las variables
+        if (buscar->definicion == NULL && cuenta_hijos(buscar) <= 1 && hastaDondeEliminar == NULL) {
             hastaDondeEliminar = buscar;
             padreHDE = padre;
             iHDE = i-1;
         }else{
             if((cuenta_hijos(buscar) > 1 || buscar->definicion != NULL)){
-            hastaDondeEliminar = NULL;
-            padreHDE = NULL;
-            iHDE = 0;
+            	hastaDondeEliminar = NULL;
+            	padreHDE = NULL;
+            	iHDE = 0;
             }
         }
         
         //El if es para el caso particular de borra una hoja cuyo padre tiene mas de 1 hijo
         padre = buscar;
-        if(cuenta_hijos(padre) > 1 && i == clave.size()-1){
+        if((cuenta_hijos(buscar) > 1 || buscar->definicion != NULL) && (i == clave.size()-1)){
             padreHDE = padre;
-            hastaDondeEliminar = buscar;
+            hastaDondeEliminar = buscar->siguientes[int(clave[i])];
             iHDE = i;
         }
-
+        
         buscar = buscar->siguientes[int(clave[i])];
         i = i+1;
     }
-    if(hastaDondeEliminar == raiz){
-        aux_delete(hastaDondeEliminar);
-        raiz = NULL;
+    if(cuenta_hijos(buscar) > 0){
+    	T* muere = buscar->definicion;
+        delete muere;
+        buscar->definicion = NULL;
     }else{
-        if(cuenta_hijos(buscar) > 0){
-            T* muere = buscar->definicion;
-            delete muere;
-            buscar->definicion = NULL;
-        }else{
-            aux_delete(hastaDondeEliminar);
+    	if(hastaDondeEliminar == raiz){
+    		aux_delete(hastaDondeEliminar);
+    		raiz = NULL;
+    	}else{
+    		aux_delete(hastaDondeEliminar);
             padreHDE->siguientes[int(clave[iHDE])] = NULL;
-        }
+    	}
     }
+    
     typename Lista<string>::Iterador itlis = claves.CrearIt();
     while(itlis.HaySiguiente() && itlis.Siguiente() != clave){
         itlis.Avanzar();
@@ -303,5 +305,46 @@ int DiccString<T>::cuenta_hijos(Nodo* n){
     return j;
 }
 
+template <class T>
+typename DiccString<T>::const_Iterador DiccString<T>::CrearIt()const{
+	return const_Iterador(this, claves.CrearIt());
+}
+
+//OPERACIONES DEL ITERADOR
+template <class T>
+DiccString<T>::const_Iterador::const_Iterador() :
+	Dicc_(NULL), it(NULL){};
+
+template <typename T>
+DiccString<T>::const_Iterador::const_Iterador(const typename DiccString<T>::const_Iterador& otro)
+  : Dicc_(otro.Dicc_), it(otro.it){};
+
+template <class T>
+bool DiccString<T>::const_Iterador::HayMas()const{
+	return it.HaySiguiente();
+}
+
+/*
+template <class T>
+const T& DiccString<T>::const_Iterador::Actual()const{
+	return it.Siguiente();
+}
+*/
+
+template <class T>
+void DiccString<T>::const_Iterador::Avanzar(){
+	it.Avanzar();
+}
+
+template <class T>
+Lista<string> DiccString<T>::const_Iterador::Siguientes()const{
+	typename Lista<T>::const_Iterador it2 = it;
+	Lista<string> l;
+	while(it2.HaySiguiente()){
+		l.AgregarAtras(it2.Siguiente());
+		it2.Avanzar();
+	}
+	return l;
+}
 
 #endif

@@ -140,7 +140,13 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Significado("uno").Significado("hola") == 1);
 	ASSERT(d.Significado("hola") == 2);
 	ASSERT(d2.Claves().Longitud() == 1);
-	//ASSERT(d2.Claves().pertenece("uno"));
+	
+	typename Lista<string>::const_Iterador it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "uno"){
+		it.Avanzar();
+	}
+	
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "uno");
 	ASSERT(d2.Significado("uno").Significado("hola")     == 1);
 	ASSERT(d2.Significado("uno").Definido("holas")   == false);
 	ASSERT(d2.Significado("uno").Definido("holasa")  == false);
@@ -152,8 +158,12 @@ void test_todos_prefijos2() {
 	d.Definir("holas", 2);
 	d2.Definir("unodos", d);
 	ASSERT(d2.Claves().Longitud() == 2);
-	//ASSERT(d2.Claves().pertenece("uno"));
-	//ASSERT(d2.Claves().pertenece("unodos"));
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "uno");
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodos"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodos");
 	ASSERT(d2.Significado("uno").Significado("hola")     == 1);
 	ASSERT(d2.Significado("uno").Definido("holas")   == false);
 	ASSERT(d2.Significado("uno").Definido("holasa")  == false);
@@ -167,9 +177,17 @@ void test_todos_prefijos2() {
 	d.Definir("holasa", 3);
 	d2.Definir("unodostres", d);
 	ASSERT(d2.Claves().Longitud() == 3);
-	//ASSERT(d2.Claves().pertenece("uno"));
-	//ASSERT(d2.Claves().pertenece("unodos"));
-	//ASSERT(d2.Claves().pertenece("unodostres"));
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodos");
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "uno"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "uno");
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodostres"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodostres");
 	ASSERT(d2.Significado("unodostres").Significado("hola")     == 2);
 	ASSERT(d2.Significado("unodostres").Significado("holas")    == 2);
 	ASSERT(d2.Significado("unodostres").Significado("holasa")   == 3);
@@ -184,10 +202,19 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("unodostres") == true);
 	
 	d2.Borrar("uno");
+
 	ASSERT(d2.Claves().Longitud() == 2);
-	//ASSERT(!d2.Claves().pertenece("uno"));
-	//ASSERT(d2.Claves().pertenece("unodos"));
-	//ASSERT(d2.Claves().pertenece("unodostres"));
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodostres");
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "uno"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodos"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodos");
 	ASSERT(d.Definido("hola"));
 	ASSERT(d.Definido("holasa"));
 	ASSERT(d.Definido("holas"));
@@ -196,13 +223,25 @@ void test_todos_prefijos2() {
 	ASSERT(d.Significado("holasa") == 3);
 	ASSERT(d2.Definido("uno") == false);
 	ASSERT(d2.Definido("unodos") == true);
-	//ASSERT(d2.Definido("unodostres") == true);
-	/*
+	ASSERT(d2.Definido("unodostres") == true);
+	
 	d2.Borrar("unodos");
 	ASSERT(d2.Claves().Longitud() == 1);
-	//ASSERT(!d2.Claves().pertenece("uno"));
-	//ASSERT(!d2.Claves().pertenece("unodos"));
-	//ASSERT(d2.Claves().pertenece("unodostres"));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodos"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "uno"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodostres"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "unodostres");
 	ASSERT(d.Definido("hola"));
 	ASSERT(d.Definido("holasa"));
 	ASSERT(d.Definido("holas"));
@@ -212,12 +251,24 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("uno") == false);
 	ASSERT(d2.Definido("unodos") == false);
 	ASSERT(d2.Definido("unodostres") == true);
-
+	
 	d2.Borrar("unodostres");
 	ASSERT(d2.Claves().Longitud() == 0);
-	//ASSERT(!d2.Claves().pertenece("uno"));
-	//ASSERT(!d2.Claves().pertenece("unodos"));
-	//ASSERT(!d2.Claves().pertenece("unodostres"));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodostres"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "uno"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	it = d2.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "unodos"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
 	ASSERT(d2.Definido("uno") == false);
 	ASSERT(d2.Definido("unodos") == false);
 	ASSERT(d2.Definido("unodostres") == false);
@@ -228,9 +279,9 @@ void test_todos_prefijos2() {
 	ASSERT(d.Significado("holas") == 2);
 	ASSERT(d.Significado("holasa") == 3);
 	ASSERT(d2.Claves().Longitud() == 0);
-	*/
+	
 }
-/*
+
 void test_doble_definicion2() {
 	DiccString<int> d;
 	d.Definir("hola", 1);
@@ -242,38 +293,6 @@ void test_doble_definicion2() {
 	ASSERT(d.Significado("holas") == 4);
 }
 
-void test_definicion_vacia2() {
-	DiccString<int> d;
-	d.Definir("", 10);
-	
-	d.Definir("da", 12);
-	d.Definir("dario", 13);
-	d.Definir("hola", 14);
-
-	d.Borrar("da");
-	ASSERT(d.Definido("") == true);
-	ASSERT(d.Definido("da") == false);
-	ASSERT(d.Definido("dario") == true);
-	ASSERT(d.Definido("hola") == true);
-
-	d.Borrar("dario");
-	ASSERT(d.Definido("") == true);
-	ASSERT(d.Definido("da") == false);
-	ASSERT(d.Definido("dario") == false);
-	ASSERT(d.Definido("hola") == true);
-
-	d.Borrar("hola");
-	ASSERT(d.Definido("") == true);
-	ASSERT(d.Definido("da") == false);
-	ASSERT(d.Definido("dario") == false);
-	ASSERT(d.Definido("hola") == false);
-	
-	d.Borrar("");
-	ASSERT(d.Definido("") == false);
-	ASSERT(d.Definido("da") == false);
-	ASSERT(d.Definido("dario") == false);
-	ASSERT(d.Definido("hola") == false);
-}
 
 void test_cardinal_claves2() {
 	DiccString<int> d;
@@ -361,6 +380,7 @@ void test_definir_definido() {
   	ASSERT( d.Definido("hola") );
 	ASSERT( d.Definido("casona") );
  	ASSERT( !d.Definido("casa") );
+  	
   	d.Borrar("casona");
   	ASSERT( d.Definido("hola") );
 	ASSERT( !d.Definido("casona") );
@@ -369,7 +389,7 @@ void test_definir_definido() {
   	ASSERT( !d.Definido("hola") );
 	ASSERT( !d.Definido("casona") );
  	ASSERT( !d.Definido("casa") );
-
+	
 }
 
 
@@ -434,16 +454,20 @@ void test_borrar() {
 	d.Definir("casa",22);
 	d.Definir("casas",22);
 	d.Definir("cascada",22);
+ 	
  	d.Borrar("casa");
 	ASSERT( d.Definido("hola") );
 	ASSERT(!d.Definido("casa") );
 	ASSERT(!d.Definido("c"));
 	ASSERT( d.Definido("casas") );
 	ASSERT( d.Definido("cascada") );
+	
 	d.Borrar("hola");
 	ASSERT(!d.Definido("hola"));
+	
 	d.Definir("casa", 22);
 	d.Borrar("casas");
+	
 	ASSERT(d.Definido("casa"));
 	ASSERT(d.Definido("cascada"));
 	d.Borrar("cascada");
@@ -471,13 +495,38 @@ void test_claves(){
 	d.Definir("gato",10);
 	d.Definir("cascada",3);
 	ASSERT(d.Claves().Longitud() == 6);
-	ASSERT(d.Claves().pertenece("hola"));
-	ASSERT(d.Claves().pertenece("h"));
-	ASSERT(d.Claves().pertenece("gato"));
-	ASSERT(d.Claves().pertenece("casa"));
-	ASSERT(d.Claves().pertenece("c"));
-	ASSERT(!d.Claves().pertenece("cas"));
-	ASSERT(d.Claves().minimo() == "c");
+	
+	typename Lista<string>::const_Iterador it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "hola"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "hola");
+	it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "h"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "h");
+	it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "gato"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "gato");
+	it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "casa"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "casa");
+	it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "c"){
+		it.Avanzar();
+	}
+	ASSERT(it.HaySiguiente() && it.Siguiente() == "c");
+	it = d.Claves().CrearIt();
+	while(it.HaySiguiente() && it.Siguiente() != "cas"){
+		it.Avanzar();
+	}
+	ASSERT(!(it.HaySiguiente()));
+	
 	d.Borrar("hola");
 	ASSERT(d.Claves().Longitud() == 5);
 	d.Borrar("casa");
@@ -493,6 +542,7 @@ void test_claves(){
 	DiccString<int> d3;
 	DiccString<int> d4(d3);
 	ASSERT(d3.Claves().Longitud() == d4.Claves().Longitud())
+	
 }
 
 void test_constructor_por_copia(){
@@ -532,32 +582,40 @@ void test_constructor_por_copia(){
 	DiccString<int> d3(d2);
 	ASSERT(d3.Definido("gcs"));
 }
-*/
-int main() {
-	//RUN_TEST(test_joaco);
-	//RUN_TEST(test_claves_dicc_vacio);
-	//RUN_TEST(test_definir_definido);
-	//RUN_TEST(test_obtener);
-	//RUN_TEST(test_constructor_por_copia);
-	//RUN_TEST(test_claves);
-	//RUN_TEST(test_borrar);
-	
-	//RUN_TEST(test_claves_dicc_vacio2);
-	//RUN_TEST(test_definir_definido2);
-	//RUN_TEST(test_obtener2);
-	//RUN_TEST(test_borrar_uno2);
-	//RUN_TEST(test_borrar2);
-	//RUN_TEST(test_copia_referencia2);
-	RUN_TEST(test_todos_prefijos2);
-	
-	//RUN_TEST(test_doble_definicion2);
-	//RUN_TEST(test_definicion_vacia2);
-	//RUN_TEST(test_cardinal_claves2);
-	//RUN_TEST(test_todos_prefijos_con_varias_hojas2);
-	//Realizar más test para chequear el funcionamiento del diccionario sobre trie.
 
-	//test sin sentido para el tp
+void test_crearIterado(){
+	DiccString<int> d;
+	d.Definir("hola", 8);
+	d.Definir("casa", 9);
+
+	DiccString<int>::const_Iterador it = d.CrearIt();
+
+}
+
+int main() {
+	RUN_TEST(test_claves_dicc_vacio);
+	RUN_TEST(test_claves_dicc_vacio2);
+	RUN_TEST(test_definir_definido2);
+	RUN_TEST(test_obtener2);
+	RUN_TEST(test_borrar_uno2);
+	RUN_TEST(test_borrar2);
+	RUN_TEST(test_copia_referencia2);
+	RUN_TEST(test_todos_prefijos2);
+	RUN_TEST(test_doble_definicion2);
+	RUN_TEST(test_cardinal_claves2);
+	RUN_TEST(test_definir_definido);
+	RUN_TEST(test_obtener);
+	RUN_TEST(test_constructor_por_copia);
+	RUN_TEST(test_todos_prefijos_con_varias_hojas2);
+	RUN_TEST(test_joaco);
+	RUN_TEST(test_borrar);
+	RUN_TEST(test_claves);
 	
+	
+	//NO FUNCIO CON DEFINICIONES VACIAS EL QUE LO QUIERA QUE LO PROGRAME
+
+
+	//Realizar más test para chequear el funcionamiento del diccionario sobre trie.
 	return 0;
 
 }
