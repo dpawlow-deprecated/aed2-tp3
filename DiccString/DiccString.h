@@ -17,7 +17,7 @@ class DiccString {
 
                 //Constructor del Dicc vacio (Operacion Vacio())
                 DiccString();
-
+                DiccString(const DiccString<T>&);
                 //Destruye todos los elementos del diccionario
                 ~DiccString();
 
@@ -99,52 +99,77 @@ DiccString<T>::DiccString()
 }
 
 template <typename T>
-void DiccString<T>::Borrar(const string& clave) {
-Nodo* buscar = raiz;
-Nodo* padre = raiz;
-Nodo* hastaDondeEliminar = NULL;
-Nodo* padreHDE = NULL;
-Nat iHDE = 0;
-Nat i = 0;
-
-while (i < s.size()){
-if aux→significado = NULL ∧ cantidadHijos(aux) = 1 ∧ hastaDondeEliminar = NULL then
-hastaDondeEliminar ← aux
-padreHDE ← padreAux
-iHDE ← i - 1
-else
-if (cantidadHijos(aux) > 1 ∨ aux→significado = NULL) ∧ (i = longitud(s) -1) then
-hastaDondeEliminar ← NULL
-padreHDE ← NULL
-iHDE ← 0
-end if
-end if
-padreAux ← aux
-if cantidadHijos(padreAux) > 1 ∧ i = longitud(s)-1 then
-padreHDE ← padreAux
-hastaDondeEliminar ← aux→hijos[ord(s[i])]
-iHDE ← i
-end if
-aux ← aux→hijos[ord(s[i])]
-i ← i+1
+DiccString<T>::DiccString(const DiccString& d) {
+    while(claves.Longitud() > 0){
+        claves.Fin();
+    }
+    raiz = NULL;
+    Lista<string> c = d.Claves();
+    while(0 < c.Longitud()){
+        Definir(c.Primero(), d.Significado(c.Primero()));
+        c.Fin();
+    }
 }
-if hastaDondeEliminar = d ∧ cantidadHijos(aux) = 0 then
-borrarNodo(d)
-d ← NULL
-end if
-if cantidadHijos(aux) > 0 then
-aux→significado ← NULL
-else
-borrarNodo(hastaDondeEliminar)
-padreHDE→hijos[ord(s[iHDE])] ← NULL
-end if
-itLista(string) itlis ← CrearIt(d.Arbolito)
-while HaySiguiente(itlis) ∧ Siguiente(itlis) = s do
-Avanzar(it)
-end while
-if HaySiguiente(it) then
-EliminarSiguiente(itlis)
-end if
+
+template <typename T>
+void DiccString<T>::Borrar(const string& clave) {
+    //Un buscador y el padre del buscador para recorrer el trie
+    Nodo* buscar = raiz;    
+    Nodo* padre = raiz;
+    
+    //variables utiles para saber desde donde borrar
+    Nodo* hastaDondeEliminar = NULL;
+    Nodo* padreHDE = NULL;
+    Nat iHDE = 0;
+
+    //Contador para recorrer la clave 
+    int i = 0; 
+    while (i < clave.size()){
+        //Me guardo hasta donde guardar, el segundo if para algunos casos en donde se recetea las variables
+        if (buscar->definicion == NULL && cuenta_hijos(buscar) == 1 && hastaDondeEliminar == NULL) {
+            hastaDondeEliminar = buscar;
+            padreHDE = padre;
+            iHDE = i-1;
+        }else{
+            if((cuenta_hijos(buscar) > 1 || buscar->definicion != NULL)){
+            hastaDondeEliminar = NULL;
+            padreHDE = NULL;
+            iHDE = 0;
+            }
+        }
+        
+        //El if es para el caso particular de borra una hoja cuyo padre tiene mas de 1 hijo
+        padre = buscar;
+        if(cuenta_hijos(padre) > 1 && i == clave.size()-1){
+            padreHDE = padre;
+            hastaDondeEliminar = buscar;
+            iHDE = i;
+        }
+
+        buscar = buscar->siguientes[int(clave[i])];
+        i = i+1;
+    }
+    if(hastaDondeEliminar == raiz){
+        aux_delete(hastaDondeEliminar);
+        raiz = NULL;
+    }else{
+        if(cuenta_hijos(buscar) > 0){
+            T* muere = buscar->definicion;
+            delete muere;
+            buscar->definicion = NULL;
+        }else{
+            aux_delete(hastaDondeEliminar);
+            padreHDE->siguientes[int(clave[iHDE])] = NULL;
+        }
+    }
+    typename Lista<string>::Iterador itlis = claves.CrearIt();
+    while(itlis.HaySiguiente() && itlis.Siguiente() != clave){
+        itlis.Avanzar();
+    }
+
+    if (itlis.HaySiguiente()){
+        itlis.EliminarSiguiente();
+    }
 }
 
 
@@ -159,18 +184,15 @@ DiccString<T>::~DiccString(){
 template <class T>
 void DiccString<T>::aux_delete(Nodo* nodo){
     if(nodo != NULL){
-        if(nodo->siguientes == NULL){
-            delete nodo;
-        }else{
-            for(int i = 0; i < 256; i++){
-                if(nodo->siguientes[i] != NULL){
-                    aux_delete(nodo->siguientes[i]);
-                }
+        for(int i = 0; i < 256; i++){
+            if(nodo->siguientes[i] != NULL){
+                aux_delete(nodo->siguientes[i]);
             }
-            delete nodo;
         }
-    }
+        delete nodo;     
+   }
 }
+
 
 template <typename T>
 void DiccString<T>::Definir(const string& clave, const T& significado){
@@ -272,7 +294,7 @@ const Lista<string>& DiccString<T>::Claves() const{
 
 template <class T>
 int DiccString<T>::cuenta_hijos(Nodo* n){
-    int j = 0;
+    int j = 0; 
     for(int i = 0; i < 256; i++){
         if(n->siguientes[i] != NULL){
             j++;
