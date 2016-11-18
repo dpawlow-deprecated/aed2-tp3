@@ -53,21 +53,22 @@ class DiccString {
 
                         bool HayMas() const;
                         
-                        const T& Actual() const;
+                       // const T& Actual() const;
 
                         void Avanzar();
 
-                        Lista<String> Siguientes() const;
+                        Lista<string> Siguientes() const;
                     private:
 
                         const DiccString* Dicc_;
 
-                        const typename Lista<T>::const_Iterador it;
+                    	const_Iterador(const DiccString<T>* dicc);
+
+                        typename Lista<String>::const_Iterador it;
 
                         /// El constructor es privado, necesitamos el friend.
-                        const_Iterador(const DiccString<T>* dicc, const typename Lista<T>::const_Iterador it);
 
-                        friend typename DiccString::const_Iterador DiccString::CrearIt() const;
+                        friend typename DiccString<T>::const_Iterador DiccString<T>::CrearIt() const;
                 };
 
         private:
@@ -307,13 +308,17 @@ int DiccString<T>::cuenta_hijos(Nodo* n){
 
 template <class T>
 typename DiccString<T>::const_Iterador DiccString<T>::CrearIt()const{
-	return const_Iterador(this, claves.CrearIt());
+	return const_Iterador(this);
 }
 
 //OPERACIONES DEL ITERADOR
 template <class T>
 DiccString<T>::const_Iterador::const_Iterador() :
 	Dicc_(NULL), it(NULL){};
+
+template <class T>
+DiccString<T>::const_Iterador::const_Iterador(const DiccString<T>* dicc) :
+	Dicc_(dicc), it(dicc->claves.CrearIt()){};
 
 template <typename T>
 DiccString<T>::const_Iterador::const_Iterador(const typename DiccString<T>::const_Iterador& otro)
@@ -323,8 +328,8 @@ template <class T>
 bool DiccString<T>::const_Iterador::HayMas()const{
 	return it.HaySiguiente();
 }
-
 /*
+
 template <class T>
 const T& DiccString<T>::const_Iterador::Actual()const{
 	return it.Siguiente();
@@ -338,7 +343,7 @@ void DiccString<T>::const_Iterador::Avanzar(){
 
 template <class T>
 Lista<string> DiccString<T>::const_Iterador::Siguientes()const{
-	typename Lista<T>::const_Iterador it2 = it;
+	typename Lista<string>::const_Iterador it2 = it;
 	Lista<string> l;
 	while(it2.HaySiguiente()){
 		l.AgregarAtras(it2.Siguiente());

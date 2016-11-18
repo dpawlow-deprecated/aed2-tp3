@@ -588,7 +588,7 @@ void test_crearIterado(){
 	d.Definir("hola", 8);
 	d.Definir("casa", 9);
 
-	DiccString<int>::const_Iterador it = d.CrearIt();
+	DiccString<int>::const_Iterador it(d.CrearIt());
 
 }
 
