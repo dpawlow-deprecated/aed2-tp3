@@ -33,6 +33,11 @@ int main(){
 	//Testeo de TieneCoordenadaIzquierda y TieneCoordenadaAbajo
 	cout << TieneCoordenadaIzquierda(c2) << "   " << TieneCoordenadaIzquierda(c5) << endl; 
 	cout << TieneCoordenadaAbajo(c2) << "   " << TieneCoordenadaAbajo(c5) << endl;
+	string p = "pikachu";
+	int q = 0;
+	Tupla<int, string> t(q, p);
+	cerr << t.Primero() << endl;
+	cerr << t.Segundo() << endl;
 	return 0;
 
 }

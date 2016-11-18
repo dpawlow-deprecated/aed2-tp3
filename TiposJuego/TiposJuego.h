@@ -7,6 +7,19 @@
 
 using namespace std;
 
+template<class T, class K>
+struct Tupla{
+	T primero;
+	K segundo;
+	Tupla(T a, K b) : primero(a), segundo(b){}
+	const T Primero()const{
+		return primero;
+	}
+	const K Segundo()const{
+		return segundo;
+	}
+};
+
 typedef unsigned int Jugador;
 typedef std::string Pokemon;
 typedef unsigned int Nat;

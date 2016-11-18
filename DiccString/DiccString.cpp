@@ -588,11 +588,27 @@ void test_crearIterado(){
 	d.Definir("hola", 8);
 	d.Definir("casa", 9);
 
-	DiccString<int>::const_Iterador it(d.CrearIt());
-
+	DiccString<int>::const_Iterador it = d.CrearIt();
+	ASSERT(it.Actual().Primero() == "hola");
+	ASSERT(it.Actual().Segundo() == 8);
+	ASSERT(it.HayMas());
+	Lista<string> l1 = it.Siguientes();
+	ASSERT(l1.Longitud() == d.Claves().Longitud());
+	int i = 0;
+	while(i < l1.Longitud()){
+		ASSERT(l1[i] == d.Claves()[i]);
+		i++;
+	}
+	it.Avanzar();
+	ASSERT(it.HayMas());
+	ASSERT(it.Actual().Primero() == "casa");
+	ASSERT(it.Actual().Segundo() == 9);
+	it.Avanzar();
+	ASSERT(!(it.HayMas()));
 }
 
 int main() {
+	
 	RUN_TEST(test_claves_dicc_vacio);
 	RUN_TEST(test_claves_dicc_vacio2);
 	RUN_TEST(test_definir_definido2);
@@ -610,8 +626,7 @@ int main() {
 	RUN_TEST(test_joaco);
 	RUN_TEST(test_borrar);
 	RUN_TEST(test_claves);
-	
-	
+	RUN_TEST(test_crearIterado);
 	//NO FUNCIO CON DEFINICIONES VACIAS EL QUE LO QUIERA QUE LO PROGRAME
 
 

@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include "../TiposJuego/TiposJuego.h"
 using namespace std;
 using namespace aed2;
 
@@ -53,7 +54,7 @@ class DiccString {
 
                         bool HayMas() const;
                         
-                       // const T& Actual() const;
+                        const Tupla<string, T> Actual() const;
 
                         void Avanzar();
 
@@ -328,13 +329,13 @@ template <class T>
 bool DiccString<T>::const_Iterador::HayMas()const{
 	return it.HaySiguiente();
 }
-/*
 
 template <class T>
-const T& DiccString<T>::const_Iterador::Actual()const{
-	return it.Siguiente();
+const Tupla<string, T> DiccString<T>::const_Iterador::Actual()const{
+	Tupla<string, T> t(it.Siguiente(), (*Dicc_).Significado(it.Siguiente()));
+    return t;
 }
-*/
+
 
 template <class T>
 void DiccString<T>::const_Iterador::Avanzar(){
