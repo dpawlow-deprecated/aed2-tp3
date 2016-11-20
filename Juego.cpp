@@ -6,23 +6,29 @@ using namespace aed2;
 
 /*
 Juego::Juego(Mapa m){
-	mapa = m;
-	pokemons = Diccstring <Nat, Tupla<Nat, Nat> >;
-	jugadores = Vector<InfoJugador>;
-	cantidadTotPokemons = 0;
-	coordenadasConPokemons = Conj<Coordenada>;
-	pokemonsDeJugadores = Lista< DiccString<Nat> >;
+	
 };
 */
 
 void Juego::AgregarPokemon(Pokemon p, Coordenada c){
-	
-};
-
-Juego::IterJugador AgregarJugador(Jugador j){
 
 };
-
+/*
+Juego::IterJugador Juego::AgregarJugador(Jugador j){
+	DiccString<Nat> d;
+	Coordenada c(0,0);
+	Lista< DiccString<Nat> >::Iterador it = pokemonesDeJugadores.AgregarAtras(d);
+	InfoJugador i;
+	i.id = j;
+	i.conectado = false;
+	i.expulsado = false;
+	i.pos = c;
+	i.sanciones = 0;
+	i.pokemons = it;
+	i.cantTotalPoke = 0;
+	jugadores.AgregarAtras(i);
+};
+*/
 void Juego::Conectarse(Jugador j, Coordenada c){
 	jugadores[j].conectado = true;
 	jugadores[j].pos = c;
