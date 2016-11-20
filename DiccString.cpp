@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "mini_test.h"
+#include "mini_test_diccstring.h"
 
 #include "DiccString.h"
 
