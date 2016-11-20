@@ -1,22 +1,34 @@
 #include "Mapa.h"
 
 Mapa::Mapa(){
-	coordenadas = Conj<Coordenada>();
-	ancho = 0;
-	alto = 0;
-	relacionCoordenadas = new bool*[0];
+	_coordenadas = Conj<Coordenada>();
+	_ancho = 0;
+	_alto = 0;
+	_relacionCoordenadas = new bool*[0];
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
-	return true;
+	int pos1 = _ancho * c1.longitud + _alto * c1.latitud;
+	int pos2 = _ancho * c2.longitud + _alto * c2.latitud;
+	return _relacionCoordenadas[pos1][pos2];
 }
 
 Conj<Coordenada> Mapa::Coordenadas(){
-	return coordenadas;
+	return _coordenadas;
 }
 
 bool Mapa::PosExistente(const Coordenada& c) {
-	return true;
+	if (c.latitud > _alto && c.longitud > _ancho) {
+		int pos = _ancho * c.longitud + _alto * c.latitud;
+		return _relacionCoordenadas[pos][pos];
+	}
+	return false;
+}
+
+
+Conj<Coordenada> Mapa::CoordenadasConectadasA(const Coordenada&) const {
+	Conj<Coordenada> coordenadas;
+	return coordenadas;
 }
 
 void Mapa::AgregarCoordenada(const Coordenada& c1){

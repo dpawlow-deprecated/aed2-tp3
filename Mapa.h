@@ -16,13 +16,14 @@ public:
 	void AgregarCoordenada (const Coordenada&);
 	bool HayCamino(const Coordenada&, const Coordenada&);
 	bool PosExistente(const Coordenada&);
-	Nat Ancho() { return ancho; };
-	Nat Alto() { return alto; };
+	Nat Ancho() const { return _ancho; };
+	Nat Alto() const { return _alto; };
 private:
-	Conj<Coordenada> coordenadas;
-	Nat ancho;
-	Nat alto;
-	bool** relacionCoordenadas;
+	Conj<Coordenada> CoordenadasConectadasA(const Coordenada&) const;
+	Conj<Coordenada> _coordenadas;
+	Nat _ancho;
+	Nat _alto;
+	bool** _relacionCoordenadas;
 };
 
 #endif
