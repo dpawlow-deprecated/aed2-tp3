@@ -1,12 +1,12 @@
 #ifndef DICC_STRING_H_
 #define DICC_STRING_H_
 
-#include "../Modulos-CPP/aed2/Lista.h"
-#include "../Modulos-CPP/aed2/Conj.h"
+#include "Modulos-CPP/aed2/Lista.h"
+#include "Modulos-CPP/aed2/Conj.h"
 #include <string>
 #include <iostream>
 #include <cassert>
-#include "../TiposJuego/TiposJuego.h"
+#include "TiposJuego.h"
 using namespace std;
 using namespace aed2;
 
@@ -31,7 +31,7 @@ class DiccString {
                 //Chequea que el diccionario esta vacio
                 bool Vacio();
 
-                //Devuelve el significado de la clave 
+                //Devuelve el significado de la clave
                 const T& Significado(const string& clave) const;
                 T& Significado(const string& clave);
 
@@ -40,7 +40,7 @@ class DiccString {
 
                 //Devuelve las claves definidas en el diccionario
                 const Lista<string>& Claves() const;
-                
+
                 //Crea un iterador al principio del diccionario
                 const_Iterador CrearIt() const;
 
@@ -63,9 +63,9 @@ class DiccString {
                     private:
 
                         const DiccString* Dicc_;
-                        
-                        typename Lista<String>::const_Iterador it;   
-                        
+
+                        typename Lista<String>::const_Iterador it;
+
                         /// El constructor es privado, necesitamos el friend.
                     	const_Iterador(const DiccString<T>* dicc);
 
@@ -92,7 +92,7 @@ class DiccString {
                 void aux_delete(Nodo*);
                 Nodo* raiz;
                 Lista<string> claves;
-                
+
 };
 
 //OPERACIONES DEL TRIE
@@ -123,15 +123,15 @@ DiccString<T>::DiccString(const DiccString& d) {
 template <typename T>
 void DiccString<T>::Borrar(const string& clave) {
     //Un buscador y el padre del buscador para recorrer el trie
-    Nodo* buscar = raiz;    
+    Nodo* buscar = raiz;
     Nodo* padre = raiz; //El padre del buscar
-    
+
     //variables utiles para saber desde donde borrar
     Nodo* hastaDondeEliminar = NULL;
     Nodo* padreHDE = NULL;
     Nat iHDE = 0;
-    //Contador para recorrer la clave 
-    int i = 0; 
+    //Contador para recorrer la clave
+    int i = 0;
     while (i < clave.size()){
     	//Me guardo hasta donde guardar, el segundo if sirve para algunos casos en donde se recetea las variables, los casos en que el nodo actual tenga
         //mas de 1 hijo o que tenga alguna definicion
@@ -146,7 +146,7 @@ void DiccString<T>::Borrar(const string& clave) {
             	iHDE = 0;
             }
         }
-        
+
         //El if es para el caso particular de borra una hoja cuyo padre tiene mas de 1 hijo, la idea es que solo pasa cuando estoy casi al final de la palabra.
         //Esto sucede porque en el if anterio hastaDondeEliminar es NULL y tengo que actualizar los valores para borrarlo despues
         padre = buscar;
@@ -155,7 +155,7 @@ void DiccString<T>::Borrar(const string& clave) {
             hastaDondeEliminar = buscar->siguientes[int(clave[i])];
             iHDE = i;
         }
-        
+
         buscar = buscar->siguientes[int(clave[i])];
         i = i+1;
     }
@@ -177,7 +177,7 @@ void DiccString<T>::Borrar(const string& clave) {
     //La idea es usar aux_delete porque borra recursivamente bajando hasta los hijos y despues borrando el nodo en cuestion, esto es asi porque al recorrer toda
     //la clave me aseguro que no tenga otra cosa definida que se pueda romper
     }
-    
+
     //Luego busco la clave que hay que borrar de la lista claves
     typename Lista<string>::Iterador itlis = claves.CrearIt();
     while(itlis.HaySiguiente() && itlis.Siguiente() != clave){
@@ -200,13 +200,13 @@ DiccString<T>::~DiccString(){
         claves.Fin();
     }
     aux_delete(raiz);
-    //Complejidad: Mucho, no importa segun Algo 2 es O(1)... 
+    //Complejidad: Mucho, no importa segun Algo 2 es O(1)...
 }
 
 template <class T>
 void DiccString<T>::aux_delete(Nodo* nodo){
     //La idea es que, si el puntero a nodo pasado no es null, ver si tiene algun hijo. Si lo tiene se vuelve a invocar la funcion pero ahora con el hijo.
-    //Luego por la "magia" de la recursion se borrar todos los hijos (con sus respectivos hijos) del puntero a nodo pasado por parametros, despues de 
+    //Luego por la "magia" de la recursion se borrar todos los hijos (con sus respectivos hijos) del puntero a nodo pasado por parametros, despues de
     //esto se borra el nodo
     if(nodo != NULL){
         for(int i = 0; i < 256; i++){
@@ -214,7 +214,7 @@ void DiccString<T>::aux_delete(Nodo* nodo){
                 aux_delete(nodo->siguientes[i]);
             }
         }
-        delete nodo;     
+        delete nodo;
    }
    //Complejidad: No tengo ganas de pensar la ecuacion de recurrencia, tarda por lo menos n siendo n la cantidad de nodos
 }
@@ -230,7 +230,7 @@ void DiccString<T>::Definir(const string& clave, const T& significado){
         Nodo* nuevo = new Nodo;
         unsigned int i = 0;
         raiz = nuevo;
-        //Recorro la raiz, si el nodo que le sigue a la clave esta definido no hago nada, sino creo un nuevo nodo y lo "encadeno" al aterior 
+        //Recorro la raiz, si el nodo que le sigue a la clave esta definido no hago nada, sino creo un nuevo nodo y lo "encadeno" al aterior
         while(i<clave.size()){
             if(nuevo->siguientes[int(clave[i])] == NULL){
                 Nodo* nuevo2 = new Nodo;
@@ -242,7 +242,7 @@ void DiccString<T>::Definir(const string& clave, const T& significado){
                 i++;
             }
         }
-        //luego una vez en la hoja (podria no serlo) le agrego el significado. Nota: como en este caso solo voy a entrar si no tengo raiz, es logico pensar 
+        //luego una vez en la hoja (podria no serlo) le agrego el significado. Nota: como en este caso solo voy a entrar si no tengo raiz, es logico pensar
         //que no va a haber una clave en este nodo definida anteriormente, por ende no necesito borrarla
         nuevo->definicion = new T(significado);
     }else{
@@ -286,7 +286,7 @@ bool DiccString<T>::Definido(const string& clave) const{
     if(raiz == NULL){
         return false;
     }else{
-        //Sino recorro toda la clave 
+        //Sino recorro toda la clave
         Nodo* buscar = raiz;
         unsigned int i = 0;
         while((i < clave.size()) && (buscar->siguientes[int(clave[i])] != NULL)){
@@ -338,7 +338,7 @@ const Lista<string>& DiccString<T>::Claves() const{
 template <class T>
 int DiccString<T>::cuenta_hijos(Nodo* n){
     //Simplemente cuenta los hijos del puntero pasado por parametros
-    int j = 0; 
+    int j = 0;
     for(int i = 0; i < 256; i++){
         if(n->siguientes[i] != NULL){
             j++;

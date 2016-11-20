@@ -1,7 +1,7 @@
 #ifndef TIPOSJUEGO_H_
 #define TIPOSJUEGO_H_
 
-#include "../Modulos-CPP/aed2/TiposBasicos.h"
+#include "Modulos-CPP/aed2/TiposBasicos.h"
 #include <cmath>
 #include <cassert>
 
