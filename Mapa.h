@@ -9,13 +9,15 @@
 using namespace std;
 using namespace aed2;
 
-class mapa{
+class Mapa {
 public:
-	mapa(); //CrearMapa()
+	Mapa(); //CrearMapa()
 	Conj<Coordenada> Coordenadas();
 	void AgregarCoordenada (const Coordenada&);
 	bool HayCamino(const Coordenada&, const Coordenada&);
 	bool PosExistente(const Coordenada&);
+	Nat Ancho() { return ancho; };
+	Nat Alto() { return alto; };
 private:
 	Conj<Coordenada> coordenadas;
 	Nat ancho;
