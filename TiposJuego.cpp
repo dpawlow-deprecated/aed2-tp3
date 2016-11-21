@@ -35,9 +35,9 @@ int main(){
 	cout << TieneCoordenadaAbajo(c2) << "   " << TieneCoordenadaAbajo(c5) << endl;
 	string p = "pikachu";
 	int q = 0;
-	Tupla<int, string> t(q, p);
-	cerr << t.Primero() << endl;
-	cerr << t.Segundo() << endl;
+	pair<int, string> t(q, p);
+	cerr << t.first << endl;
+	cerr << t.second << endl;
 	return 0;
 
 }

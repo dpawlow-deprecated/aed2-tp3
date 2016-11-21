@@ -55,7 +55,7 @@ class DiccString {
                         //la funcion devuelve false
                         bool HayMas() const;
                         //Devuelve una tupla con el elemento apuntado por el iterador
-                        const Tupla<string, T> Actual() const;
+                        const pair<string, T> Actual() const;
                         //Avanza al siguiente
                         void Avanzar();
                         //devuelve todas las claves que quedan recorrer
@@ -377,9 +377,9 @@ bool DiccString<T>::const_Iterador::HayMas()const{
 }
 
 template <class T>
-const Tupla<string, T> DiccString<T>::const_Iterador::Actual()const{
+const pair<string, T> DiccString<T>::const_Iterador::Actual()const{
     //Crea un tupla y la devuelve por copia, si el tipo T es una estructura, esto esta como el orto (siempre vamos a usar tipos basicos)
-	Tupla<string, T> t(it.Siguiente(), (*Dicc_).Significado(it.Siguiente()));
+	pair<string, T> t(it.Siguiente(), (*Dicc_).Significado(it.Siguiente()));
     return t;
     //O(|L|) porque tengo que buscar el significado en el diccionario
 }

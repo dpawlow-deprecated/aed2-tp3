@@ -1,6 +1,6 @@
 
 #include <iostream>
-#include "mini_test_diccstring.h"
+#include "mini_test.h"
 
 #include "DiccString.h"
 
@@ -589,8 +589,8 @@ void test_crearIterado(){
 	d.Definir("casa", 9);
 
 	DiccString<int>::const_Iterador it = d.CrearIt();
-	ASSERT(it.Actual().Primero() == "hola");
-	ASSERT(it.Actual().Segundo() == 8);
+	ASSERT(it.Actual().first == "hola");
+	ASSERT(it.Actual().second == 8);
 	ASSERT(it.HayMas());
 	Lista<string> l1 = it.Siguientes();
 	ASSERT(l1.Longitud() == d.Claves().Longitud());
@@ -601,8 +601,8 @@ void test_crearIterado(){
 	}
 	it.Avanzar();
 	ASSERT(it.HayMas());
-	ASSERT(it.Actual().Primero() == "casa");
-	ASSERT(it.Actual().Segundo() == 9);
+	ASSERT(it.Actual().first == "casa");
+	ASSERT(it.Actual().second == 9);
 	it.Avanzar();
 	ASSERT(!(it.HayMas()));
 }
