@@ -28,19 +28,21 @@ Juego::~Juego(){
 
 void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 coordenadasConPokemons.AgregarRapido(c);
-if(!pokemons.Definido(p){
-	pokemons.Definir(p, <1, 1>);
+if(!pokemons.Definido(p)){
+	pokemons.Definir(p, pair<Nat, Nat> (1, 1));
 }else{
-	pokemons.Definir(p, pair<pokemons.Significado(p).first +1, pokemons.Significado(p).second +1>);
+	Nat k = pokemons.Significado(p).first;
+	Nat b = pokemons.Significado(p).second;
+	pokemons.Definir(p, pair<Nat, Nat> (k+1, b+1));
 }
 
-mapaInfo[c].hayPokemon = true;
+//mapaInfo[c].hayPokemon = true;
 //mapaInfo[c].jugEspe = Vacio();
-mapaInfo[c].yaSeCapturo = false;
-mapaInfo[c].movimientosRestantes = 0;
-mapaInfo[c].pokemon = p;
+//mapaInfo[c].yaSeCapturo = false;
+//mapaInfo[c].movimientosRestantes = 0;
+//mapaInfo[c].pokemon = p;
 Lista<Coordenada> lc;
-lc = CeldasValidas(g, c);
+lc = CeldasValidas(c);
 lc.AgregarAtras(c);
 Lista<Coordenada>::const_Iterador itCoordenadas = lc.CrearIt();
 
@@ -98,8 +100,8 @@ void Moverse(Jugador j, Coordenada c){
 
 };
 
-Juego::IterJugador Juego::Jugadores(){
-
+Juego::IterJugador Juego::Jugadores()const{
+	return IterJugador(this);
 };
 
 bool Juego::EstaConectado(Jugador j){
@@ -171,9 +173,55 @@ Nat Juego::CantPokemonsTotales(){
 	return cantidadTotPokemons;
 };
 
-Coordenada PosPokemonCercano(Coordenada){
+Coordenada Juego::PosPokemonCercano(Coordenada){
 
 };
+
+//OPERACIONES DEL ITERADOR JUGADOR
+
+bool Juego::IterJugador::HayMas(){
+	bool b = false;
+	Nat i = posicion;
+	while(i < (*vector).Longitud() && !b){
+		if((*vector)[i].expulsado == false){
+			b = true;
+		}
+		i++;
+	}
+	return b;
+};
+
+void Juego::IterJugador::Avanzar(){
+	bool b = false;
+	Nat i = posicion;
+	while (i < (*vector).Longitud() && !b){
+		if((*vector)[i].expulsado == false){
+			b = true;
+		}
+		i++;
+	}
+	posicion = (i-1);
+}
+
+Nat Juego::IterJugador::Actual(){
+	return posicion;
+}
+
+Lista<Nat> Juego::IterJugador::Siguientes(){
+	Lista<Nat> ls;
+	Nat i = posicion;
+	while(i < (*vector).Longitud()){
+		if((*vector)[i].expulsado == false){
+			ls.AgregarAtras(i);
+		}
+		i++;
+	}
+	return ls;
+}
+
+//OPERACIONES DEL ITERADOR POKEMON
+
+
 
 int main(){
 	return 0;

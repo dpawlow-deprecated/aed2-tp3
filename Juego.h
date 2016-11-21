@@ -77,7 +77,7 @@ public:
 	//Mapa Mapa();
 
 	//Devuelve los jugadores actuaes del juego (no expulsados)
-	IterJugador Jugadores();
+	IterJugador Jugadores()const;
 
 	//Pregunta si un jugador esta conectado
 	//pre: el jugador tiene que existir
@@ -134,7 +134,7 @@ public:
 			bool HayMas();
 			void Avanzar();
 			Nat Actual();
-			Lista<Nat> Siguiente();
+			Lista<Nat> Siguientes();
 
 		private:
 			
@@ -142,9 +142,12 @@ public:
 
 			const Vector<InfoJugador>* vector;
 
-			IterJugador(const Juego& j);
+			IterJugador(const Juego* j){
+				posicion = 0;
+				vector = &j->jugadores;
+			};
 
-			friend Juego::IterJugador Juego::Jugadores();
+			friend Juego::IterJugador Juego::Jugadores()const;
 	};
 
 	class IterPokemon{
@@ -156,7 +159,10 @@ public:
 
 		private:
 			DiccString<Nat>::const_Iterador it;
-			IterPokemon(const Juego& j, Jugador);
+			IterPokemon(const Juego* j, Jugador g){
+				it = (*Jjugadores)[g].pokemons.Siguiente().CrearIt();
+			};
+			friend Juego::IterPokemon Juego::Pokemons(Jugador);
 	};
 
 
