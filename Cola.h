@@ -10,6 +10,7 @@ template<typename T>
 class Cola {
   public:
       Cola(); // Vacia()
+      ~Cola();
       void Encolar(T& elem);
       bool EsVacia() const;
       T Proximo() const;
@@ -24,6 +25,13 @@ class Cola {
 template<typename T>
 Cola<T>::Cola() {
     _elementos = Vector<T>();
+}
+
+template<typename T>
+Cola<T>::~Cola() {
+    while(_elementos.Longitud() != 0) {
+        _elementos.TirarUltimos(1);
+    }
 }
 
 template<typename T>
