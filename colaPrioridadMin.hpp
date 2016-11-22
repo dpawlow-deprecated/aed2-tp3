@@ -108,8 +108,6 @@ const T& ColaPrioridad<T>::proximo(){
 template <class T>
 void ColaPrioridad<T>::encolar(const T& value){
 
-    std::cout << "Valor encolado: " << value << '\n';
-
     Nodo* insertado = new Nodo(value);
 
     if (raiz_ == NULL){
@@ -118,14 +116,9 @@ void ColaPrioridad<T>::encolar(const T& value){
         return;
     }
 
-
     buscarPadreInsertar();
 
-    std::cout << __LINE__ << '\n';
-
     insertado->padre = this->padreParaAgregar_;
-
-    std::cout << __LINE__ << '\n';
 
     if (this->padreParaAgregar_->izq == NULL){
         this->padreParaAgregar_->izq = insertado;
@@ -133,17 +126,11 @@ void ColaPrioridad<T>::encolar(const T& value){
         this->padreParaAgregar_->der = insertado;
     }
 
-    std::cout << __LINE__ << '\n';
-
-    std::cout << (this->raiz_ == insertado) << '\n';
-
-    while (insertado == this->raiz_ || insertado->valor < insertado->padre->valor){
+    while (insertado != this->raiz_ && insertado->valor < insertado->padre->valor){
         siftUp(insertado);
     }
 
-    std::cout << __LINE__ << '\n';
-
-    // INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
+    // TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
 }
 
 template <class T>
@@ -161,20 +148,20 @@ void ColaPrioridad<T>::desencolar(){
     Nodo* aEliminar = this->raiz_;
 
     if (this->padreParaAgregar_->der == NULL){
+        std::cout << __LINE__ << '\n';
         ultimo = this->padreParaAgregar_->izq;
         this->padreParaAgregar_->izq = NULL;
     } else {
+        std::cout << __LINE__ << '\n';
         ultimo = this->padreParaAgregar_->der;
         this->padreParaAgregar_->der = NULL;
+        std::cout << (ultimo->valor) << '\n';
     }
-
     ultimo->izq = this->raiz_->izq;
     ultimo->der = this->raiz_->der;
     this->raiz_ = ultimo;
 
-    bool seElimina = ultimo->der->valor < ultimo->valor || ultimo->izq->valor < ultimo->valor;
-
-    while (ultimo->der != NULL && ultimo->izq != NULL && seElimina){
+    while ((ultimo->izq != NULL && ultimo->izq->valor <= ultimo->valor) || (ultimo->der != NULL && ultimo->der->valor <= ultimo->valor)){
         siftDown(ultimo);
     }
 
@@ -239,7 +226,8 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
         aux = aux->padre;
 
         if (aux->der == NULL){
-            padreParaAgregar_
+            this->padreParaAgregar_ = aux;
+            return;
         }
         aux = aux->der;
     }
@@ -254,12 +242,12 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
 
 template <class T>
 void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
-
-    //TODO
-
+ /*
     Nodo* aux = NULL;
 
-    if (nodoEvaluado->padre->izq == nodoEvaluado){
+    if (nodoEvaluado == this->raiz_){
+
+    } else if (nodoEvaluado->padre->izq == nodoEvaluado){
         aux->der = nodoEvaluado->padre->der;
         aux->izq = nodoEvaluado->padre;
     } else {
@@ -277,6 +265,47 @@ void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
     nodoEvaluado->padre->izq = nodoEvaluado->izq;
     nodoEvaluado->padre->padre = nodoEvaluado->padre;
     nodoEvaluado = aux;
+*/
+
+    if(nodoEvaluado->izq != NULL && nodoEvaluado->izq->valor <= nodoEvaluado->valor){
+
+        Nodo* auxBaja = nodoEvaluado;
+        Nodo* auxSube = nodoEvaluado->izq;
+
+        if(nodoEvaluado == this->raiz_){
+            this->raiz_ = auxSube;
+        }
+
+        auxBaja->izq = auxSube->izq;
+        auxBaja->der = auxSube->der;
+        auxBaja->padre = auxSube;
+
+        auxSube->izq = auxBaja;
+        auxSube->der = nodoEvaluado->der;
+        auxSube->padre = nodoEvaluado->padre;
+
+        nodoEvaluado = auxBaja;
+
+    } else if (nodoEvaluado->der != NULL && nodoEvaluado->der->valor <= nodoEvaluado->valor){
+
+        Nodo* auxBaja = nodoEvaluado;
+        Nodo* auxSube = nodoEvaluado->der;
+
+        if(nodoEvaluado == this->raiz_){
+            this->raiz_ = auxSube;
+        }
+
+        auxBaja->der = auxSube->der;
+        auxBaja->izq = auxSube->izq;
+        auxBaja->padre = auxSube;
+
+        auxSube->der = auxBaja;
+        auxSube->izq = nodoEvaluado->izq;
+        auxSube->padre = nodoEvaluado->padre;
+
+        nodoEvaluado = auxBaja;
+    }
+
 }
 
 
