@@ -6,15 +6,15 @@ using namespace aed2;
 
 /*
 Juego::Juego(Mapa m){
-	Conj<Coordenada> coords = Coordenadas(m);
-	Conj<Coordenada>::const_Iterador iter ← CrearIt(coords);
+	Conj<Coordenada> coords = m.Coordenadas();
+	Conj<Coordenada>::const_Iterador iter = coords.CrearIt();
 	Nat ancho = 0
 	Nat alto = 0
 	while (iter.HaySiguiente(){
 		Coordenada c = iter.Siguiente();
 		iter.Avanzar();
-		if(c.Latitud() > alto){ alto = c.Latitud()};
-		if(c.Longitud() > ancho){ ancho = c.Longitud()};
+		if(Latitud(c) > alto){ alto = Latitud(c)};
+		if(Longitud(c) > ancho){ ancho = Longitud(c)};
  	}
  	infocoor ← arreglo[ancho] de arreglo[alto] de <Vacía(), Bool, Vacía(), 10>
  	res ← <Vacio(), m, Vacía(), infocoor, 0, Vacía()>
@@ -61,8 +61,10 @@ while(itCoordenadas.HaySiguiente()){
 		g.mapaInfo[Siguiente(itCoordena)].yaSeCapturo ← false
 	end if
 	Avanzar(itCoordenada)
+
 }
 */
+
 };
 
 Juego::IterJugador Juego::AgregarJugador(Jugador j){
@@ -117,7 +119,7 @@ Coordenada Juego::Posicion(Jugador j){
 };
 
 Juego::IterPokemon Juego::Pokemons(Jugador j){
-
+	return IterPokemon(this, j);
 };
 
 Conj<Jugador> Juego::Expulsados(){
@@ -177,6 +179,78 @@ Coordenada Juego::PosPokemonCercano(Coordenada){
 
 };
 
+Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
+	Lista<Coordenada> ls;
+	Nat i = 4;
+	while(i > 0){
+		ls.AgregarAtras(Coordenada(Latitud(c)+i, Longitud(c)));
+		if(Latitud(c)-i>0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-i, Longitud(c)));
+		}
+		ls.AgregarAtras(Coordenada(Latitud(c), Longitud(c)+i));
+		if(Longitud(c)-i >0){
+			ls.AgregarAtras(Coordenada(Latitud(c), Longitud(c)-i));
+		}
+		i--;
+	}
+
+	i = 3;
+	while(i > 0){
+		if(Longitud(c)-(i-1)>0){
+			ls.AgregarAtras(Coordenada(Latitud(c)+3, Longitud(c)-(i-1)));
+		}
+		if(Latitud(c)-(i-1)>0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)+3));
+		}
+		if(Latitud(c)-3>0 && Longitud(c)-(i-1)){
+			ls.AgregarAtras(Coordenada(Latitud(c)-3, Longitud(c)-(i-1)));
+		}
+		if(Latitud(c)-(i-1) >0 && Longitud(c)-3 >0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)-3));
+		}
+		if(Latitud(c)-3 > 0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-3, Longitud(c)+(i-1)));
+		}
+		if(Longitud(c)-3 > 0){
+			ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)-3));
+		}
+		ls.AgregarAtras(Coordenada(Latitud(c)+3, Longitud(c)+(i-1)));
+		ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)+3));
+		ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)+2));
+		ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)+1));
+		if(Longitud(c)-2 > 0){
+			ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)-2));
+		}
+		if(Longitud(c)-1 > 0){
+			ls.AgregarAtras(Coordenada(Latitud(c)+(i-1), Longitud(c)-1));
+		}
+		if(Latitud(c)-(i-1) > 0 && Longitud(c)-2 >0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)-2));
+		}
+		if(Latitud(c)-(i-1)>0 && Longitud(c)-1 >0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)-1));
+		}
+		if(Latitud(c)-(i-1) > 0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)+2));
+		}
+		if(Latitud(c)-(i-1) >0){
+			ls.AgregarAtras(Coordenada(Latitud(c)-(i-1), Longitud(c)+1));
+		}
+		i--;
+	}
+
+	Lista<Coordenada>::Iterador it = ls.CrearIt();
+	while(it.HaySiguiente()){
+		if(mapa.PosExistente(it.Siguiente())){
+			it.Avanzar();
+		}else{
+			it.EliminarSiguiente();
+		}
+	}
+
+	return ls;
+}
+
 //OPERACIONES DEL ITERADOR JUGADOR
 
 bool Juego::IterJugador::HayMas(){
@@ -221,7 +295,21 @@ Lista<Nat> Juego::IterJugador::Siguientes(){
 
 //OPERACIONES DEL ITERADOR POKEMON
 
+pair<string, Nat> Juego::IterPokemon::Actual(){
+	return it.Actual();
+}
 
+bool Juego::IterPokemon::HayMas(){
+	return it.HayMas();
+}
+
+void Juego::IterPokemon::Avanzar(){
+	it.Avanzar();
+}
+
+Lista<string> Juego::IterPokemon::Siguientes(){
+	return it.Siguientes();
+}
 
 int main(){
 	return 0;

@@ -1,7 +1,7 @@
 #ifndef JUEGO_H
 #define JUEGO_H
 
-#include "Mapa.h"
+#include "Mapa.cpp"
 #include "TiposJuego.h"
 #include "DiccString.h"
 #include "colaPrioridadMin.hpp"
@@ -160,7 +160,7 @@ public:
 		private:
 			DiccString<Nat>::const_Iterador it;
 			IterPokemon(const Juego* j, Jugador g){
-				it = (*Jjugadores)[g].pokemons.Siguiente().CrearIt();
+				it = j->jugadores[g].pokemons.Siguiente().CrearIt();
 			};
 			friend Juego::IterPokemon Juego::Pokemons(Jugador);
 	};
