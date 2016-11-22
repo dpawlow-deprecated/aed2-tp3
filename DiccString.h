@@ -359,7 +359,7 @@ typename DiccString<T>::const_Iterador DiccString<T>::CrearIt()const{
 //Los 3 constructores
 template <class T>
 DiccString<T>::const_Iterador::const_Iterador() :
-	Dicc_(NULL), it(NULL){};
+	Dicc_(NULL), it(){};
 
 template <class T>
 DiccString<T>::const_Iterador::const_Iterador(const DiccString<T>* dicc) :
