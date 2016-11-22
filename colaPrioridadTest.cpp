@@ -22,7 +22,23 @@ void test_encolar(){
 
     ASSERT(c.proximo() == 3);
 
-    c.encolar(4);
+    c.encolar(8);
+
+    ASSERT(c.proximo() == 3);
+
+    c.encolar(5);
+
+    ASSERT(c.proximo() == 3);
+
+    c.encolar(6);
+
+    ASSERT(c.proximo() == 3);
+
+    c.encolar(7);
+
+    ASSERT(c.proximo() == 3);
+
+    c.encolar(5);
 
     ASSERT(c.proximo() == 3);
 
