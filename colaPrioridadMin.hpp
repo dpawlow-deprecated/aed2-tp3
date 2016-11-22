@@ -34,7 +34,9 @@ class ColaPrioridad{
 
         //Elimina el elemento al que apunta el puntero del parametro
         //Deberíamos hacer esto con un iterador?
+        //TODO
         //void borrar();
+
 
 
     private:
@@ -105,9 +107,16 @@ const T& ColaPrioridad<T>::proximo(){
 
 template <class T>
 void ColaPrioridad<T>::encolar(const T& value){
-    buscarPadreInsertar();
 
     Nodo* insertado = new Nodo(value);
+
+    if (raiz_ == NULL){
+        this->raiz_ = insertado;
+        this->padreParaAgregar_ = insertado;
+    }
+
+    buscarPadreInsertar();
+
     insertado->padre = this->padreParaAgregar_;
 
     if (this->padreParaAgregar_->izq == NULL){
@@ -116,11 +125,15 @@ void ColaPrioridad<T>::encolar(const T& value){
         this->padreParaAgregar_->der = insertado;
     }
 
+    std::cout << "_LINE_ pre while" << '\n';
     while (insertado->valor < insertado->padre->valor){
+        std::cout << "in while pre siftUp" << '\n';
         siftUp(insertado);
+        std::cout << "in while post siftup" << '\n';
     }
+    std::cout << __LINE__ << "__LINE__ post while" << '\n';
 
-    //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
+    // INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
 }
 
 template <class T>
@@ -136,7 +149,8 @@ void ColaPrioridad<T>::desencolar(){
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
 
-    Nodo* aux = NULL;
+    Nodo* aux = new Nodo(nodoEvaluado->valor);
+    aux = NULL;
 
     if (nodoEvaluado->der->valor < nodoEvaluado->valor){
         aux->der = nodoEvaluado->der->der;
@@ -162,7 +176,31 @@ void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
 
 template <class T>
 void ColaPrioridad<T>::buscarPadreInsertar(){
-    //TODO
+
+    if (this->padreParaAgregar_->der == NULL){
+        return;
+    }
+
+    Nodo* aux = new Nodo(padreParaAgregar_->valor);
+    aux = NULL;
+
+    aux = this->padreParaAgregar_;
+
+    while (aux != this->raiz_ && aux->padre->der == aux) {
+        aux = aux->padre;
+    }
+
+    //Encuentro el "punto de quiebre", ahora sé que tengo que bajar
+    if (aux != this->raiz_){
+        aux = aux->padre;
+        aux = aux->der;
+    }
+
+    while (aux->izq != NULL) {
+        aux = aux->izq;
+    }
+
+    this->padreParaAgregar_ = aux;
 }
 template <class T>
 void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
