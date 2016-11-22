@@ -113,9 +113,12 @@ void ColaPrioridad<T>::encolar(const T& value){
     if (raiz_ == NULL){
         this->raiz_ = insertado;
         this->padreParaAgregar_ = insertado;
+        return;
     }
 
+    std::cout << "pre buscarPadreInsertar" << std::endl;
     buscarPadreInsertar();
+    std::cout << __LINE__ << std::endl;
 
     insertado->padre = this->padreParaAgregar_;
 
@@ -138,7 +141,38 @@ void ColaPrioridad<T>::encolar(const T& value){
 
 template <class T>
 void ColaPrioridad<T>::desencolar(){
-    //TODO
+
+    if (this->raiz_ == NULL){
+        return;
+    } else if (this->raiz_->izq == NULL){
+        delete this->raiz_;
+        this->raiz_ = NULL;
+        return;
+    }
+
+    Nodo* ultimo = NULL;
+    Nodo* aEliminar = this->raiz_;
+
+    if (this->padreParaAgregar_->der == NULL){
+        ultimo = this->padreParaAgregar_->izq;
+        this->padreParaAgregar_->izq = NULL;
+    } else {
+        ultimo = this->padreParaAgregar_->der;
+        this->padreParaAgregar_->der = NULL;
+    }
+
+    ultimo->izq = this->raiz_->izq;
+    ultimo->der = this->raiz_->der;
+    this->raiz_ = ultimo;
+
+    bool seElimina = ultimo->der->valor < ultimo->valor || ultimo->izq->valor < ultimo->valor;
+
+    while (ultimo->der != NULL && ultimo->izq != NULL && seElimina){
+        siftDown(ultimo);
+    }
+
+    delete aEliminar;
+
 }
 
 
@@ -148,18 +182,28 @@ void ColaPrioridad<T>::desencolar(){
 // Auxiliares de encolar
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
+    /*
+    Nodo* aux = nodoEvaluado;
+    std::cout << __LINE__ << std::endl;
 
-    Nodo* aux = new Nodo(nodoEvaluado->valor);
-    aux = NULL;
+    if (nodoEvaluado->padre->valor > nodoEvaluado->valor){
+        Nodo* auxPadre = nodoEvaluado->padre;
+        Nodo* auxNodo = nodoEvaluado;
 
-    if (nodoEvaluado->der->valor < nodoEvaluado->valor){
-        aux->der = nodoEvaluado->der->der;
-        aux->izq = nodoEvaluado->der->izq;
-        aux->padre = nodoEvaluado->der;
+        std::cout << __LINE__ << std::endl;
+        aux->
+        aux->der = nodoEvaluado->der;
+        aux->izq = nodoEvaluado->der;
+        aux->padre = nodoEvaluado;
 
-        nodoEvaluado->der->der = nodoEvaluado->der;
+
+        nodoEvaluado->der = nodoEvaluado->der;
         nodoEvaluado->der->izq = aux;
         nodoEvaluado->der->padre = nodoEvaluado->padre;
+
+        aux->der = nodoEvaluado->der;
+        aux->izq = nodoEvaluado->der;
+        aux->padre = nodoEvaluado;
 
     }else{
         aux->der = nodoEvaluado->izq->der;
@@ -170,8 +214,10 @@ void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
         nodoEvaluado->izq->izq = aux;
         nodoEvaluado->izq->padre = nodoEvaluado->padre;
     }
+    std::cout << __LINE__ << std::endl;
 
     nodoEvaluado = aux;
+    */
 }
 
 template <class T>
@@ -181,12 +227,12 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
         return;
     }
 
-    Nodo* aux = new Nodo(padreParaAgregar_->valor);
-    aux = NULL;
+    Nodo* aux = padreParaAgregar_;
 
     aux = this->padreParaAgregar_;
 
     while (aux != this->raiz_ && aux->padre->der == aux) {
+        std::cout << __LINE__ << std::endl;
         aux = aux->padre;
     }
 
@@ -197,6 +243,7 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
     }
 
     while (aux->izq != NULL) {
+        std::cout << __LINE__ << std::endl;
         aux = aux->izq;
     }
 
@@ -204,7 +251,29 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
 }
 template <class T>
 void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
+
     //TODO
+
+    Nodo* aux = NULL;
+
+    if (nodoEvaluado->padre->izq = nodoEvaluado){
+        aux->der = nodoEvaluado->padre->der;
+        aux->izq = nodoEvaluado->padre;
+    } else {
+        aux->der = nodoEvaluado->padre;
+        aux->izq = nodoEvaluado->padre->izq;
+    }
+
+    if (nodoEvaluado->padre = this->raiz_){
+        aux->padre = NULL;
+    } else {
+        aux->padre = nodoEvaluado->padre->padre;
+    }
+
+    nodoEvaluado->padre->der = nodoEvaluado->der;
+    nodoEvaluado->padre->izq = nodoEvaluado->izq;
+    nodoEvaluado->padre->padre = nodoEvaluado->padre;
+    nodoEvaluado = aux;
 }
 
 
