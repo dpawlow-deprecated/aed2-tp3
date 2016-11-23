@@ -8,7 +8,7 @@ using namespace std;
 
 template <typename T>
 class ColaPrioridad{
-   
+
     public:
 
         //Constructor. Genera una cola de prioridad vacía.
@@ -43,7 +43,7 @@ class ColaPrioridad{
         struct Nodo{
 
             //El constructor, toma el elemento al que representa el nodo.
-            
+
             Nodo(const T& v);
             //El elemento al que representa.
             T valor;
@@ -76,7 +76,7 @@ class ColaPrioridad{
         //Eliminar deberia llevar iterador o puntero a nodo?
         //void eliminar(??);
 
-       
+
 
 };
 
@@ -180,61 +180,67 @@ void ColaPrioridad<T>::desencolar(){
 // Auxiliares de encolar
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
-    bool esRaiz = false;
-    if (nodoEvaluado->padre == this->raiz_){
-        esRaiz = true;
-    }
-    
-    Nodo* auxPadre = nodoEvaluado->padre;
-    Nodo* auxNodo = nodoEvaluado;
-    
-    if(auxPadre->padre != NULL){
-        auxNodo->padre = auxPadre->padre;
-        if(auxPadre->padre->izq == auxPadre){
-            auxPadre->padre->izq = auxNodo;
-        }else{
-            auxPadre->padre->der = auxNodo;
-        }
-    }else{
-        auxNodo->padre = NULL;
-    }
 
-    if(padreParaAgregar_ == auxNodo)padreParaAgregar_ = auxPadre;
-    if(padreParaAgregar_ == auxPadre)padreParaAgregar_ = auxNodo;
+  if (nodoEvaluado == raiz_) {
+    return;
+  }
 
-    if (auxPadre->izq == nodoEvaluado){
-        auxNodo->izq = auxPadre;
-        if(auxPadre->der != NULL){
-            auxNodo->der = auxPadre->der;
-        }else{
-            auxNodo->der = NULL;
-        }
-    }else{ 
-        auxNodo->der = auxPadre;
-        if(auxPadre->izq != NULL){
-            auxNodo->izq = auxPadre->izq;
-        }else{
-            auxNodo->izq = NULL;
-        }
-    }
-    if(nodoEvaluado->der != NULL){
-        auxPadre->der = nodoEvaluado->der;    
-    }else{
-        auxPadre->der = NULL;
-    }
-    
-    if(nodoEvaluado->izq != NULL){
-        auxPadre->izq = nodoEvaluado->izq;
-    }else{
-        auxPadre->izq = NULL;
-    }
+  Nodo* sube = nodoEvaluado;
+  Nodo* subePadre = nodoEvaluado->padre;
+  Nodo* subeDer = nodoEvaluado->der;
+  Nodo* subeIzq = nodoEvaluado->izq;
 
-    auxPadre->padre = nodoEvaluado;
-    nodoEvaluado = auxNodo;
+  Nodo* baja = nodoEvaluado->padre;
+  Nodo* bajaPadre = nodoEvaluado->padre->padre;
+  Nodo* bajaDer = nodoEvaluado->padre->der;
+  Nodo* bajaIzq = nodoEvaluado->padre->izq;
 
-    if (esRaiz){
-        this->raiz_ = nodoEvaluado;
-    }
+  //cambio padres
+  // aunque sea hijo de raiz anda
+  nodoEvaluado->padre->padre = nodoEvaluado;
+  nodoEvaluado->padre = bajaPadre;
+
+  // sin importar en donde esta en el arbol
+  baja->izq = subeIzq;
+  baja->der = subeDer;
+
+  if (nodoEvaluado == bajaIzq) {
+    sube->izq = subePadre;
+    sube->der = bajaDer;
+    //
+    if (bajaDer != NULL) bajaDer->padre = sube;
+  } else {
+    sube->izq = bajaIzq;
+    sube->der = subePadre;
+    //
+    if (bajaIzq != NULL) bajaIzq->padre = sube;
+  }
+
+  if (subeIzq != NULL) {
+    subeIzq->padre = subePadre;
+  }
+  if (subeDer != NULL) {
+    subeDer->padre = subePadre;
+  }
+
+
+  if (bajaPadre != NULL && bajaPadre->izq == baja) {
+    bajaPadre->izq = sube;
+  }
+  if (bajaPadre != NULL && bajaPadre->der == baja) {
+    bajaPadre->der = sube;
+  }
+
+  //seteamos la nueva raiz
+  if (baja == raiz_) {
+    raiz_ = sube;
+  }
+
+  if (padreParaAgregar_ == baja) {
+    padreParaAgregar_ = sube;
+  } else if (padreParaAgregar_ == sube) {
+    padreParaAgregar_ = baja;
+  }
 }
 
 
@@ -243,7 +249,6 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
 
     if (this->padreParaAgregar_->der == NULL){
         return;
-        
     }
 
     Nodo* aux = this->padreParaAgregar_;
@@ -255,10 +260,6 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
     if (aux != this->raiz_){
         aux = aux->padre;
 
-        if (aux->der == NULL){
-            this->padreParaAgregar_ = aux;
-            return;
-        }
         aux = aux->der;
     }
     while (aux->izq != NULL) {
@@ -338,4 +339,3 @@ void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
 
 
 #endif
-

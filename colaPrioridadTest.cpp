@@ -17,7 +17,7 @@
 
 void test_encolar(){
     ColaPrioridad<int> c;
-    
+
     c.encolar(3);
 
     ASSERT(c.proximo() == 3);
@@ -27,9 +27,9 @@ void test_encolar(){
     ASSERT(c.proximo() == 3);
 
     c.encolar(5);
-    
+
     ASSERT(c.proximo() == 3);
-    
+
     c.encolar(6);
 
     ASSERT(c.proximo() == 3);
@@ -37,7 +37,7 @@ void test_encolar(){
     c.encolar(4);
 
     ASSERT(c.proximo() == 3);
-    
+
     c.encolar(5);
 
     ASSERT(c.proximo() == 3);
@@ -46,11 +46,11 @@ void test_encolar(){
 
     ASSERT(c.proximo() == 3);
 
-    //c.encolar(1);
+    c.encolar(1);
 
-    //ASSERT(c.proximo() == 1);
-    
-    
+    ASSERT(c.proximo() == 1);
+
+
 }
 
 void test_desencolar(){
