@@ -2,12 +2,13 @@
 #define COLAPRIORIDADMIN_H_
 
 #include <stddef.h>
+#include <iostream>
 
-
+using namespace std;
 
 template <typename T>
 class ColaPrioridad{
-
+   
     public:
 
         //Constructor. Genera una cola de prioridad vacía.
@@ -36,15 +37,13 @@ class ColaPrioridad{
         //Deberíamos hacer esto con un iterador?
         //TODO
         //void borrar();
-
-
-
-    private:
+        private:
 
         //La representacion de un nodo interno.
         struct Nodo{
 
             //El constructor, toma el elemento al que representa el nodo.
+            
             Nodo(const T& v);
             //El elemento al que representa.
             T valor;
@@ -77,6 +76,8 @@ class ColaPrioridad{
         //Eliminar deberia llevar iterador o puntero a nodo?
         //void eliminar(??);
 
+       
+
 };
 
 template <class T>
@@ -102,12 +103,14 @@ const bool ColaPrioridad<T>::preguntarVacia(){
 
 template <class T>
 const T& ColaPrioridad<T>::proximo(){
-    return this->raiz_->valor;
+   //cerr << raiz_->valor << endl;
+   //if(raiz_->izq != NULL)cerr << raiz_->izq->valor << endl;
+   //if(raiz_->der!=NULL)cerr << raiz_->der->valor << endl;
+   return this->raiz_->valor;
 }
 
 template <class T>
 void ColaPrioridad<T>::encolar(const T& value){
-
     Nodo* insertado = new Nodo(value);
 
     if (raiz_ == NULL){
@@ -125,11 +128,12 @@ void ColaPrioridad<T>::encolar(const T& value){
     }else{
         this->padreParaAgregar_->der = insertado;
     }
-
     while (insertado != this->raiz_ && insertado->valor < insertado->padre->valor){
         siftUp(insertado);
     }
-
+    //cerr << padreParaAgregar_->valor << endl;
+    //if(padreParaAgregar_->izq != NULL)cerr << padreParaAgregar_->izq->valor << endl;
+    //if(padreParaAgregar_->der != NULL)cerr << padreParaAgregar_->der->valor << endl;
     // TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
 }
 
@@ -176,30 +180,56 @@ void ColaPrioridad<T>::desencolar(){
 // Auxiliares de encolar
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
-
     bool esRaiz = false;
     if (nodoEvaluado->padre == this->raiz_){
         esRaiz = true;
     }
-
+    
     Nodo* auxPadre = nodoEvaluado->padre;
     Nodo* auxNodo = nodoEvaluado;
-
-    auxNodo->padre = auxPadre->padre;
-    if (auxPadre->izq == nodoEvaluado){
-
-        auxNodo->izq = auxPadre;
-        auxNodo->der = auxPadre->der;
-    } else {
-
-        auxNodo->der = auxPadre;
-        auxNodo->izq = auxPadre->izq;
+    
+    if(auxPadre->padre != NULL){
+        auxNodo->padre = auxPadre->padre;
+        if(auxPadre->padre->izq == auxPadre){
+            auxPadre->padre->izq = auxNodo;
+        }else{
+            auxPadre->padre->der = auxNodo;
+        }
+    }else{
+        auxNodo->padre = NULL;
     }
 
-    auxPadre->der = nodoEvaluado->der;
-    auxPadre->izq = nodoEvaluado->izq;
-    auxPadre->padre = nodoEvaluado;
+    if(padreParaAgregar_ == auxNodo)padreParaAgregar_ = auxPadre;
+    if(padreParaAgregar_ == auxPadre)padreParaAgregar_ = auxNodo;
 
+    if (auxPadre->izq == nodoEvaluado){
+        auxNodo->izq = auxPadre;
+        if(auxPadre->der != NULL){
+            auxNodo->der = auxPadre->der;
+        }else{
+            auxNodo->der = NULL;
+        }
+    }else{ 
+        auxNodo->der = auxPadre;
+        if(auxPadre->izq != NULL){
+            auxNodo->izq = auxPadre->izq;
+        }else{
+            auxNodo->izq = NULL;
+        }
+    }
+    if(nodoEvaluado->der != NULL){
+        auxPadre->der = nodoEvaluado->der;    
+    }else{
+        auxPadre->der = NULL;
+    }
+    
+    if(nodoEvaluado->izq != NULL){
+        auxPadre->izq = nodoEvaluado->izq;
+    }else{
+        auxPadre->izq = NULL;
+    }
+
+    auxPadre->padre = nodoEvaluado;
     nodoEvaluado = auxNodo;
 
     if (esRaiz){
@@ -213,14 +243,14 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
 
     if (this->padreParaAgregar_->der == NULL){
         return;
+        
     }
 
     Nodo* aux = this->padreParaAgregar_;
 
     while (aux != this->raiz_ && aux->padre->der == aux) {
         aux = aux->padre;
-        }
-
+    }
     //Encuentro el "punto de quiebre", ahora se que tengo que bajar
     if (aux != this->raiz_){
         aux = aux->padre;
@@ -231,11 +261,9 @@ void ColaPrioridad<T>::buscarPadreInsertar(){
         }
         aux = aux->der;
     }
-
     while (aux->izq != NULL) {
         aux = aux->izq;
     }
-
     this->padreParaAgregar_ = aux;
 }
 
@@ -310,3 +338,4 @@ void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
 
 
 #endif
+
