@@ -38,6 +38,7 @@ class ColaPrioridad{
         //Deberíamos hacer esto con un iterador?
         //TODO
         //void borrar();
+
         private:
 
         //La representacion de un nodo interno.
@@ -210,7 +211,7 @@ void ColaPrioridad<T>::desencolar(){
       assert(false); // si llego aca es porque padreParaAgregar_ quedo
                      // mal en algun paso anterior
     }
-    if (padreParaAgregar_ == raiz_) {
+    if (padreParaAgregar_ == auxRaiz) {
       padreParaAgregar_ = raiz_;
     }
     delete auxRaiz;

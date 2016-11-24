@@ -76,6 +76,8 @@ void test_desencolar(){
     c.desencolar();
     ASSERT(c.proximo() == 20);
 
+    c.desencolar();
+
 }
 
 
