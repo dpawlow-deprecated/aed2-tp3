@@ -100,7 +100,7 @@ ColaPrioridad<T>::ColaPrioridad(){
 
 template <class T>
 ColaPrioridad<T>::~ColaPrioridad(){
-  if (false && raiz_ != NULL) {
+  if (raiz_ != NULL) {
     liberar(raiz_);
     raiz_ = NULL;
     padreParaAgregar_ = NULL;
@@ -211,6 +211,7 @@ void ColaPrioridad<T>::desencolar(){
       assert(false); // si llego aca es porque padreParaAgregar_ quedo
                      // mal en algun paso anterior
     }
+    raiz_->padre = NULL; // la nueva raiz no tiene que tener padre
     if (padreParaAgregar_ == auxRaiz) {
       padreParaAgregar_ = raiz_;
     }
@@ -307,7 +308,7 @@ void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
 template <class T>
 void ColaPrioridad<T>::buscarPadreDesencolar(){
 
-    if (this->padreParaAgregar_->izq != NULL){
+    if (this->padreParaAgregar_->izq != NULL || this->padreParaAgregar_ == raiz_){
         return;
     }
 
