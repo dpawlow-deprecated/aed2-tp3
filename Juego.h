@@ -13,6 +13,10 @@
 using namespace std;
 using namespace aed2;
 
+bool operator<(pair<Nat, Jugador> p1, pair<Nat, Jugador> p2){
+	return p1.first < p2.first;
+}
+
 class Juego{
 friend class IterJugador;
 private:
@@ -23,16 +27,16 @@ private:
 		Nat sanciones;
 		Coordenada pos;
 		Lista< DiccString<Nat> >::const_Iterador pokemons;
-		// Dicc <Nat, > posicion mapa;
+		Dicc <Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
 		Nat cantTotalPoke;
 	};
 
 	struct InfoCoordenada{
 		Pokemon pokemon;
-		// ColaPrioridad<> jugEspe;
+		ColaPrioridad< pair<Nat, Jugador> > jugEspe;
 		bool hayPokemon;
 		bool yaSeCapturo;
-		//Dicc<Nat, > jugadores;
+		//Dicc<Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadores;
 		Nat MovimientosRestantes;
 	};
 
@@ -44,6 +48,7 @@ private:
 	Nat cantidadTotPokemons;
 	Conj<Coordenada> coordenadasConPokemons;
 	Lista< DiccString<Nat> > pokemonesDeJugadores;
+	
 	Lista<Coordenada> CeldasValidas(Coordenada);
 	void ActualizarJugadorYCoordenada(Jugador, Coordenada);
 	void VerCapturas(Jugador, Coordenada);

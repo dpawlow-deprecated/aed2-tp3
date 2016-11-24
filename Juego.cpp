@@ -4,22 +4,35 @@
 using namespace std;
 using namespace aed2;
 
-/*
+
 Juego::Juego(Mapa m){
-	Conj<Coordenada> coords = m.Coordenadas();
+	DiccString< pair<Nat, Nat> > ndicc;
+	pokemons = ndicc;
+	mapa = m;
+	cantidadTotPokemons = 0;
+	Vector<InfoJugador> vj;
+	jugadores = vj;
+	Conj<Coordenada> cc;
+	coordenadasConPokemons = cc;
+	Lista< DiccString<Nat> > dp;
+	pokemonesDeJugadores = dp;
+	
+	const Conj<Coordenada> coords = m.Coordenadas();
 	Conj<Coordenada>::const_Iterador iter = coords.CrearIt();
-	Nat ancho = 0
-	Nat alto = 0
-	while (iter.HaySiguiente(){
+	Nat ancho = 0;
+	Nat alto = 0;
+	while (iter.HaySiguiente()){
 		Coordenada c = iter.Siguiente();
 		iter.Avanzar();
-		if(Latitud(c) > alto){ alto = Latitud(c)};
-		if(Longitud(c) > ancho){ ancho = Longitud(c)};
+		if(Latitud(c) > alto) alto = Latitud(c);
+		if(Longitud(c) > ancho) ancho = Longitud(c);
  	}
- 	infocoor ← arreglo[ancho] de arreglo[alto] de <Vacía(), Bool, Vacía(), 10>
- 	res ← <Vacio(), m, Vacía(), infocoor, 0, Vacía()>
-};
-*/
+ 	const Nat i = ancho;
+ 	const Nat j = alto;
+ 	mapaInfo[i][j];
+
+}
+
 /*
 Juego::~Juego(){
 
@@ -27,44 +40,39 @@ Juego::~Juego(){
 */
 
 void Juego::AgregarPokemon(Pokemon p, Coordenada c){
-coordenadasConPokemons.AgregarRapido(c);
-if(!pokemons.Definido(p)){
-	pokemons.Definir(p, pair<Nat, Nat> (1, 1));
-}else{
-	Nat k = pokemons.Significado(p).first;
-	Nat b = pokemons.Significado(p).second;
-	pokemons.Definir(p, pair<Nat, Nat> (k+1, b+1));
-}
-
-//mapaInfo[c].hayPokemon = true;
-//mapaInfo[c].jugEspe = Vacio();
-//mapaInfo[c].yaSeCapturo = false;
-//mapaInfo[c].movimientosRestantes = 0;
-//mapaInfo[c].pokemon = p;
-Lista<Coordenada> lc;
-lc = CeldasValidas(c);
-lc.AgregarAtras(c);
-Lista<Coordenada>::const_Iterador itCoordenadas = lc.CrearIt();
-
-/*
-while(itCoordenadas.HaySiguiente()){
-	//itDicc(jugador, EsperandoCapturar) itJugadores ← CrearIt(g.mapaInfo[Siguiente(itCoordenadas)].jugadores)
-	while(itJugadores.HaySiguiente()){
-		if(itJugadores.SiguienteSignificado() == NULL){
-			itJugadores.Borrar(itJugadores.SiguienteSignificado());
-		}
-		itColaPrioridad itCola ← Encolar(g.mapaInfo[c].jugEspe, g.jugadores[SiguienteClave(itJugadores)].cantTotPoke, SiguienteClave(itJugadores));
-		SiguienteSignficado(itJugadores) ← itCola;
-		Avanzar(itJugadores);
+	//Defino el nuevo pokemon en todos lados, en el dicc y en el conjunto de coordenadas
+	coordenadasConPokemons.AgregarRapido(c);
+	if(!pokemons.Definido(p)){
+		pokemons.Definir(p, pair<Nat, Nat> (1, 1));
+	}else{
+		Nat k = pokemons.Significado(p).first;
+		Nat b = pokemons.Significado(p).second;
+		pokemons.Definir(p, pair<Nat, Nat> (k+1, b+1));
 	}
-	if EsVacio?(g.mapaInfo[Siguiente(itCoordena)].jugEspe) then
-		g.mapaInfo[Siguiente(itCoordena)].yaSeCapturo ← false
-	end if
-	Avanzar(itCoordenada)
-
-}
-*/
-
+	mapaInfo[Latitud(c)][Longitud(c)].hayPokemon = true;
+	ColaPrioridad< pair<Nat, Jugador> > cj;
+	mapaInfo[Latitud(c)][Longitud(c)].jugEspe = cj;
+	mapaInfo[Latitud(c)][Longitud(c)].yaSeCapturo = false;
+	mapaInfo[Latitud(c)][Longitud(c)].MovimientosRestantes = 0;
+	mapaInfo[Latitud(c)][Longitud(c)].pokemon = p;
+	
+	//Luego me arma una lista con todas las coordenadas que existan cerca de la coordenada pasada por parametros y agrego a c a la lista
+	Lista<Coordenada> lc;
+	lc = CeldasValidas(c);
+	lc.AgregarAtras(c);
+	/*
+	//Recorro todas las coordenadas y por cada una, me fijo los jugadores en el radio de captura y defino sus interadores a la nueva cola 
+	Lista<Coordenada>::const_Iterador itCoordenadas = lc.CrearIt();
+	while(itCoordenadas.HaySiguiente()){
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itJugadores = mapaInfo[Latitud(itCoordenadas.Siguiente())][Longitud(itCoordenadas.Siguiente())].jugadores.CrearIt();
+		while(itJugadores.HaySiguiente()){
+			ColaPrioridad< pair<Nat, Jugador> >::Iterador itCola = mapaInfo[Latitud(c)][Longitud(c)].jugEspe.Encolar(jugadores[itJugadores.SiguienteClave()].cantTotPoke, itJugadores.SiguienteClave());
+			itJugadores.SiguienteSignficado() = itCola;
+			itJugadores.Avanzar();
+		}
+		itCoordenada.Avanzar();
+	}
+	*/
 };
 
 Juego::IterJugador Juego::AgregarJugador(Jugador j){
@@ -90,12 +98,32 @@ Juego::IterJugador Juego::AgregarJugador(Jugador j){
 };
 
 void Juego::Conectarse(Jugador j, Coordenada c){
+	
 	jugadores[j].conectado = true;
 	jugadores[j].pos = c;
+	/*
+	if(HayPokemonCercano(c)){
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[Latitud(c)][Longitud(c)].jugadores.DefinirRapido(j, mapaInfo[posPokemonCerca(c)].jugEspe.Encolar(jugadores[j].cantTotalPoke, j));
+		jugadores[j].posicionMapa = itPosicion;
+	}else{
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador > itPosicion = mapaInfo[Latitud(c)][Longitud[c]].jugadores.DefinirRapido(j, NULL);
+		jugadores[j].posicionMapa = itPosicion;
+	}
+	*/
 };
 
 void Juego::Desconectarse(Jugador j){
+	/*
 	jugadores[j].conectado = false;
+	if(jugadores[j].posicionMapa.SiguienteSignificado() == NULL){
+		jugadores[j].posicionMapa.SiguienteSignificado().Borrar(jugadores[j].posicionMapa.SiguienteSignificado());
+		jugadores[j].posicionMapa.EleminarSiguiente();
+		jugadores[j].posicionMapa = NULL;
+	}else{
+		jugadores[j].posicionMapa.EleminarSiguiente();
+		jugadores[j].posicionMapa = NULL;
+	}
+	*/
 };
 
 void Moverse(Jugador j, Coordenada c){
