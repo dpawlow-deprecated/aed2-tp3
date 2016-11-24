@@ -171,6 +171,7 @@ Pokemon Juego::PokemonEnPos(Coordenada c){
 };
 
 Nat Juego::CantMovimientosParaCaptura(Coordenada c){
+	return 10 - mapaInfo[Latitud(c)][Longitud(c)].MovimientosRestantes;
 
 };
 
@@ -229,8 +230,22 @@ Nat Juego::CantPokemonsTotales(){
 	return cantidadTotPokemons;
 };
 
-Coordenada Juego::PosPokemonCercano(Coordenada){
+Coordenada Juego::PosPokemonCercano(Coordenada c){
+	Coordenada res;
 
+	if (mapa.PosExistente(c)){
+		Lista<Coordenada> coordCercanas = CeldasValidas(c);
+		Lista<Coordenada>::const_Iterador iter = coordCercanas.CrearIt();
+		while (iter.HaySiguiente()){
+			Coordenada coordAux = iter.Siguiente();
+
+		if (mapaInfo[Latitud(coordAux)][Longitud(coordAux)].hayPokemon){
+				res = coordAux;
+			}
+			iter.Avanzar();
+		}
+	}
+	return res;
 };
 
 Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
