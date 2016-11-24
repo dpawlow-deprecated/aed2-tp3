@@ -320,6 +320,26 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 	return ls;
 }
 
+void Juego::VerCapturas(Jugador j, Coordenada c){
+	//Esto está bien, pero por la mitad
+
+	/*Coordenada coordJugador = jugadores[j].pos;
+	Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
+
+	while (iter.HaySiguiente()){
+		mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes += 1;
+
+		if (mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes >= 10){
+			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].hayPokemon = false;
+			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].yaSeCapturo = true;
+			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes = 0;
+			pokemons.Significado(mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].pokemon).first = pokemons.Significado(mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].pokemon).first - 1;
+			Jugador jug = mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].jugEspe.proximo().second;
+		} 
+	}
+	*/
+}
+
 //OPERACIONES DEL ITERADOR JUGADOR
 
 bool Juego::IterJugador::HayMas(){
