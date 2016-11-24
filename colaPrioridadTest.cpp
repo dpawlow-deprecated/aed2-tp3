@@ -80,12 +80,31 @@ void test_desencolar(){
 
 }
 
+void test_iterador() {
+    ColaPrioridad<int> c;
+    ColaPrioridad<int>::Iterador it;
+
+    c.encolar(3);
+    c.encolar(8);
+    c.encolar(5);
+    c.encolar(6);
+    c.encolar(4);
+    c.encolar(5);
+    it = c.encolar(20);
+    c.encolar(1);
+
+    ASSERT(it.Siguiente() == 20);
+    it.Borrar();
+    ASSERT(c.proximo() == 1);
+}
+
 
 int main() {
     //RUN_TEST(test_punteros_cola_vacia);
     RUN_TEST(test_encolar);
     RUN_TEST(test_desencolar3);
     RUN_TEST(test_desencolar);
+    //RUN_TEST(test_iterador);
 
     return 0;
 }

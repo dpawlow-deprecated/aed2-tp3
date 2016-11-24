@@ -45,7 +45,7 @@ class DiccString {
                 const_Iterador CrearIt() const;
 
                 //Clase de const_iterador, no modificable
-                class const_Iterador{
+                class const_Iterador {
                     public:
                         //Constructor por defecto del iterador
                         const_Iterador();

@@ -10,36 +10,7 @@ using namespace std;
 template <typename T>
 class ColaPrioridad{
 
-    public:
-
-        //Constructor. Genera una cola de prioridad vacía.
-        ColaPrioridad();
-
-        //Destructor. Debe dejar limpia la memoria.
-        ~ColaPrioridad();
-
-        //Chequea que la lista este vacia.
-        //Es la funcion "EsVacia?()"
-        const bool preguntarVacia();
-
-        //PRE: NO es vacia
-        //POST: Retorna el valor del primer elemento.
-        const T& proximo();
-
-        //Agrega un elemento.
-        //PRE: el elemento no existe en la cola.
-        //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
-        void encolar(const T&);
-
-        //Elimina el proximo elemento de la cola.
-        void desencolar();
-
-        //Elimina el elemento al que apunta el puntero del parametro
-        //Deberíamos hacer esto con un iterador?
-        //TODO
-        //void borrar();
-
-        private:
+    private:
 
         //La representacion de un nodo interno.
         struct Nodo{
@@ -64,6 +35,9 @@ class ColaPrioridad{
         //hijo cuando encolamos.
         Nodo* padreParaAgregar_;
 
+        void borrar(Nodo*);
+
+
 
         //FUNCIONES AUXILIARES:
 
@@ -83,6 +57,56 @@ class ColaPrioridad{
         //Eliminar deberia llevar iterador o puntero a nodo?
         //void eliminar(??);
 
+    public:
+        class Iterador {
+            public:
+                //Constructor por defecto del iterador
+                Iterador();
+                //Constructor por copia
+                Iterador(typename ColaPrioridad<T>::Iterador& otro);
+
+                //Chequea si hay mas elementos por recorrer, obs: si esta parado en el ultimo elemento esta funcion devuelve true, recien cuando se avance
+                //la funcion devuelve false
+                bool HayMas() const;
+
+                T Siguiente();
+
+                // En el TP tenemos que la cola recibe un iterador para poder borrar
+                // y en realidad el iterador es quien deberia saber borrarse
+                void Borrar();
+            private:
+
+                ColaPrioridad<T>::Nodo* nodo_;
+                ColaPrioridad<T>* cola_;
+
+                /// El constructor es privado, necesitamos el friend.
+                Iterador(ColaPrioridad<T>* cola, ColaPrioridad<T>::Nodo* nodo);
+
+                friend class ColaPrioridad<T>;
+        };
+        friend class ColaPrioridad<T>::Iterador;
+
+        //Constructor. Genera una cola de prioridad vacía.
+        ColaPrioridad();
+
+        //Destructor. Debe dejar limpia la memoria.
+        ~ColaPrioridad();
+
+        //Chequea que la lista este vacia.
+        //Es la funcion "EsVacia?()"
+        const bool preguntarVacia();
+
+        //PRE: NO es vacia
+        //POST: Retorna el valor del primer elemento.
+        const T& proximo();
+
+        //Agrega un elemento.
+        //PRE: el elemento no existe en la cola.
+        //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
+        ColaPrioridad<T>::Iterador encolar(const T&);
+
+        //Elimina el proximo elemento de la cola.
+        void desencolar();
 
 
 };
@@ -132,13 +156,14 @@ const T& ColaPrioridad<T>::proximo(){
 }
 
 template <class T>
-void ColaPrioridad<T>::encolar(const T& value){
+typename ColaPrioridad<T>::Iterador ColaPrioridad<T>::encolar(const T& value){
     Nodo* insertado = new Nodo(value);
+    ColaPrioridad<T>::Iterador it(this, insertado);
 
     if (raiz_ == NULL){
         this->raiz_ = insertado;
         this->padreParaAgregar_ = insertado;
-        return;
+        return it;
     }
 
     buscarPadreInsertar();
@@ -153,10 +178,8 @@ void ColaPrioridad<T>::encolar(const T& value){
     while (insertado != this->raiz_ && insertado->valor < insertado->padre->valor){
         siftUp(insertado);
     }
-    //cerr << padreParaAgregar_->valor << endl;
-    //if(padreParaAgregar_->izq != NULL)cerr << padreParaAgregar_->izq->valor << endl;
-    //if(padreParaAgregar_->der != NULL)cerr << padreParaAgregar_->der->valor << endl;
-    // TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
+
+    return it;
 }
 
 template <class T>
@@ -378,6 +401,122 @@ void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
     }
   }
 }
+
+template <class T>
+void ColaPrioridad<T>::borrar(Nodo* nodo) {
+  if (nodo == raiz_) {
+    desencolar();
+    return;
+  }
+
+  buscarPadreDesencolar();
+
+  if (nodo == padreParaAgregar_->der) {
+    padreParaAgregar_->der = NULL;
+    delete nodo;
+    return;
+  } else if (nodo == padreParaAgregar_->izq) {
+    if (padreParaAgregar_->der == NULL) {
+      padreParaAgregar_->izq = NULL;
+      padreParaAgregar_ = padreParaAgregar_->padre;
+    } else {
+      padreParaAgregar_->izq = padreParaAgregar_->der;
+    }
+    delete nodo;
+    return;
+  }
+
+  // este es el caso general, no se donde esta, no es raiz ni hijo de donde hay que desencolar
+
+  Nodo* raizOriginal = raiz_;
+  Nodo* raizIzq = raiz_->izq;
+  Nodo* raizDer = raiz_->der;
+
+  if (raiz_ == nodo->padre) {
+    raiz_->padre = nodo;
+  } else {
+    raiz_->padre = nodo->padre;
+  }
+  raiz_->izq = nodo->izq;
+  if (nodo->izq != NULL){
+    nodo->izq->padre = raiz_;
+  }
+  raiz_->der = nodo->der;
+  if (nodo->der != NULL) {
+    nodo->der->padre = raiz_;
+  }
+
+  if (raiz_->izq != NULL) {
+    raiz_->izq->padre = nodo;
+  }
+  if (raiz_->der != NULL) {
+    raiz_->der->padre = nodo;
+  }
+
+  nodo->padre = NULL;
+  if (nodo == raizIzq) {
+    nodo->izq = raiz_;
+  } else {
+    nodo->izq = raizIzq;
+  }
+  if (nodo == raizDer) {
+    nodo->der = raiz_;
+  } else {
+    nodo->der = raizDer;
+  }
+  raiz_ = nodo;
+
+  if (padreParaAgregar_ == nodo) {
+    padreParaAgregar_ = raizOriginal;
+  }
+
+  desencolar();
+  while(raizOriginal != raiz_ && raizOriginal->padre->valor >= raizOriginal->valor) {
+    siftUp(raizOriginal);
+  }
+
+}
+
+
+
+//OPERACIONES DEL ITERADOR
+//Los 3 constructores
+template <class T>
+ColaPrioridad<T>::Iterador::Iterador() :
+  nodo_(NULL){};
+
+template <class T>
+ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>* cola, ColaPrioridad<T>::Nodo* nodo) :
+  nodo_(nodo), cola_(cola){};
+
+template <class T>
+ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>::Iterador& otro)
+  : nodo_(otro.nodo_){};
+
+
+
+template <class T>
+bool ColaPrioridad<T>::Iterador::HayMas() const {
+  return nodo_->izq != NULL || nodo_->der != NULL || nodo_->padre != NULL;
+}
+
+
+template <class T>
+T ColaPrioridad<T>::Iterador::Siguiente() {
+  return nodo_->valor;
+}
+
+template <class T>
+void ColaPrioridad<T>::Iterador::Borrar() {
+  cola_->borrar(nodo_);
+}
+
+
+
+
+
+
+
 
 
 #endif
