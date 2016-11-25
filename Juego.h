@@ -132,6 +132,7 @@ public:
 	//Devuelve la coordenada del pokemon mas cercano
 	Coordenada PosPokemonCercano(Coordenada);
 
+	// Antes de usar este iterador hay que avanzarlo como primer paso
 	class IterJugador{
 
 		public:
@@ -147,9 +148,7 @@ public:
 
 			const Vector<InfoJugador>* vector;
 
-			IterJugador(const Juego* j){
-				posicion = 0;
-				vector = &j->jugadores;
+			IterJugador(const Juego* j): posicion(-1), vector(&j->jugadores) {
 			};
 
 			friend Juego::IterJugador Juego::Jugadores()const;

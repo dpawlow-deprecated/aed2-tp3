@@ -26,7 +26,7 @@ void test_juegoMapa2x2(){
 	m.AgregarCoordenada(c1);
 	m.AgregarCoordenada(c2);
 	m.AgregarCoordenada(c3);
-	
+
 	//Asumo que HayCamino es simetrica
 	ASSERT(m.Coordenadas().Cardinal() == 4);
 	ASSERT(m.Coordenadas().Pertenece(c));
@@ -48,10 +48,10 @@ void test_juegoMapa2x2(){
 
 	//Test de los jugadores de mapa
 	//nota: en este mapa no se pueden producir capturas, es muy pequeño
-	Jugador j = 1;
-	Jugador j1 = 2;
-	Jugador j2 = 3;
-	Jugador j3 = 4;
+	Jugador j =  0;
+	Jugador j1 = 1;
+	Jugador j2 = 2;
+	Jugador j3 = 3;
 	Juego g(m);
 	g.AgregarJugador(j);
 	g.AgregarJugador(j1);
@@ -112,13 +112,14 @@ void test_juegoMapa2x2(){
 	ASSERT(!g.Pokemons(j2).HayMas());
 	ASSERT(!g.Pokemons(j3).HayMas());
 	Juego::IterJugador itj = g.Jugadores();
-	ASSERT(itj.HayMas() && itj.Siguiente() == j);
+	itj.Avanzar(); // por definicion antes de usarlo hay que avanzarlo
+	ASSERT(itj.HayMas() && itj.Actual() == j);
 	itj.Avanzar();
-	ASSERT(itj.HayMas() && itj.Siguiente() == j1);
+	ASSERT(itj.HayMas() && itj.Actual() == j1);
 	itj.Avanzar();
-	ASSERT(itj.HayMas() && itj.Siguiente() == j2);
+	ASSERT(itj.HayMas() && itj.Actual() == j2);
 	itj.Avanzar();
-	ASSERT(itj.HayMas() && itj.Siguiente() == j3);
+	ASSERT(itj.HayMas() && itj.Actual() == j3);
 	itj.Avanzar();
 	ASSERT(!itj.HayMas());
 

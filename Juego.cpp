@@ -398,15 +398,11 @@ bool Juego::IterJugador::HayMas(){
 };
 
 void Juego::IterJugador::Avanzar(){
-	bool b = false;
-	Nat i = posicion;
-	while (i < (*vector).Longitud() && !b){
-		if((*vector)[i].expulsado == false){
-			b = true;
-		}
+	Nat i = posicion+1;
+	while (i < (*vector).Longitud() && (*vector)[i].expulsado == true){
 		i++;
 	}
-	posicion = (i-1);
+	posicion = i;
 }
 
 Nat Juego::IterJugador::Actual(){
