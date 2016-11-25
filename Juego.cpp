@@ -33,11 +33,10 @@ Juego::Juego(Mapa m){
 
 }
 
-/*
-Juego::~Juego(){
 
+Juego::~Juego(){
 };
-*/
+
 
 void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 	//Defino el nuevo pokemon en todos lados, en el dicc y en el conjunto de coordenadas
@@ -130,6 +129,52 @@ void Moverse(Jugador j, Coordenada c){
 	//VerCapturas(j, c);
 	//ActualizarJugador(j, c);
 };
+
+void Juego::ActualizarJugadorYCoordenada(Jugador j, Coordenada c){
+	/*
+	if(distanciaEuclidia(c, jugadores[j].pos) > 100 || !(mapa.hayCamino(c, jugadores[j].pos))){
+		jugadores[j].sanciones = jugadores[j].sanciones +1;
+		if (jugadores[j].sanciones >= 4){
+			jugadores[j].expulsado = true;
+		}
+	}
+
+	if(g.jugadores[j].expulsado == true){
+		cantidadTotPokemons = cantidadTotPokemons - jugadores[j].cantTotalPoke;
+		Lista<string>::Iterador itPokemons = g.jugadores[j].pokemons.Siguiente().Claves().CrearIt();
+		while(itPokemons.HayMas()) {
+			pokemons.Significado(itPokemons.Siguiente()).second -= jugadores[j].pokemons.Significado(it.Siguiente()); 
+			itPokemons.EliminarSiguiente();
+		}
+		jugadores[j].pokemons.EliminarSiguiente();
+		jugadores[j].pokemons = NULL;
+		jugadores[j].cantTotalPoke = 0;
+	}else{
+		if(hayPokemonCercano(jugadores[j].pos)){
+			if(hayPokemonCercano(c)){
+				if(posPokemonCercano(g.jugadores[j].pos) == posPokemonCercano(c, g)){
+					mapaInfo[Latitud(jugadores[j].pos)][Longitud(jugadores[j].pos)].MovimientosRestantes = 0;
+				}
+			}else{
+				mapaInfo[Latitud(g.jugadores[j])][Longitud(g.jugadores[j].pos)].MovimientosRestantes = 0;
+			}
+		}else{
+			if(hayPokemonCercano(c)){
+				mapaInfo[Latitud(c)][Longitud(c)].MovimientosRestantes = 0
+			}
+		}
+	}
+
+	jugadores[j].pos = c;
+	if(HayPokemonCerca(c)){
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[Latitud(c)][Longitud(c)].jugadores.DefinirRapido(j, mapaInfo[Latitud(posPokemonCerca(c))][Longitud(posPokemonCerca(c))].jugEspe.Encolar(pair<g.jugadores[j].cantTotalPoke, j>));
+		jugadores[j].posicionMapa = itPosicion;
+	}else{
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::const_Iterador itPosicion = mapaInfo[Latitud(c)][Longitud(c)].jugadores.DefinirRapido(j, NULL);
+		jugadores[j].posicionMapa = itPosicion;
+	}*/
+}
+
 
 Juego::IterJugador Juego::Jugadores()const{
 	return IterJugador(this);

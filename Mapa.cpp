@@ -26,7 +26,7 @@ Conj<Coordenada> Mapa::Coordenadas(){
 }
 
 bool Mapa::PosExistente(const Coordenada& c) {
-	if (c.latitud > _alto && c.longitud > _ancho) {
+	if (c.latitud < _alto && c.longitud < _ancho) {
 		int pos = _ancho * c.longitud + _alto * c.latitud;
 		return _relacionCoordenadas[pos][pos];
 	}
