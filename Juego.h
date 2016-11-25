@@ -48,12 +48,12 @@ private:
 	Nat cantidadTotPokemons;
 	Conj<Coordenada> coordenadasConPokemons;
 	Lista< DiccString<Nat> > pokemonesDeJugadores;
-	
+
 	Lista<Coordenada> CeldasValidas(Coordenada);
 	void ActualizarJugadorYCoordenada(Jugador, Coordenada);
 	void VerCapturas(Jugador, Coordenada);
 
-public: 
+public:
 	//Declaraciones de las clases de iterador
 	class IterJugador;
 	class IterPokemon;
@@ -88,7 +88,7 @@ public:
 	//pre: el jugador tiene que existir
 	bool EstaConectado(Jugador);
 
-	//Devuelve las sanciones de un jugador 
+	//Devuelve las sanciones de un jugador
 	//pre: el jugador tiene que existir en el juego
 	Nat Sanciones(Jugador);
 
@@ -123,7 +123,7 @@ public:
 	//Devuelve si hay un pokemon cercano
 	bool HayPokemonCercano(Coordenada);
 
-	//Devuelve el indice de rareza del pokemon 
+	//Devuelve el indice de rareza del pokemon
 	Nat IndiceRareza(Pokemon);
 
 	//Devuelve la cantidad total de pokemons del juego
@@ -133,16 +133,16 @@ public:
 	Coordenada PosPokemonCercano(Coordenada);
 
 	class IterJugador{
-		
+
 		public:
-			
+
 			bool HayMas();
 			void Avanzar();
 			Nat Actual();
 			Lista<Nat> Siguientes();
 
 		private:
-			
+
 			Nat posicion;
 
 			const Vector<InfoJugador>* vector;
@@ -174,4 +174,4 @@ public:
 
 };
 
-#endif 
+#endif

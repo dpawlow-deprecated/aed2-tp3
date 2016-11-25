@@ -1,18 +1,15 @@
 #include "Mapa.h"
 #include "Cola.h"
 
-Mapa::Mapa(){
+Mapa::Mapa(): _ancho(0), _alto(0), _relacionCoordenadas(NULL){
 	_coordenadas = Conj<Coordenada>();
-	_ancho = 0;
-	_alto = 0;
-	_relacionCoordenadas = new bool*[0];
 }
 
-Mapa::Mapa(const Mapa& otro){
+Mapa::Mapa(const Mapa& otro): _ancho(0), _alto(0), _relacionCoordenadas(NULL) {
 	Conj<Coordenada> c1(otro._coordenadas);
 	_coordenadas = c1;
 	Conj<Coordenada>::const_Iterador it = c1.CrearIt();
-	while(it.HaySiguiente()){
+	while (it.HaySiguiente()) {
 		AgregarCoordenada(it.Siguiente());
 		it.Avanzar();
 	}
@@ -22,7 +19,9 @@ Mapa::~Mapa() {
 	for (int i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
 	}
-	delete [] _relacionCoordenadas;
+	if (_relacionCoordenadas != NULL) {
+		delete [] _relacionCoordenadas;
+	}
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
@@ -92,7 +91,9 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 	for (int i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
 	}
-	delete [] _relacionCoordenadas;
+	if (_relacionCoordenadas != NULL) {
+		delete [] _relacionCoordenadas;
+	}
 
 
 	if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa

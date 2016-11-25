@@ -6,10 +6,11 @@ using namespace aed2;
 
 
 Juego::Juego(Mapa m){
-	Mapa m1(m);
+
 	DiccString< pair<Nat, Nat> > ndicc;
 	pokemons = ndicc;
-	mapa = m1;
+
+	mapa = Mapa(m);
 	cantidadTotPokemons = 0;
 	Vector<InfoJugador> vj;
 	jugadores = vj;
@@ -17,25 +18,24 @@ Juego::Juego(Mapa m){
 	coordenadasConPokemons = cc;
 	Lista< DiccString<Nat> > dp;
 	pokemonesDeJugadores = dp;
-	
-	const Conj<Coordenada> coords = m1.Coordenadas();
+
+	const Conj<Coordenada> coords = mapa.Coordenadas();
 	Conj<Coordenada>::const_Iterador iter = coords.CrearIt();
-	Nat ancho = 0;
-	Nat alto = 0;
-	while (iter.HaySiguiente()){
-		Coordenada c = iter.Siguiente();
-		iter.Avanzar();
-		if(Latitud(c) > alto) alto = Latitud(c);
-		if(Longitud(c) > ancho) ancho = Longitud(c);
- 	}
- 	const Nat i = ancho;
- 	const Nat j = alto;
- 	mapaInfo[i][j];
-	
+	Nat ancho = mapa.Ancho();
+	Nat alto = mapa.Alto();
+
+	mapaInfo = new InfoCoordenada*[ancho];
+ 	for (int i=0; i<ancho; i++) {
+		mapaInfo[i] = new InfoCoordenada[alto];
+	}
 }
 
 
 Juego::~Juego(){
+	for (int i = 0; i<mapa.Ancho(); i++) {
+		delete [] mapaInfo[i];
+	}
+	delete [] mapaInfo;
 };
 
 
@@ -445,4 +445,3 @@ void Juego::IterPokemon::Avanzar(){
 Lista<string> Juego::IterPokemon::Siguientes(){
 	return it.Siguientes();
 }
-

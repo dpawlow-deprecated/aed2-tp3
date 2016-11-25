@@ -124,11 +124,33 @@ void test_CrearCopia(){
 
 }
 
+void test_free(){
+    Mapa m;
+    Mapa m2;
+    Mapa m3;
+    Coordenada c(1,1);
+    m.AgregarCoordenada(c);
+    m2.AgregarCoordenada(c);
+    m3.AgregarCoordenada(c);
+}
+
+void test_copias_locas(){
+    Mapa m;
+    Mapa m2;
+    Mapa m3;
+    m2 = Mapa(m);
+    m3 = Mapa(m2);
+    Coordenada c(1,5);
+    m3.AgregarCoordenada(c);
+}
+
 int test_mapa() {
 	RUN_TEST(test_crearmapa);
 	RUN_TEST(test_mapa_4x4);
 	RUN_TEST(test_mapa_4x4_creciendo);
     RUN_TEST(test_CrearCopia);
+    RUN_TEST(test_free);
+    RUN_TEST(test_copias_locas);
     return 0;
 }
 
