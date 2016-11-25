@@ -14,7 +14,7 @@ Mapa::Mapa(const Mapa& otro){
 	Conj<Coordenada>::const_Iterador it = c1.CrearIt();
 	while(it.HaySiguiente()){
 		AgregarCoordenada(it.Siguiente());
-		it.Avanzar();	
+		it.Avanzar();
 	}
 }
 
@@ -26,8 +26,8 @@ Mapa::~Mapa() {
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
-	int pos1 = _ancho * c1.latitud + c1.longitud;
-	int pos2 = _ancho * c2.latitud + c2.longitud;
+	int pos1 = calcularPosicion(c1);
+	int pos2 = calcularPosicion(c2);
 	return _relacionCoordenadas[pos1][pos2];
 }
 
@@ -37,7 +37,7 @@ Conj<Coordenada> Mapa::Coordenadas(){
 
 bool Mapa::PosExistente(const Coordenada& c) {
 	if (c.latitud < _alto && c.longitud < _ancho) {
-		int pos = _ancho * c.longitud + _alto * c.latitud;
+		int pos = calcularPosicion(c);
 		return _relacionCoordenadas[pos][pos];
 	}
 	return false;
@@ -122,10 +122,14 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 		while (iterConectadas.HaySiguiente()) {
 			Coordenada coor2 = iterConectadas.Siguiente();
 			iterConectadas.Avanzar();
-			int pos1 = _ancho * coor.latitud + coor.longitud;
-			int pos2 = _ancho * coor2.latitud + coor2.longitud;
+			int pos1 = calcularPosicion(coor);
+			int pos2 = calcularPosicion(coor2);
 			_relacionCoordenadas[pos1][pos2] = true;
 			_relacionCoordenadas[pos2][pos1] = true;
 		}
 	}
+}
+
+Nat Mapa::calcularPosicion(const Coordenada& c) const{
+	return _ancho * c.latitud + c.longitud;
 }

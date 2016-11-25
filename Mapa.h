@@ -27,6 +27,7 @@ private:
 	Nat _ancho;
 	Nat _alto;
 	bool** _relacionCoordenadas;
+	Nat calcularPosicion(const Coordenada&) const;
 };
 
 #endif
