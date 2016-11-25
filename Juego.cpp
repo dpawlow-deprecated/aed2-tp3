@@ -5,12 +5,11 @@ using namespace std;
 using namespace aed2;
 
 
-Juego::Juego(Mapa m): mapa(m){
+Juego::Juego(Mapa m): mapa(m), cantidadTotPokemons(0){
 
 	DiccString< pair<Nat, Nat> > ndicc;
 	pokemons = ndicc;
 
-	cantidadTotPokemons = 0;
 	Vector<InfoJugador> vj;
 	jugadores = vj;
 	Conj<Coordenada> cc;
@@ -59,6 +58,7 @@ void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 	Lista<Coordenada> lc;
 	lc = CeldasValidas(c);
 	lc.AgregarAtras(c);
+	cantidadTotPokemons++;
 	/*
 	//Recorro todas las coordenadas y por cada una, me fijo los jugadores en el radio de captura y defino sus interadores a la nueva cola
 	Lista<Coordenada>::const_Iterador itCoordenadas = lc.CrearIt();
@@ -201,7 +201,7 @@ bool Juego::PuedoAgregarPokemon(Coordenada c){
 	return res;
 };
 
-bool Juego::HayPokemonCercano(Coordenada c){
+bool Juego::HayPokemonCercano(Coordenada c) {
 	bool res = false;
 	if (mapa.PosExistente(c)){
 		Lista<Coordenada> coordCercanas = CeldasValidas(c);
@@ -248,14 +248,15 @@ Coordenada Juego::PosPokemonCercano(Coordenada c){
 
 Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 	Lista<Coordenada> ls;
+	ls.AgregarAtras(c);
 	Nat i = 4;
 	while(i > 0){
 		ls.AgregarAtras(Coordenada(Latitud(c)+i, Longitud(c)));
-		if(Latitud(c)-i>0){
+		if(Latitud(c)-i>=0){
 			ls.AgregarAtras(Coordenada(Latitud(c)-i, Longitud(c)));
 		}
 		ls.AgregarAtras(Coordenada(Latitud(c), Longitud(c)+i));
-		if(Longitud(c)-i >0){
+		if(Longitud(c)-i >=0){
 			ls.AgregarAtras(Coordenada(Latitud(c), Longitud(c)-i));
 		}
 		i--;
@@ -387,7 +388,7 @@ void Juego::VerCapturas(Jugador j, Coordenada c){
 
 bool Juego::IterJugador::HayMas(){
 	bool b = false;
-	Nat i = posicion;
+	Nat i = posicion; // evitamos preguntar si el actual esta expulsado deberiamos fijarnos uno adelante
 	while(i < (*vector).Longitud() && !b){
 		if((*vector)[i].expulsado == false){
 			b = true;

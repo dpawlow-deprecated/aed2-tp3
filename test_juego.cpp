@@ -133,7 +133,7 @@ void test_juegoMapa2x2(){
 	ASSERT(g.PosConPokemons().Cardinal() == 1);
 	ASSERT(g.PosConPokemons().Pertenece(c));
 	ASSERT(g.PokemonEnPos(c) == s);
-	ASSERT(g.CantMovimientosParaCaptura(c)==0);
+	ASSERT(g.CantMovimientosParaCaptura(c)==10);
 	ASSERT(g.CantPokemonsTotales()==1);
 	ASSERT(g.IndiceRareza(s)==0);
 	ASSERT(g.PosPokemonCercano(c1) == c);
