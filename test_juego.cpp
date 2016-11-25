@@ -16,6 +16,7 @@ void test_juegoVacio(){
 }
 
 void test_juegoMapa2x2(){
+	//test para mapa
 	Coordenada c(1, 1);
 	Coordenada c1(1, 0);
 	Coordenada c2(0, 1);
@@ -25,7 +26,7 @@ void test_juegoMapa2x2(){
 	m.AgregarCoordenada(c1);
 	m.AgregarCoordenada(c2);
 	m.AgregarCoordenada(c3);
-
+	
 	//Asumo que HayCamino es simetrica
 	ASSERT(m.Coordenadas().Cardinal() == 4);
 	ASSERT(m.Coordenadas().Pertenece(c));
@@ -45,10 +46,12 @@ void test_juegoMapa2x2(){
 	ASSERT(m.Ancho() == 2);
 	ASSERT(m.Alto() == 2);
 
-	Jugador j =  0;
-	Jugador j1 = 1;
-	Jugador j2 = 2;
-	Jugador j3 = 3;
+	//Test de los jugadores de mapa
+	//nota: en este mapa no se pueden producir capturas, es muy pequeño
+	Jugador j = 1;
+	Jugador j1 = 2;
+	Jugador j2 = 3;
+	Jugador j3 = 4;
 	Juego g(m);
 	g.AgregarJugador(j);
 	g.AgregarJugador(j1);
@@ -58,6 +61,7 @@ void test_juegoMapa2x2(){
 	g.Conectarse(j1, c1);
 	g.Conectarse(j2, c2);
 	g.Conectarse(j3, c3);
+	ASSERT(g.Expulsados().Cardinal()==0);
 	ASSERT(g.JugadoresConectados().Cardinal()==4);
 	ASSERT(g.JugadoresConectados().Pertenece(j));
 	ASSERT(g.JugadoresConectados().Pertenece(j1));
@@ -99,14 +103,41 @@ void test_juegoMapa2x2(){
 	ASSERT(g.Sanciones(j1)==0);
 	ASSERT(g.Sanciones(j2)==0);
 	ASSERT(g.Sanciones(j3)==0);
+	ASSERT(g.Posicion(j)==c);
+	ASSERT(g.Posicion(j1)==c1);
+	ASSERT(g.Posicion(j2)==c2);
+	ASSERT(g.Posicion(j3)==c3);
+	ASSERT(!g.Pokemons(j).HayMas());
+	ASSERT(!g.Pokemons(j1).HayMas());
+	ASSERT(!g.Pokemons(j2).HayMas());
+	ASSERT(!g.Pokemons(j3).HayMas());
+	Juego::IterJugador itj = g.Jugadores();
+	ASSERT(itj.HayMas() && itj.Siguiente() == j);
+	itj.Avanzar();
+	ASSERT(itj.HayMas() && itj.Siguiente() == j1);
+	itj.Avanzar();
+	ASSERT(itj.HayMas() && itj.Siguiente() == j2);
+	itj.Avanzar();
+	ASSERT(itj.HayMas() && itj.Siguiente() == j3);
+	itj.Avanzar();
+	ASSERT(!itj.HayMas());
 
+	//Test de pokemon, solo se puede agregar un pokemon
 	Pokemon s = "TuVieja";
 	Coordenada fueraDeMapa(3,3);
 	g.AgregarPokemon(s, c);
 	ASSERT(g.HayPokemonCercano(c));
 	ASSERT(!(g.HayPokemonCercano(fueraDeMapa)));
 	ASSERT(!(g.PuedoAgregarPokemon(c1)));
-
+	ASSERT(g.PosConPokemons().Cardinal() == 1);
+	ASSERT(g.PosConPokemons().Pertenece(c));
+	ASSERT(g.PokemonEnPos(c) == s);
+	ASSERT(g.CantMovimientosParaCaptura(c)==0);
+	ASSERT(g.CantPokemonsTotales()==1);
+	ASSERT(g.IndiceRareza(s)==0);
+	ASSERT(g.PosPokemonCercano(c1) == c);
+	ASSERT(g.PosPokemonCercano(c2) == c);
+	ASSERT(g.PosPokemonCercano(c3) == c);
 
 }
 
