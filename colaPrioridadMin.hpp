@@ -14,9 +14,7 @@ class ColaPrioridad{
 
         //La representacion de un nodo interno.
         struct Nodo{
-
             //El constructor, toma el elemento al que representa el nodo.
-
             Nodo(const T& v);
             //El elemento al que representa.
             T valor;
@@ -30,32 +28,25 @@ class ColaPrioridad{
 
         //Puntero a la raíz del árbol (se representa con un heap).
         Nodo* raiz_;
-
-        //Guardamos un puntero al nodo al que le tenemos que agregar el
-        //hijo cuando encolamos.
-        Nodo* padreParaAgregar_;
-
-        void borrar(Nodo*);
-
+        //Guardamos un puntero al ultimo nodo del arbol
+        Nodo* ultimo_;
 
 
         //FUNCIONES AUXILIARES:
+        Nodo* buscarPadreInsertar(Nodo*);
+        Nodo* buscarUltimoAlDesencolar(Nodo*);
 
-        //Actualiza el padreParaAgregar_
-        void buscarPadreInsertar();
-        void buscarPadreDesencolar();
 
-        //
         void siftUp(Nodo*);
-
         void siftDown(Nodo*);
 
         bool tieneQueBajar(Nodo*);
-        void swap(Nodo*);
         void liberar(Nodo*);
 
-        //Eliminar deberia llevar iterador o puntero a nodo?
-        //void eliminar(??);
+        void swap(Nodo*, Nodo*);
+
+        // este borrar es el que llama el iterador para borrar el elemento que apunta
+        void borrar(Nodo*);
 
     public:
         class Iterador {
@@ -119,7 +110,7 @@ ColaPrioridad<T>::Nodo::Nodo(const T& v)
 template <class T>
 ColaPrioridad<T>::ColaPrioridad(){
     this->raiz_ = NULL;
-    this->padreParaAgregar_ = this->raiz_;
+    this->ultimo_ = this->raiz_;
 }
 
 template <class T>
@@ -127,7 +118,7 @@ ColaPrioridad<T>::~ColaPrioridad(){
   if (raiz_ != NULL) {
     liberar(raiz_);
     raiz_ = NULL;
-    padreParaAgregar_ = NULL;
+    ultimo_ = NULL;
   }
 }
 
@@ -149,9 +140,6 @@ const bool ColaPrioridad<T>::preguntarVacia(){
 
 template <class T>
 const T& ColaPrioridad<T>::proximo(){
-   //cerr << raiz_->valor << endl;
-   //if(raiz_->izq != NULL)cerr << raiz_->izq->valor << endl;
-   //if(raiz_->der!=NULL)cerr << raiz_->der->valor << endl;
    return this->raiz_->valor;
 }
 
@@ -161,89 +149,59 @@ typename ColaPrioridad<T>::Iterador ColaPrioridad<T>::encolar(const T& value){
     ColaPrioridad<T>::Iterador it(this, insertado);
 
     if (raiz_ == NULL){
-        this->raiz_ = insertado;
-        this->padreParaAgregar_ = insertado;
+        raiz_ = insertado;
+        ultimo_ = insertado;
         return it;
     }
 
-    buscarPadreInsertar();
+    Nodo* dondeAgregar = buscarPadreInsertar(ultimo_);
 
-    insertado->padre = this->padreParaAgregar_;
+    if (dondeAgregar->izq == NULL) {
+        dondeAgregar->izq = insertado;
+    } else if (dondeAgregar->der == NULL) {
+        dondeAgregar->der = insertado;
+    } else {
+        assert(false); // no deberia pasar, exploto
+    }
+    insertado->padre = dondeAgregar;
+    ultimo_ = insertado;
 
-    if (this->padreParaAgregar_->izq == NULL){
-        this->padreParaAgregar_->izq = insertado;
-    }else{
-        this->padreParaAgregar_->der = insertado;
-    }
-    while (insertado != this->raiz_ && insertado->valor < insertado->padre->valor){
-        siftUp(insertado);
-    }
+    siftUp(insertado);
 
     return it;
 }
 
 template <class T>
 void ColaPrioridad<T>::desencolar(){
-    assert(this->raiz_ != NULL);
+    assert(!preguntarVacia());
 
     // si desencolamos la raiz, la tenemos que poner en null
-    if (this->raiz_->izq == NULL){
-        delete this->raiz_;
-        this->raiz_ = NULL;
-        padreParaAgregar_ = NULL;
+    if (raiz_->izq == NULL) {
+        delete raiz_;
+        raiz_ = NULL;
+        ultimo_ = NULL;
         return;
     }
 
+    Nodo* nuevoUltimo = buscarUltimoAlDesencolar(ultimo_);
 
+    Nodo* aBorrar = raiz_;
+    swap(raiz_, ultimo_); // guarda, modifica raiz_ y ultimo_ esta funcion
 
-    // cambiamos la raiz por el ultimo elemento
-    Nodo* auxRaiz = raiz_;
-    if (padreParaAgregar_->der != NULL) {
-      padreParaAgregar_->der->izq = raiz_->izq;
-      if (padreParaAgregar_->der != raiz_->der) {
-        padreParaAgregar_->der->der = raiz_->der;
-      } else {
-        padreParaAgregar_->der->der = NULL;
-      }
-      padreParaAgregar_->der->padre = NULL;
-      if (raiz_->izq != NULL) {
-        raiz_->izq->padre = padreParaAgregar_->der;
-      }
-      if (raiz_->der != NULL) {
-        raiz_->der->padre = padreParaAgregar_->der;
-      }
-      raiz_ = padreParaAgregar_->der;
-      padreParaAgregar_->der = NULL;
-    } else if (padreParaAgregar_->izq != NULL) {
-      if (padreParaAgregar_->izq != raiz_->izq) {
-        padreParaAgregar_->izq->izq = raiz_->izq;
-      } else {
-        padreParaAgregar_->izq->izq = NULL;
-      }
-      padreParaAgregar_->izq->der = raiz_->der;
-      padreParaAgregar_->izq->padre = NULL;
-      if (raiz_->izq != NULL) {
-        raiz_->izq->padre = padreParaAgregar_->izq;
-      }
-      if (raiz_->der != NULL) {
-        raiz_->der->padre = padreParaAgregar_->izq;
-      }
-      raiz_ = padreParaAgregar_->izq;
-      padreParaAgregar_->izq = NULL;
+    // lo saco
+    if (ultimo_->padre->der == aBorrar) {
+      ultimo_->padre->der = NULL;
+    } else if (ultimo_->padre->izq == aBorrar) {
+      ultimo_->padre->izq = NULL;
     } else {
-      assert(false); // si llego aca es porque padreParaAgregar_ quedo
-                     // mal en algun paso anterior
+      assert(false); // no deberia pasar, reviento por los aires
     }
-    raiz_->padre = NULL; // la nueva raiz no tiene que tener padre
-    if (padreParaAgregar_ == auxRaiz) {
-      padreParaAgregar_ = raiz_;
-    }
-    delete auxRaiz;
+    delete aBorrar;
 
-    buscarPadreDesencolar();
-
-    // bajamos la raiz
+    ultimo_ = nuevoUltimo;
     siftDown(raiz_);
+
+    return;
 }
 
 template <class T>
@@ -260,84 +218,132 @@ bool ColaPrioridad<T>::tieneQueBajar(Nodo* aBajar) {
 
 /************   AUXILIARES **************/
 
-
 template <class T>
-void ColaPrioridad<T>::swap(Nodo* nodoEvaluado) {
-    Nodo* sube = nodoEvaluado;
-    Nodo* subePadre = nodoEvaluado->padre;
-    Nodo* subeDer = nodoEvaluado->der;
-    Nodo* subeIzq = nodoEvaluado->izq;
+void ColaPrioridad<T>::swap(Nodo* nodo1, Nodo* nodo2) {
+    Nodo* n1 = nodo1;
+    Nodo* n1Padre = nodo1->padre;
+    Nodo* n1Der = nodo1->der;
+    Nodo* n1Izq = nodo1->izq;
 
-    Nodo* baja = nodoEvaluado->padre;
-    Nodo* bajaPadre = nodoEvaluado->padre->padre;
-    Nodo* bajaDer = nodoEvaluado->padre->der;
-    Nodo* bajaIzq = nodoEvaluado->padre->izq;
+    Nodo* n2 = nodo2;
+    Nodo* n2Padre = nodo2->padre;
+    Nodo* n2Der = nodo2->der;
+    Nodo* n2Izq = nodo2->izq;
 
     //cambio padres
-    // aunque sea hijo de raiz anda
-    nodoEvaluado->padre->padre = nodoEvaluado;
-    nodoEvaluado->padre = bajaPadre;
-
-    // sin importar en donde esta en el arbol
-    baja->izq = subeIzq;
-    baja->der = subeDer;
-
-    if (nodoEvaluado == bajaIzq) {
-      sube->izq = subePadre;
-      sube->der = bajaDer;
-      //
-      if (bajaDer != NULL) bajaDer->padre = sube;
-    } else {
-      sube->izq = bajaIzq;
-      sube->der = subePadre;
-      //
-      if (bajaIzq != NULL) bajaIzq->padre = sube;
+    if (nodo1->padre != nodo2 && nodo2->padre != nodo1) {
+      // aunque una sea raiz anda
+      nodo1->padre = n2Padre;
+      nodo2->padre = n1Padre;
+      if (nodo1->izq != NULL) {
+        nodo1->izq->padre = nodo2;
+      }
+      if (nodo1->der != NULL) {
+        nodo1->der->padre = nodo2;
+      }
+      if (nodo2->izq != NULL) {
+        nodo2->izq->padre = nodo1;
+      }
+      if (nodo2->der != NULL) {
+        nodo2->der->padre = nodo1;
+      }
+    } else { // estan uno arriba del otro
+      if (nodo2->padre == nodo1) { // nodo1 es padre de nodo2
+        nodo1->padre = n2;
+        nodo2->padre = n1Padre;
+        if (nodo1->izq != NULL && nodo1->izq != nodo2) {
+          nodo1->izq->padre = nodo2;
+        }
+        if (nodo1->der != NULL && nodo1->der != nodo2) {
+          nodo1->der->padre = nodo2;
+        }
+        if (nodo2->izq != NULL) {
+          nodo2->izq->padre = nodo1;
+        }
+        if (nodo2->der != NULL) {
+          nodo2->der->padre = nodo1;
+        }
+      } else if (nodo1->padre == nodo2) { //nodo2 es padre de nodo1
+        nodo1->padre = n2Padre;
+        nodo2->padre = n1;
+        if (nodo1->izq != NULL) {
+          nodo1->izq->padre = nodo2;
+        }
+        if (nodo1->der != NULL) {
+          nodo1->der->padre = nodo2;
+        }
+        if (nodo2->izq != NULL && nodo2->izq != nodo1) {
+          nodo2->izq->padre = nodo1;
+        }
+        if (nodo2->der != NULL && nodo2->der != nodo1) {
+          nodo2->der->padre = nodo1;
+        }
+      }
     }
 
-    if (subeIzq != NULL) {
-      subeIzq->padre = subePadre;
+    // apuntamos los nuevos hijos de cada nodo
+    nodo1->izq = n2Izq;
+    if (nodo1->izq != NULL && nodo1->izq == nodo1) { //esto pasa cuando un nodo es padre del otro
+      nodo1->izq = nodo2;
     }
-    if (subeDer != NULL) {
-      subeDer->padre = subePadre;
+    nodo1->der = n2Der;
+    if (nodo1->der != NULL && nodo1->der == nodo1) {
+      nodo1->der = nodo2;
+    }
+    nodo2->izq = n1Izq;
+    if (nodo2->izq != NULL && nodo2->izq == nodo2) {
+      nodo2->izq = nodo1;
+    }
+    nodo2->der = n1Der;
+    if (nodo2->der != NULL && nodo2->der == nodo2) {
+      nodo2->der = nodo1;
     }
 
+    // tenemos que actualizar las referencias de los padres
+    if (n1Padre != NULL && n1Padre->izq == n1) {
+      n1Padre->izq = n2;
+    }
+    if (n1Padre != NULL && n1Padre->der == n1) {
+      n1Padre->der = n2;
+    }
+    if (n2Padre != NULL && n2Padre->izq == n2) {
+      n2Padre->izq = n1;
+    }
+    if (n2Padre != NULL && n2Padre->der == n2) {
+      n2Padre->der = n1;
+    }
 
-    if (bajaPadre != NULL && bajaPadre->izq == baja) {
-      bajaPadre->izq = sube;
-    }
-    if (bajaPadre != NULL && bajaPadre->der == baja) {
-      bajaPadre->der = sube;
-    }
     //seteamos la nueva raiz
-    if (baja == raiz_) {
-      raiz_ = sube;
+    if (nodo1 == raiz_) {
+      raiz_ = nodo2;
+    } else if (nodo2 == raiz_) {
+      raiz_ = nodo1;
     }
-
-    if (padreParaAgregar_ == baja) {
-      padreParaAgregar_ = sube;
-    } else if (padreParaAgregar_ == sube) {
-      padreParaAgregar_ = baja;
+    //actualizamos el ultimo
+    if (ultimo_ == nodo1) {
+      ultimo_ = nodo2;
+    } else if (ultimo_ == nodo2) {
+      ultimo_ = nodo1;
     }
 }
 
-// Auxiliares de encolar
+
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
-  swap(nodoEvaluado);
+    while (nodoEvaluado != raiz_ && nodoEvaluado->valor < nodoEvaluado->padre->valor){
+        swap(nodoEvaluado, nodoEvaluado->padre);
+    }
 }
 
 
-
 template <class T>
-void ColaPrioridad<T>::buscarPadreDesencolar(){
-
-    if (this->padreParaAgregar_->izq != NULL || this->padreParaAgregar_ == raiz_){
-        return;
+typename ColaPrioridad<T>::Nodo* ColaPrioridad<T>::buscarUltimoAlDesencolar(Nodo* nodo){
+    if (nodo->padre->der == nodo) {
+        return nodo->padre->izq;
     }
 
-    Nodo* aux = this->padreParaAgregar_;
-
-    while (aux != this->raiz_ && aux->padre->izq == aux) {
+    Nodo* aux = nodo->padre;
+    while (aux != raiz_ && aux->padre->izq == aux) {
         aux = aux->padre;
     }
     //Encuentro el "punto de quiebre", ahora se que tengo que bajar
@@ -347,54 +353,47 @@ void ColaPrioridad<T>::buscarPadreDesencolar(){
     while (aux->der != NULL) {
         aux = aux->der;
     }
-    if (aux->izq == NULL && aux->der == NULL) {
-      aux = aux->padre;
-    }
-    this->padreParaAgregar_ = aux;
+
+    return aux;
 }
 
 
 template <class T>
-void ColaPrioridad<T>::buscarPadreInsertar(){
-
-    if (this->padreParaAgregar_->der == NULL){
-        return;
+typename ColaPrioridad<T>::Nodo* ColaPrioridad<T>::buscarPadreInsertar(Nodo* nodo){
+    if (nodo == raiz_) {
+      return nodo;
+    }
+    if (nodo->padre->der == NULL){
+        return nodo->padre;
     }
 
-    Nodo* aux = this->padreParaAgregar_;
-
+    Nodo* aux = nodo->padre;
     while (aux != this->raiz_ && aux->padre->der == aux) {
         aux = aux->padre;
     }
     //Encuentro el "punto de quiebre", ahora se que tengo que bajar
-    if (aux != this->raiz_){
-        aux = aux->padre;
-
-        aux = aux->der;
+    if (aux != this->raiz_) {
+        aux = aux->padre->der;
     }
     while (aux->izq != NULL) {
         aux = aux->izq;
     }
-    this->padreParaAgregar_ = aux;
+
+    return aux;
 }
 
 
 template <class T>
-void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado){
-  // if padreParaAgregar_ no tiene hijos apunta al padre
-  if (padreParaAgregar_->izq == NULL && padreParaAgregar_->der == NULL) {
-    padreParaAgregar_ = padreParaAgregar_->padre;
-  }
-
+void ColaPrioridad<T>::siftDown(Nodo* nodoEvaluado) {
   Nodo* aBajar = nodoEvaluado;
   while (tieneQueBajar(aBajar)) {
     if (aBajar->der == NULL) {
-      swap(aBajar->izq); // subo el nodo izquierdo
+      swap(aBajar->izq, aBajar); // subo el nodo izquierdo
     } else if (aBajar->izq != NULL && aBajar->der != NULL) {
       if (aBajar->izq->valor < aBajar->der->valor) {
-        swap(aBajar->izq);
+        swap(aBajar->izq, aBajar);
       } else {
-        swap(aBajar->der);
+        swap(aBajar->der, aBajar);
       }
     } else {
       assert(false); // esto nunca deberia pasar, asique explotamos
@@ -409,72 +408,12 @@ void ColaPrioridad<T>::borrar(Nodo* nodo) {
     return;
   }
 
-  buscarPadreDesencolar();
-
-  if (nodo == padreParaAgregar_->der) {
-    padreParaAgregar_->der = NULL;
-    delete nodo;
-    return;
-  } else if (nodo == padreParaAgregar_->izq) {
-    if (padreParaAgregar_->der == NULL) {
-      padreParaAgregar_->izq = NULL;
-      padreParaAgregar_ = padreParaAgregar_->padre;
-    } else {
-      padreParaAgregar_->izq = padreParaAgregar_->der;
-    }
-    delete nodo;
-    return;
-  }
-
-  // este es el caso general, no se donde esta, no es raiz ni hijo de donde hay que desencolar
-
   Nodo* raizOriginal = raiz_;
-  Nodo* raizIzq = raiz_->izq;
-  Nodo* raizDer = raiz_->der;
 
-  if (raiz_ == nodo->padre) {
-    raiz_->padre = nodo;
-  } else {
-    raiz_->padre = nodo->padre;
-  }
-  raiz_->izq = nodo->izq;
-  if (nodo->izq != NULL){
-    nodo->izq->padre = raiz_;
-  }
-  raiz_->der = nodo->der;
-  if (nodo->der != NULL) {
-    nodo->der->padre = raiz_;
-  }
-
-  if (raiz_->izq != NULL) {
-    raiz_->izq->padre = nodo;
-  }
-  if (raiz_->der != NULL) {
-    raiz_->der->padre = nodo;
-  }
-
-  nodo->padre = NULL;
-  if (nodo == raizIzq) {
-    nodo->izq = raiz_;
-  } else {
-    nodo->izq = raizIzq;
-  }
-  if (nodo == raizDer) {
-    nodo->der = raiz_;
-  } else {
-    nodo->der = raizDer;
-  }
-  raiz_ = nodo;
-
-  if (padreParaAgregar_ == nodo) {
-    padreParaAgregar_ = raizOriginal;
-  }
-
+  swap(raiz_, nodo);
   desencolar();
-  while(raizOriginal != raiz_ && raizOriginal->padre->valor >= raizOriginal->valor) {
-    siftUp(raizOriginal);
-  }
 
+  siftUp(raizOriginal);
 }
 
 
@@ -500,7 +439,6 @@ bool ColaPrioridad<T>::Iterador::HayMas() const {
   return nodo_->izq != NULL || nodo_->der != NULL || nodo_->padre != NULL;
 }
 
-
 template <class T>
 T ColaPrioridad<T>::Iterador::Siguiente() {
   return nodo_->valor;
@@ -510,12 +448,6 @@ template <class T>
 void ColaPrioridad<T>::Iterador::Borrar() {
   cola_->borrar(nodo_);
 }
-
-
-
-
-
-
 
 
 
