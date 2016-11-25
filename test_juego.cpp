@@ -1,5 +1,5 @@
 #include "mini_test.h"
-#include "Juego.h"
+#include "Juego.cpp"
 
 using namespace std;
 using namespace aed2;
@@ -59,5 +59,6 @@ void test_juegoMapa2x2(){
 }
 
 int main(){
+	RUN_TEST(test_juegoVacio);
 	return 0;
 }

@@ -12,6 +12,7 @@ using namespace aed2;
 class Mapa {
 public:
 	Mapa(); //CrearMapa()
+	Mapa(const Mapa&);
 	~Mapa();
 	Conj<Coordenada> Coordenadas();
 	void AgregarCoordenada (const Coordenada&);

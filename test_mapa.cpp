@@ -93,11 +93,42 @@ void test_mapa_4x4_creciendo() {
     ASSERT(m.Coordenadas().Pertenece(Coordenada(3,3)));
 }
 
+void test_CrearCopia(){
+    Mapa m;
+    Coordenada c(1,1);
+    Coordenada c1(0,1);
+    Coordenada c2(1,0);
+    Coordenada c3(0,0);
+
+    m.AgregarCoordenada(c);
+    m.AgregarCoordenada(c1);
+    m.AgregarCoordenada(c2);
+    m.AgregarCoordenada(c3);
+
+    ASSERT(m.Coordenadas().Cardinal()== 4);
+    ASSERT(m.Coordenadas().Pertenece(c));
+    ASSERT(m.Coordenadas().Pertenece(c1));
+    ASSERT(m.Coordenadas().Pertenece(c2));
+    ASSERT(m.Coordenadas().Pertenece(c3));
+    ASSERT(m.HayCamino(c, c1));
+    ASSERT(m.HayCamino(c, c2));
+    ASSERT(m.HayCamino(c, c3));
+    ASSERT(m.HayCamino(c1, c2));
+    ASSERT(m.HayCamino(c1, c3));
+    ASSERT(m.HayCamino(c2, c3));
+    ASSERT(m.PosExistente(c));
+    ASSERT(m.PosExistente(c1));
+    ASSERT(m.PosExistente(c2));
+    ASSERT(m.PosExistente(c3));
+
+
+}
 
 int test_mapa() {
 	RUN_TEST(test_crearmapa);
 	RUN_TEST(test_mapa_4x4);
 	RUN_TEST(test_mapa_4x4_creciendo);
+    RUN_TEST(test_CrearCopia);
     return 0;
 }
 

@@ -8,6 +8,16 @@ Mapa::Mapa(){
 	_relacionCoordenadas = new bool*[0];
 }
 
+Mapa::Mapa(const Mapa& otro){
+	Conj<Coordenada> c1(otro._coordenadas);
+	_coordenadas = c1;
+	Conj<Coordenada>::const_Iterador it = c1.CrearIt();
+	while(it.HaySiguiente()){
+		AgregarCoordenada(it.Siguiente());
+		it.Avanzar();	
+	}
+}
+
 Mapa::~Mapa() {
 	for (int i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
