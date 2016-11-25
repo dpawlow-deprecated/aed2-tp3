@@ -40,6 +40,7 @@ class ColaPrioridad{
         void siftUp(Nodo*);
         void siftDown(Nodo*);
 
+        bool tieneQueSubir(Nodo*);
         bool tieneQueBajar(Nodo*);
         void liberar(Nodo*);
 
@@ -205,6 +206,14 @@ void ColaPrioridad<T>::desencolar(){
 }
 
 template <class T>
+bool ColaPrioridad<T>::tieneQueSubir(Nodo* aSubir) {
+  if (aSubir->padre == NULL) {
+    return false;
+  }
+  return aSubir->valor < aSubir->padre->valor;
+}
+
+template <class T>
 bool ColaPrioridad<T>::tieneQueBajar(Nodo* aBajar) {
   if (aBajar->izq == NULL && aBajar->der == NULL) {
     return false;
@@ -330,7 +339,7 @@ void ColaPrioridad<T>::swap(Nodo* nodo1, Nodo* nodo2) {
 
 template <class T>
 void ColaPrioridad<T>::siftUp(Nodo* nodoEvaluado){
-    while (nodoEvaluado != raiz_ && nodoEvaluado->valor < nodoEvaluado->padre->valor){
+    while (tieneQueSubir(nodoEvaluado)){
         swap(nodoEvaluado, nodoEvaluado->padre);
     }
 }
@@ -408,12 +417,28 @@ void ColaPrioridad<T>::borrar(Nodo* nodo) {
     return;
   }
 
-  Nodo* raizOriginal = raiz_;
+  Nodo* ultimoOriginal = ultimo_;
 
-  swap(raiz_, nodo);
-  desencolar();
+  // swap actualiza raiz_ y ultimo_ por lo cual ultimo_ apunta al
+  // elemento a eliminar despues de esta linea
+  swap(nodo, ultimo_);
 
-  siftUp(raizOriginal);
+  Nodo* nuevoUltimo = buscarUltimoAlDesencolar(ultimo_);
+
+  // lo saco
+  if (ultimo_->padre->der == nodo) {
+    ultimo_->padre->der = NULL;
+  } else if (ultimo_->padre->izq == nodo) {
+    ultimo_->padre->izq = NULL;
+  } else {
+    assert(false); // no deberia pasar, reviento por los aires
+  }
+  delete nodo;
+
+  ultimo_ = nuevoUltimo;
+
+  siftUp(ultimoOriginal);
+  siftDown(ultimoOriginal);
 }
 
 
