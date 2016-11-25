@@ -25,7 +25,7 @@ void test_juegoMapa2x2(){
 	m.AgregarCoordenada(c1);
 	m.AgregarCoordenada(c2);
 	m.AgregarCoordenada(c3);
-	
+
 	//Asumo que HayCamino es simetrica
 	ASSERT(m.Coordenadas().Cardinal() == 4);
 	ASSERT(m.Coordenadas().Pertenece(c));
@@ -45,10 +45,10 @@ void test_juegoMapa2x2(){
 	ASSERT(m.Ancho() == 2);
 	ASSERT(m.Alto() == 2);
 
-	Jugador j = 1;
-	Jugador j1 = 2;
-	Jugador j2 = 3;
-	Jugador j3 = 4;
+	Jugador j =  0;
+	Jugador j1 = 1;
+	Jugador j2 = 2;
+	Jugador j3 = 3;
 	Juego g(m);
 	g.AgregarJugador(j);
 	g.AgregarJugador(j1);
@@ -112,5 +112,6 @@ void test_juegoMapa2x2(){
 
 int main(){
 	RUN_TEST(test_juegoVacio);
+	RUN_TEST(test_juegoMapa2x2);
 	return 0;
 }

@@ -5,12 +5,11 @@ using namespace std;
 using namespace aed2;
 
 
-Juego::Juego(Mapa m){
+Juego::Juego(Mapa m): mapa(m){
 
 	DiccString< pair<Nat, Nat> > ndicc;
 	pokemons = ndicc;
 
-	mapa = Mapa(m);
 	cantidadTotPokemons = 0;
 	Vector<InfoJugador> vj;
 	jugadores = vj;
@@ -113,17 +112,15 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 };
 
 void Juego::Desconectarse(Jugador j){
-	/*
 	jugadores[j].conectado = false;
-	if(jugadores[j].posicionMapa.SiguienteSignificado() == NULL){
+	/*if(jugadores[j].posicionMapa.SiguienteSignificado() == NULL){
 		jugadores[j].posicionMapa.SiguienteSignificado().Borrar(jugadores[j].posicionMapa.SiguienteSignificado());
 		jugadores[j].posicionMapa.EleminarSiguiente();
 		jugadores[j].posicionMapa = NULL;
 	}else{
 		jugadores[j].posicionMapa.EleminarSiguiente();
 		jugadores[j].posicionMapa = NULL;
-	}
-	*/
+	}*/
 };
 
 void Moverse(Jugador j, Coordenada c){
@@ -210,7 +207,7 @@ bool Juego::HayPokemonCercano(Coordenada c){
 		Lista<Coordenada> coordCercanas = CeldasValidas(c);
 		Lista<Coordenada>::const_Iterador iter = coordCercanas.CrearIt();
 
-		while (iter.HaySiguiente()){
+		while (iter.HaySiguiente()) {
 			Coordenada coordAux = iter.Siguiente();
 
 			if (mapaInfo[Latitud(coordAux)][Longitud(coordAux)].hayPokemon){
