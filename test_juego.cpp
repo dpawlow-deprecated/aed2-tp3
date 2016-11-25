@@ -54,6 +54,58 @@ void test_juegoMapa2x2(){
 	g.AgregarJugador(j1);
 	g.AgregarJugador(j2);
 	g.AgregarJugador(j3);
+	g.Conectarse(j, c);
+	g.Conectarse(j1, c1);
+	g.Conectarse(j2, c2);
+	g.Conectarse(j3, c3);
+	ASSERT(g.JugadoresConectados().Cardinal()==4);
+	ASSERT(g.JugadoresConectados().Pertenece(j));
+	ASSERT(g.JugadoresConectados().Pertenece(j1));
+	ASSERT(g.JugadoresConectados().Pertenece(j2));
+	ASSERT(g.JugadoresConectados().Pertenece(j3));
+	ASSERT(g.EstaConectado(j));
+	ASSERT(g.EstaConectado(j1));
+	ASSERT(g.EstaConectado(j2));
+	ASSERT(g.EstaConectado(j3));
+	ASSERT(!(g.HayPokemonCercano(c)));
+	ASSERT(g.PuedoAgregarPokemon(c));
+	g.Desconectarse(j);
+	ASSERT(g.JugadoresConectados().Cardinal()==3);
+	ASSERT(!(g.JugadoresConectados().Pertenece(j)));
+	ASSERT(g.JugadoresConectados().Pertenece(j1));
+	ASSERT(g.JugadoresConectados().Pertenece(j2));
+	ASSERT(g.JugadoresConectados().Pertenece(j3));
+	ASSERT(!(g.EstaConectado(j)));
+	ASSERT((g.EstaConectado(j1)));
+	ASSERT((g.EstaConectado(j2)));
+	ASSERT((g.EstaConectado(j3)));
+	g.Desconectarse(j1);
+	g.Desconectarse(j2);
+	g.Desconectarse(j3);
+	ASSERT(g.JugadoresConectados().Cardinal()==0);
+	ASSERT(!(g.JugadoresConectados().Pertenece(j)));
+	ASSERT(!g.JugadoresConectados().Pertenece(j1));
+	ASSERT(!g.JugadoresConectados().Pertenece(j2));
+	ASSERT(!g.JugadoresConectados().Pertenece(j3));
+	ASSERT(!(g.EstaConectado(j)));
+	ASSERT(!(g.EstaConectado(j1)));
+	ASSERT(!(g.EstaConectado(j2)));
+	ASSERT(!(g.EstaConectado(j3)));
+	g.Conectarse(j, c);
+	g.Conectarse(j1, c1);
+	g.Conectarse(j2, c2);
+	g.Conectarse(j3, c3);
+	ASSERT(g.Sanciones(j)==0);
+	ASSERT(g.Sanciones(j1)==0);
+	ASSERT(g.Sanciones(j2)==0);
+	ASSERT(g.Sanciones(j3)==0);
+
+	Pokemon s = "TuVieja";
+	Coordenada fueraDeMapa(3,3);
+	g.AgregarPokemon(s, c);
+	ASSERT(g.HayPokemonCercano(c));
+	ASSERT(!(g.HayPokemonCercano(fueraDeMapa)));
+	ASSERT(!(g.PuedoAgregarPokemon(c1)));
 
 
 }
