@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <cassert>
+#include "Coordenada.h"
 #include "TiposJuego.h"
 using namespace std;
 using namespace aed2;

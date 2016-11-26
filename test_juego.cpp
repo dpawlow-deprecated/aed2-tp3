@@ -17,10 +17,10 @@ void test_juegoVacio(){
 
 void test_juegoMapa2x2(){
 	//test para mapa
-	Coordenada c(1, 1);
-	Coordenada c1(1, 0);
-	Coordenada c2(0, 1);
-	Coordenada c3(0, 0);
+	coordenada c(1, 1);
+	coordenada c1(1, 0);
+	coordenada c2(0, 1);
+	coordenada c3(0, 0);
 	Mapa m;
 	m.AgregarCoordenada(c);
 	m.AgregarCoordenada(c1);
@@ -125,7 +125,7 @@ void test_juegoMapa2x2(){
 
 	//Test de pokemon, solo se puede agregar un pokemon
 	Pokemon s = "TuVieja";
-	Coordenada fueraDeMapa(3,3);
+	coordenada fueraDeMapa(3,3);
 	g.AgregarPokemon(s, c);
 	ASSERT(g.HayPokemonCercano(c));
 	ASSERT(!(g.HayPokemonCercano(fueraDeMapa)));

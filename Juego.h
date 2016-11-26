@@ -10,6 +10,7 @@
 #include "Modulos-CPP/aed2/Arreglo.h"
 #include <iostream>
 
+
 using namespace std;
 using namespace aed2;
 
@@ -25,18 +26,18 @@ private:
 		bool conectado;
 		bool expulsado;
 		Nat sanciones;
-		Coordenada pos;
+		coordenada pos;
 		Lista< DiccString<Nat> >::const_Iterador pokemons;
 		Dicc <Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
 		Nat cantTotalPoke;
 	};
 
-	struct InfoCoordenada{
+	struct Infocoordenada{
 		Pokemon pokemon;
 		ColaPrioridad< pair<Nat, Jugador> > jugEspe;
 		bool hayPokemon;
 		bool yaSeCapturo;
-		//Dicc<Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadores;
+		Dicc<Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadores;
 		Nat MovimientosRestantes;
 	};
 
@@ -44,14 +45,14 @@ private:
 	DiccString< pair<Nat, Nat> > pokemons;
 	Mapa mapa;
 	Vector<InfoJugador> jugadores;
-	InfoCoordenada** mapaInfo;
+	Infocoordenada** mapaInfo;
 	Nat cantidadTotPokemons;
-	Conj<Coordenada> coordenadasConPokemons;
+	Conj<coordenada> coordenadasConPokemons;
 	Lista< DiccString<Nat> > pokemonesDeJugadores;
 
-	Lista<Coordenada> CeldasValidas(Coordenada);
-	void ActualizarJugadorYCoordenada(Jugador, Coordenada);
-	void VerCapturas(Jugador, Coordenada);
+	Lista<coordenada> CeldasValidas(coordenada);
+	void ActualizarJugadorYcoordenada(Jugador, coordenada);
+	void VerCapturas(Jugador, coordenada);
 
 public:
 	//Declaraciones de las clases de iterador
@@ -62,21 +63,21 @@ public:
 	~Juego();
 	//Agrega un pokemon p en la coordenada c, si es posible
 	//pre: es una coordenada valida para agregar
-	void AgregarPokemon(Pokemon, Coordenada);
+	void AgregarPokemon(Pokemon, coordenada);
 
 	//Agrega un jugador al juego, devuelve un iterador al jugador agregado
 	IterJugador AgregarJugador(Jugador);
 
-	//Conecta a un jugador al juego en la Coordenada pasada por parametros
+	//Conecta a un jugador al juego en la coordenada pasada por parametros
 	//pre: el jugador debe existir en el juego, y no estar expulsado
-	void Conectarse(Jugador, Coordenada);
+	void Conectarse(Jugador, coordenada);
 
 	//Igual que la anterior pero lo desconecta
 	void Desconectarse(Jugador);
 
 	//Mueve un jugador y hace un monton mas de cosas
 	//pre: jugador existe y coordenada tambien
-	void Moverse(Jugador, Coordenada);
+	void Moverse(Jugador, coordenada);
 
 	//Devuelve el mapa donde se esta jugando
 	//Mapa Mapa();
@@ -94,7 +95,7 @@ public:
 
 	//Devuelve la posicion de un jugador
 	//pre: el juegador tiene que existir en el juego
-	Coordenada Posicion(Jugador);
+	coordenada Posicion(Jugador);
 
 	//Devuelve los pokemons de un jugador
 	//pre: el jugador tiene que existir en el juego
@@ -104,24 +105,24 @@ public:
 	Conj<Jugador> Expulsados();
 
 	//Devuelve las posiciones con pokemons
-	Conj<Coordenada> PosConPokemons();
+	Conj<coordenada> PosConPokemons();
 
 	//Devuelve el pokemon en la coordenada
 	//pre: la coordenada tiene que existir en PosConPokemon
-	Pokemon PokemonEnPos(Coordenada);
+	Pokemon PokemonEnPos(coordenada);
 
 	//Devuevle los movimientos que faltan para la captura
 	//pre: La coordenada tiene que existir en PosConPokemon
-	Nat CantMovimientosParaCaptura(Coordenada);
+	Nat CantMovimientosParaCaptura(coordenada);
 
 	//Devuelve los jugadores conectados
 	Conj<Jugador> JugadoresConectados();
 
 	//Verifica si la coordenada pasada por parametro cumple los requisitos para tener un pokemon
-	bool PuedoAgregarPokemon(Coordenada);
+	bool PuedoAgregarPokemon(coordenada);
 
 	//Devuelve si hay un pokemon cercano
-	bool HayPokemonCercano(Coordenada);
+	bool HayPokemonCercano(coordenada);
 
 	//Devuelve el indice de rareza del pokemon
 	Nat IndiceRareza(Pokemon);
@@ -130,7 +131,7 @@ public:
 	Nat CantPokemonsTotales();
 
 	//Devuelve la coordenada del pokemon mas cercano
-	Coordenada PosPokemonCercano(Coordenada);
+	coordenada PosPokemonCercano(coordenada);
 
 	// Antes de usar este iterador hay que avanzarlo como primer paso
 	class IterJugador{

@@ -2,13 +2,13 @@
 #include "Cola.h"
 
 Mapa::Mapa(): _ancho(0), _alto(0), _relacionCoordenadas(NULL){
-	_coordenadas = Conj<Coordenada>();
+	_coordenadas = Conj<coordenada>();
 }
 
 Mapa::Mapa(const Mapa& otro): _ancho(0), _alto(0), _relacionCoordenadas(NULL) {
-	Conj<Coordenada> c1(otro._coordenadas);
+	Conj<coordenada> c1(otro._coordenadas);
 	_coordenadas = c1;
-	Conj<Coordenada>::const_Iterador it = c1.CrearIt();
+	Conj<coordenada>::const_Iterador it = c1.CrearIt();
 	while (it.HaySiguiente()) {
 		AgregarCoordenada(it.Siguiente());
 		it.Avanzar();
@@ -24,18 +24,18 @@ Mapa::~Mapa() {
 	}
 }
 
-bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
+bool Mapa::HayCamino(const coordenada& c1, const coordenada& c2) {
 	int pos1 = calcularPosicion(c1);
 	int pos2 = calcularPosicion(c2);
 	return _relacionCoordenadas[pos1][pos2];
 }
 
-Conj<Coordenada> Mapa::Coordenadas(){
+Conj<coordenada> Mapa::Coordenadas(){
 	return _coordenadas;
 }
 
-bool Mapa::PosExistente(const Coordenada& c) {
-	if (c.latitud < _alto && c.longitud < _ancho) {
+bool Mapa::PosExistente(const coordenada& c) {
+	if (c.Latitud() < _alto && c.Longitud() < _ancho) {
 		int pos = calcularPosicion(c);
 		return _relacionCoordenadas[pos][pos];
 	}
@@ -43,42 +43,42 @@ bool Mapa::PosExistente(const Coordenada& c) {
 }
 
 
-Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
-	Conj<Coordenada> visitadas;
-	Cola<Coordenada> aVisitar;
+Conj<coordenada> Mapa::CoordenadasConectadasA(coordenada& c1) const {
+	Conj<coordenada> visitadas;
+	Cola<coordenada> aVisitar;
 	aVisitar.Encolar(c1);
-	Conj<Coordenada> coordenadas;
+	Conj<coordenada> coordenadas;
 	coordenadas.Agregar(c1);
 
 	while (aVisitar.EsVacia() == false) {
-		Coordenada coor = aVisitar.Proximo();
+		coordenada coor = aVisitar.Proximo();
 		aVisitar.Desencolar();
 
 		visitadas.Agregar(coor);
 
-		if (coor.latitud > 0) {
-			Coordenada coorAbajo = CoordenadaAbajo(coor);
+		if (coor.Latitud() > 0) {
+			coordenada coorAbajo = coor.coordenadaAbajo(coor);
 			if (!visitadas.Pertenece(coorAbajo) && _coordenadas.Pertenece(coorAbajo)) {
 				coordenadas.Agregar(coorAbajo);
 				aVisitar.Encolar(coorAbajo);
 			}
 		}
 
-		if (coor.longitud > 0) {
-			Coordenada coorIzq = CoordenadaIzquierda(coor);
+		if (coor.Longitud() > 0) {
+			coordenada coorIzq = coor.coordenadaIzquierda(coor);
 			if (!visitadas.Pertenece(coorIzq) && _coordenadas.Pertenece(coorIzq)) {
 				coordenadas.Agregar(coorIzq);
 				aVisitar.Encolar(coorIzq);
 			}
 		}
 
-		Coordenada coorDer = CoordenadaDerecha(coor);
+		coordenada coorDer = coor.coordenadaDerecha(coor);
 		if (!visitadas.Pertenece(coorDer) && _coordenadas.Pertenece(coorDer)) {
 			coordenadas.Agregar(coorDer);
 			aVisitar.Encolar(coorDer);
 		}
 
-		Coordenada coorArriba = CoordenadaDerecha(coor);
+		coordenada coorArriba = coor.coordenadaDerecha(coor);
 		if (!visitadas.Pertenece(coorArriba) && _coordenadas.Pertenece(coorArriba)) {
 			coordenadas.Agregar(coorArriba);
 			aVisitar.Encolar(coorArriba);
@@ -87,7 +87,7 @@ Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
 	return coordenadas;
 }
 
-void Mapa::AgregarCoordenada(const Coordenada& c){
+void Mapa::AgregarCoordenada(const coordenada& c){
 	for (int i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
 	}
@@ -96,11 +96,11 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 	}
 
 
-	if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
-		_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+	if ((c.Longitud()+1) > _ancho) { //Actualizo el ancho y alto del mapa
+		_ancho = c.Longitud()+1; // este uno es porque hay que tener en cuenta la posicion 0
 	}
-	if ((c.latitud+1) > _alto) {
-		_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+	if ((c.Latitud()+1) > _alto) {
+		_alto = c.Latitud()+1; // este uno es porque hay que tener en cuenta la posicion 0
 	}
 
 	_coordenadas.Agregar(c);
@@ -114,15 +114,15 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 		}
 	}
 
-	Conj<Coordenada>::Iterador iter = _coordenadas.CrearIt();
+	Conj<coordenada>::Iterador iter = _coordenadas.CrearIt();
 	while (iter.HaySiguiente()) {
-		Coordenada coor = iter.Siguiente();
+		coordenada coor = iter.Siguiente();
 		iter.Avanzar();
 
-		Conj<Coordenada> conectadas = CoordenadasConectadasA(coor);
-		Conj<Coordenada>::Iterador iterConectadas = conectadas.CrearIt();
+		Conj<coordenada> conectadas = CoordenadasConectadasA(coor);
+		Conj<coordenada>::Iterador iterConectadas = conectadas.CrearIt();
 		while (iterConectadas.HaySiguiente()) {
-			Coordenada coor2 = iterConectadas.Siguiente();
+			coordenada coor2 = iterConectadas.Siguiente();
 			iterConectadas.Avanzar();
 			int pos1 = calcularPosicion(coor);
 			int pos2 = calcularPosicion(coor2);
@@ -132,6 +132,6 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 	}
 }
 
-Nat Mapa::calcularPosicion(const Coordenada& c) const{
-	return _ancho * c.latitud + c.longitud;
+Nat Mapa::calcularPosicion(const coordenada& c) const{
+	return _ancho * c.Latitud() + c.Longitud();
 }

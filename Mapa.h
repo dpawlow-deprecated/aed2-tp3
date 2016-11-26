@@ -5,6 +5,7 @@
 #include "Modulos-CPP/aed2/Conj.h"
 #include <iostream>
 #include "TiposJuego.h"
+#include "Coordenada.h"
 
 using namespace std;
 using namespace aed2;
@@ -14,20 +15,20 @@ public:
 	Mapa(); //CrearMapa()
 	Mapa(const Mapa&);
 	~Mapa();
-	Conj<Coordenada> Coordenadas();
-	void AgregarCoordenada (const Coordenada&);
-	bool HayCamino(const Coordenada&, const Coordenada&);
-	bool PosExistente(const Coordenada&);
+	Conj<coordenada> Coordenadas();
+	void AgregarCoordenada (const coordenada&);
+	bool HayCamino(const coordenada&, const coordenada&);
+	bool PosExistente(const coordenada&);
 	Nat Ancho() const { return _ancho; };
 	Nat Alto() const { return _alto; };
 	void Mostrar();
 private:
-	Conj<Coordenada> CoordenadasConectadasA(Coordenada&) const;
-	Conj<Coordenada> _coordenadas;
+	Conj<coordenada> CoordenadasConectadasA(coordenada&) const;
+	Conj<coordenada> _coordenadas;
 	Nat _ancho;
 	Nat _alto;
 	bool** _relacionCoordenadas;
-	Nat calcularPosicion(const Coordenada&) const;
+	Nat calcularPosicion(const coordenada&) const;
 };
 
 #endif
