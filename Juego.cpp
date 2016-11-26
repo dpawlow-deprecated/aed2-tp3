@@ -78,7 +78,7 @@ Juego::IterJugador Juego::AgregarJugador(Jugador j){
 	DiccString<Nat> dicc;
 	Lista< DiccString<Nat> >::const_Iterador it = pokemonesDeJugadores.AgregarAtras(dicc);
 	coordenada c(0,0);
-	InfoJugador i;
+	InfoJugador i(c);
 	i.conectado = false;
 	i.expulsado = false;
 	i.id = j;
@@ -86,7 +86,7 @@ Juego::IterJugador Juego::AgregarJugador(Jugador j){
 	i.pos = c;
 	i.pokemons = it;
 	i.cantTotalPoke = 0;
-	
+
 	jugadores.AgregarAtras(i);
 	Juego::IterJugador iter = Jugadores();
 	Nat q = 0;

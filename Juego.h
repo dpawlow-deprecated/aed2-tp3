@@ -4,6 +4,7 @@
 #include "Mapa.cpp"
 #include "TiposJuego.h"
 #include "DiccString.h"
+#include "Coordenada.h"
 #include "colaPrioridadMin.hpp"
 #include "Modulos-CPP/aed2/Vector.h"
 #include "Modulos-CPP/aed2/Dicc.h"
@@ -30,6 +31,7 @@ private:
 		Lista< DiccString<Nat> >::const_Iterador pokemons;
 		Dicc <Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
 		Nat cantTotalPoke;
+		InfoJugador(coordenada& c): pos(c){}
 	};
 
 	struct Infocoordenada{

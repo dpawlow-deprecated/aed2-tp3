@@ -5,7 +5,7 @@
 #include "Modulos-CPP/aed2/Conj.h"
 #include <iostream>
 #include "TiposJuego.h"
-#include "Coordenada.h"
+#include "Coordenada.cpp"
 
 using namespace std;
 using namespace aed2;

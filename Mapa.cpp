@@ -105,7 +105,7 @@ void Mapa::AgregarCoordenada(const coordenada& c){
 
 	_coordenadas.Agregar(c);
 
-	int tamanioArreglo = (_ancho+1)*(_alto+1);
+	int tamanioArreglo = _ancho*_alto;
 	_relacionCoordenadas = new bool*[tamanioArreglo];
 	for (int i = 0; i < tamanioArreglo; i++) {
 		_relacionCoordenadas[i] = new bool[tamanioArreglo];
