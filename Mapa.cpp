@@ -5,22 +5,34 @@ Mapa::Mapa(): _ancho(0), _alto(0), _relacionCoordenadas(NULL){
 	_coordenadas = Conj<coordenada>();
 }
 
-Mapa::Mapa(const Mapa& otro): _ancho(0), _alto(0), _relacionCoordenadas(NULL) {
-	Conj<coordenada> c1(otro._coordenadas);
-	_coordenadas = c1;
-	Conj<coordenada>::const_Iterador it = c1.CrearIt();
+Mapa::Mapa(const Mapa& otro): _ancho(otro._ancho), _alto(otro._alto), _relacionCoordenadas(NULL) {
+	Conj<coordenada>::const_Iterador it = otro._coordenadas.CrearIt();
+
 	while (it.HaySiguiente()) {
-		AgregarCoordenada(it.Siguiente());
+		_coordenadas.Agregar(it.Siguiente());
 		it.Avanzar();
+	}
+
+	int tamanioArreglo = _ancho*_alto;
+	_relacionCoordenadas = new bool*[tamanioArreglo];
+	for (int i = 0; i < tamanioArreglo; i++) {
+		_relacionCoordenadas[i] = new bool[tamanioArreglo];
+		for (int j = 0; j < tamanioArreglo; j++) {
+			_relacionCoordenadas[i][j] = otro._relacionCoordenadas[i][j];
+		}
 	}
 }
 
 Mapa::~Mapa() {
-	for (int i = 0; i < _ancho*_alto; i++) {
-		delete [] _relacionCoordenadas[i];
-	}
 	if (_relacionCoordenadas != NULL) {
+		for (int i = 0; i < _ancho*_alto; i++) {
+			if (_relacionCoordenadas[i] != NULL) {
+				delete [] _relacionCoordenadas[i];
+				_relacionCoordenadas[i] = NULL;
+			}
+		}
 		delete [] _relacionCoordenadas;
+		_relacionCoordenadas = NULL;
 	}
 }
 
@@ -90,9 +102,11 @@ Conj<coordenada> Mapa::CoordenadasConectadasA(coordenada& c1) const {
 void Mapa::AgregarCoordenada(const coordenada& c){
 	for (int i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
+		_relacionCoordenadas[i] = NULL;
 	}
 	if (_relacionCoordenadas != NULL) {
 		delete [] _relacionCoordenadas;
+		_relacionCoordenadas = NULL;
 	}
 
 

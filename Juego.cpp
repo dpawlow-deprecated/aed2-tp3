@@ -5,27 +5,15 @@ using namespace std;
 using namespace aed2;
 
 
-Juego::Juego(Mapa m): mapa(m), cantidadTotPokemons(0){
+Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m){
 
-	DiccString< pair<Nat, Nat> > ndicc;
-	pokemons = ndicc;
+	Conj<coordenada>::const_Iterador iter = mapa.Coordenadas().CrearIt();
 
-	Vector<InfoJugador> vj;
-	jugadores = vj;
-	Conj<coordenada> cc;
-	coordenadasConPokemons = cc;
-	Lista< DiccString<Nat> > dp;
-	pokemonesDeJugadores = dp;
-
-	const Conj<coordenada> coords = mapa.Coordenadas();
-	Conj<coordenada>::const_Iterador iter = coords.CrearIt();
-	Nat ancho = mapa.Ancho();
-	Nat alto = mapa.Alto();
-
-	mapaInfo = new Infocoordenada*[ancho];
- 	for (int i=0; i<ancho; i++) {
-		mapaInfo[i] = new Infocoordenada[alto];
+	mapaInfo = new Infocoordenada*[mapa.Ancho()];
+ 	for (int i=0; i<mapa.Ancho(); i++) {
+		mapaInfo[i] = new Infocoordenada[mapa.Alto()];
 	}
+
 }
 
 
@@ -33,7 +21,10 @@ Juego::~Juego(){
 	for (int i = 0; i<mapa.Ancho(); i++) {
 		delete [] mapaInfo[i];
 	}
-	delete [] mapaInfo;
+	if (mapaInfo != NULL) {
+		delete [] mapaInfo;
+		mapaInfo = NULL;
+	}
 };
 
 
@@ -202,7 +193,7 @@ bool Juego::PuedoAgregarPokemon(coordenada c){
 	return res;
 };
 
-bool Juego::HayPokemonCercano(coordenada c) {
+bool Juego::HayPokemonCercano(const coordenada c) {
 	bool res = false;
 	if (mapa.PosExistente(c)){
 		Lista<coordenada> coordCercanas = CeldasValidas(c);
@@ -211,7 +202,7 @@ bool Juego::HayPokemonCercano(coordenada c) {
 		while (iter.HaySiguiente()) {
 			coordenada coordAux = iter.Siguiente();
 
-			if (mapaInfo[coordAux.Latitud()][coordAux.Longitud()].hayPokemon){
+			if (mapaInfo[coordAux.Latitud()][coordAux.Longitud()].hayPokemon == true){
 				res = true;
 			}
 			iter.Avanzar();

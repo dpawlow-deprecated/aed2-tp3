@@ -41,6 +41,7 @@ private:
 		bool yaSeCapturo;
 		Dicc<Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadores;
 		Nat MovimientosRestantes;
+		Infocoordenada(): hayPokemon(false), yaSeCapturo(false), MovimientosRestantes(10){}
 	};
 
 
@@ -61,7 +62,7 @@ public:
 	class IterJugador;
 	class IterPokemon;
 	//Crea un juego vacio pero con mapa
-	Juego(Mapa);
+	Juego(Mapa&);
 	~Juego();
 	//Agrega un pokemon p en la coordenada c, si es posible
 	//pre: es una coordenada valida para agregar
@@ -124,7 +125,7 @@ public:
 	bool PuedoAgregarPokemon(coordenada);
 
 	//Devuelve si hay un pokemon cercano
-	bool HayPokemonCercano(coordenada);
+	bool HayPokemonCercano(const coordenada);
 
 	//Devuelve el indice de rareza del pokemon
 	Nat IndiceRareza(Pokemon);
