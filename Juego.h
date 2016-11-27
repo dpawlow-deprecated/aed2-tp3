@@ -29,7 +29,7 @@ private:
 		Nat sanciones;
 		coordenada pos;
 		Lista< DiccString<Nat> >::const_Iterador pokemons;
-		Dicc <Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
+		Dicc <Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
 		Nat cantTotalPoke;
 		InfoJugador(coordenada& c): pos(c){}
 	};
@@ -39,9 +39,9 @@ private:
 		ColaPrioridad< pair<Nat, Jugador> > jugEspe;
 		bool hayPokemon;
 		bool yaSeCapturo;
-		Dicc<Nat, ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadores;
-		Nat MovimientosRestantes;
-		Infocoordenada(): hayPokemon(false), yaSeCapturo(false), MovimientosRestantes(10){}
+		Dicc<Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador > jugadoresCoordenada;
+		Nat movimientosRestantes;
+		Infocoordenada(): hayPokemon(false), yaSeCapturo(false), movimientosRestantes(10){}
 	};
 
 

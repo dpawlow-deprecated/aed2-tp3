@@ -42,7 +42,7 @@ void Juego::AgregarPokemon(Pokemon p, coordenada c){
 	ColaPrioridad< pair<Nat, Jugador> > cj;
 	mapaInfo[c.Latitud()][c.Longitud()].jugEspe = cj;
 	mapaInfo[c.Latitud()][c.Longitud()].yaSeCapturo = false;
-	mapaInfo[c.Latitud()][c.Longitud()].MovimientosRestantes = 0;
+	mapaInfo[c.Latitud()][c.Longitud()].movimientosRestantes = 0;
 	mapaInfo[c.Latitud()][c.Longitud()].pokemon = p;
 
 	//Luego me arma una lista con todas las coordenadas que existan cerca de la coordenada pasada por parametros y agrego a c a la lista
@@ -50,19 +50,22 @@ void Juego::AgregarPokemon(Pokemon p, coordenada c){
 	lc = CeldasValidas(c);
 	lc.AgregarAtras(c);
 	cantidadTotPokemons++;
-	/*
+
 	//Recorro todas las coordenadas y por cada una, me fijo los jugadores en el radio de captura y defino sus interadores a la nueva cola
 	Lista<coordenada>::const_Iterador itcoordenadas = lc.CrearIt();
 	while(itcoordenadas.HaySiguiente()){
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itJugadores = mapaInfo[Latitud(itcoordenadas.Siguiente())][Longitud(itcoordenadas.Siguiente())].jugadores.CrearIt();
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itJugadores = mapaInfo[itcoordenadas.Siguiente().Latitud()][itcoordenadas.Siguiente().Longitud()].jugadoresCoordenada.CrearIt();
 		while(itJugadores.HaySiguiente()){
-			ColaPrioridad< pair<Nat, Jugador> >::Iterador itCola = mapaInfo[c.Latitud()][c.Longitud()].jugEspe.Encolar(jugadores[itJugadores.SiguienteClave()].cantTotPoke, itJugadores.SiguienteClave());
-			itJugadores.SiguienteSignficado() = itCola;
+			pair<Nat, Jugador> aEncolar(jugadores[itJugadores.SiguienteClave()].cantTotalPoke, itJugadores.SiguienteClave());
+			ColaPrioridad< pair<Nat, Jugador> >::Iterador itCola;
+			itCola = mapaInfo[c.Latitud()][c.Longitud()].jugEspe.encolar(aEncolar);
+
+			mapaInfo[itcoordenadas.Siguiente().Latitud()][itcoordenadas.Siguiente().Longitud()].jugadoresCoordenada.Definir(itJugadores.SiguienteClave(), itCola);
 			itJugadores.Avanzar();
 		}
-		itcoordenada.Avanzar();
+		itcoordenadas.Avanzar();
 	}
-	*/
+
 };
 
 Juego::IterJugador Juego::AgregarJugador(Jugador j){
@@ -161,7 +164,7 @@ Pokemon Juego::PokemonEnPos(coordenada c){
 };
 
 Nat Juego::CantMovimientosParaCaptura(coordenada c){
-	return 10 - mapaInfo[c.Latitud()][c.Longitud()].MovimientosRestantes;
+	return 10 - mapaInfo[c.Latitud()][c.Longitud()].movimientosRestantes;
 
 };
 
@@ -334,14 +337,14 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, coordenada c){
 		if(hayPokemonCercano(jugadores[j].pos)){
 			if(hayPokemonCercano(c)){
 				if(posPokemonCercano(g.jugadores[j].pos) == posPokemonCercano(c, g)){
-					mapaInfo[Latitud(jugadores[j].pos)][Longitud(jugadores[j].pos)].MovimientosRestantes = 0;
+					mapaInfo[Latitud(jugadores[j].pos)][Longitud(jugadores[j].pos)].movimientosRestantes = 0;
 				}
 			}else{
-				mapaInfo[Latitud(g.jugadores[j])][Longitud(g.jugadores[j].pos)].MovimientosRestantes = 0;
+				mapaInfo[Latitud(g.jugadores[j])][Longitud(g.jugadores[j].pos)].movimientosRestantes = 0;
 			}
 		}else{
 			if(hayPokemonCercano(c)){
-				mapaInfo[c.Latitud()][c.Longitud()].MovimientosRestantes = 0
+				mapaInfo[c.Latitud()][c.Longitud()].movimientosRestantes = 0
 			}
 		}
 	}
@@ -363,9 +366,9 @@ void Juego::VerCapturas(Jugador j, coordenada c){
 	Conj<coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
 	while (iter.HaySiguiente()){
-		mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes += 1;
+		mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].movimientosRestantes += 1;
 
-		if (mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes >= 10){
+		if (mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].movimientosRestantes >= 10){
 			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].hayPokemon = false;
 			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].yaSeCapturo = true;
 			mapaInfo[Latitud(iter.Siguiente())][Longitud(iter.Siguiente())].MovimientosRestantes = 0;

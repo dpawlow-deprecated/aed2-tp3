@@ -56,6 +56,7 @@ class ColaPrioridad{
                 Iterador();
                 //Constructor por copia
                 Iterador(typename ColaPrioridad<T>::Iterador& otro);
+                Iterador(const typename ColaPrioridad<T>::Iterador& otro);
 
                 //Chequea si hay mas elementos por recorrer, obs: si esta parado en el ultimo elemento esta funcion devuelve true, recien cuando se avance
                 //la funcion devuelve false
@@ -94,8 +95,7 @@ class ColaPrioridad{
 
         //Agrega un elemento.
         //PRE: el elemento no existe en la cola.
-        //TODO INSERTAR ITERADOR ESTO TIENE QUE DEVOLVER ITERADOR
-        ColaPrioridad<T>::Iterador encolar(const T&);
+        Iterador encolar(const T&);
 
         //Elimina el proximo elemento de la cola.
         void desencolar();
@@ -455,6 +455,10 @@ ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>* cola, ColaPrioridad<T>::N
 
 template <class T>
 ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>::Iterador& otro)
+  : nodo_(otro.nodo_){};
+
+template <class T>
+ColaPrioridad<T>::Iterador::Iterador(const ColaPrioridad<T>::Iterador& otro)
   : nodo_(otro.nodo_){};
 
 
