@@ -91,19 +91,23 @@ Juego::IterJugador Juego::AgregarJugador(Jugador j){
 	return iter;
 };
 
+//Pre: {g =obs g0 ∧ j ∈ jugadores(g) ∧L ¬estaConectado(j, g) ∧ posExistente(c, mapa(g))}
 void Juego::Conectarse(Jugador j, coordenada c){
 
 	jugadores[j].conectado = true;
 	jugadores[j].pos = c;
-	/*
+
+	//TODO: hay que reiniciar la cantidad de movimientos restantes?
+
 	if(HayPokemonCercano(c)){
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[c.Latitud()][c.Longitud()].jugadores.DefinirRapido(j, mapaInfo[posPokemonCerca(c)].jugEspe.Encolar(jugadores[j].cantTotalPoke, j));
+		coordenada cercano(PosPokemonCercano(c));
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[c.Latitud()][c.Longitud()].jugadoresCoordenada.DefinirRapido(j, mapaInfo[cercano.Latitud()][cercano.Longitud()].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
 		jugadores[j].posicionMapa = itPosicion;
 	}else{
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador > itPosicion = mapaInfo[c.Latitud()][Longitud[c]].jugadores.DefinirRapido(j, NULL);
+		ColaPrioridad< pair<Nat, Jugador> >::Iterador itVacio;
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.Latitud()][c.Longitud()].jugadoresCoordenada.DefinirRapido(j, itVacio);
 		jugadores[j].posicionMapa = itPosicion;
 	}
-	*/
 };
 
 void Juego::Desconectarse(Jugador j){
