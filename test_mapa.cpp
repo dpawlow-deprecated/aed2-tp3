@@ -128,10 +128,8 @@ void test_free(){
 
 void test_copias_locas(){
     Mapa m;
-    Mapa m2;
-    Mapa m3;
-    m2 = Mapa(m);
-    m3 = Mapa(m2);
+    Mapa m2(m);
+    Mapa m3(m2);
     coordenada c(1,5);
     m3.AgregarCoordenada(c);
 }
