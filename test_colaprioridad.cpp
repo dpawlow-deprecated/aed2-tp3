@@ -130,12 +130,34 @@ void test_iterador() {
     it20.Borrar();
 }
 
+void test_borrar_desencolar() {
+  ColaPrioridad <int> c;
+  c.encolar(424);
+  ColaPrioridad<int>::Iterador a(c.encolar(4513));
+  ColaPrioridad<int>::Iterador b(c.encolar(-41));
+  ColaPrioridad<int>::Iterador c2(c.encolar(-141));
+  c.encolar(20);
+  ASSERT(c.proximo()==-141);
+  c2.Borrar();
+  ASSERT(c.proximo()==-41);
+  b.Borrar();
+  ASSERT(c.proximo()==20);
+  a.Borrar();
+  ASSERT(c.proximo()==20);
+  c.desencolar();
+  ASSERT(c.proximo()==424);
+  c.desencolar();
+  ASSERT(c.preguntarVacia());
+  c.encolar(0);
+}
+
 
 int main() {
     RUN_TEST(test_encolar);
     RUN_TEST(test_desencolar3);
     RUN_TEST(test_desencolar);
     RUN_TEST(test_iterador);
+    RUN_TEST(test_borrar_desencolar);
 
     return 0;
 }

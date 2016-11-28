@@ -240,7 +240,9 @@ void ColaPrioridad<T>::swap(Nodo* nodo1, Nodo* nodo2) {
     Nodo* n2Izq = nodo2->izq;
 
     //cambio padres
-    if (nodo1->padre != nodo2 && nodo2->padre != nodo1) {
+    if (nodo1->padre == nodo2->padre) {
+      // no hacer nada, dejarlos con el mismo padre
+    } else if (nodo1->padre != nodo2 && nodo2->padre != nodo1) {
       // aunque una sea raiz anda
       nodo1->padre = n2Padre;
       nodo2->padre = n1Padre;
@@ -309,17 +311,23 @@ void ColaPrioridad<T>::swap(Nodo* nodo1, Nodo* nodo2) {
     }
 
     // tenemos que actualizar las referencias de los padres
-    if (n1Padre != NULL && n1Padre->izq == n1) {
-      n1Padre->izq = n2;
-    }
-    if (n1Padre != NULL && n1Padre->der == n1) {
-      n1Padre->der = n2;
-    }
-    if (n2Padre != NULL && n2Padre->izq == n2) {
-      n2Padre->izq = n1;
-    }
-    if (n2Padre != NULL && n2Padre->der == n2) {
-      n2Padre->der = n1;
+    if (nodo1->padre == nodo2->padre) {
+      Nodo* izqAux = nodo1->padre->izq;
+      nodo1->padre->izq = nodo1->padre->der;
+      nodo1->padre->der = izqAux;
+    } else {
+      if (n1Padre != NULL && n1Padre->izq == n1) {
+        n1Padre->izq = n2;
+      }
+      if (n1Padre != NULL && n1Padre->der == n1) {
+        n1Padre->der = n2;
+      }
+      if (n2Padre != NULL && n2Padre->izq == n2) {
+        n2Padre->izq = n1;
+      }
+      if (n2Padre != NULL && n2Padre->der == n2) {
+        n2Padre->der = n1;
+      }
     }
 
     //seteamos la nueva raiz
@@ -421,7 +429,9 @@ void ColaPrioridad<T>::borrar(Nodo* nodo) {
 
   // swap actualiza raiz_ y ultimo_ por lo cual ultimo_ apunta al
   // elemento a eliminar despues de esta linea
-  swap(nodo, ultimo_);
+  if (nodo != ultimo_) {
+    swap(nodo, ultimo_);
+  }
 
   Nodo* nuevoUltimo = buscarUltimoAlDesencolar(ultimo_);
 
