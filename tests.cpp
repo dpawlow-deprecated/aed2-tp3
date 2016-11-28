@@ -320,7 +320,7 @@ void test_pokemon_en_pos(){
 void test_puedo_agregar_pokemon(){
     Conj<Coordenada> cc;
     Coordenada c1 = Coordenada(0,0);
-    Coordenada c2 = Coordenada(4,4);
+    Coordenada c2 = Coordenada(5,5);
     Coordenada c3 = Coordenada(0,5);
     Coordenada c4 = Coordenada(1,3);
     Coordenada c5 = Coordenada(4,3);
