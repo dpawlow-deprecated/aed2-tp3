@@ -1111,7 +1111,7 @@ void test_mover_jugador_asigna_correcta_coordenada(){
 
     ASSERT(d.posicion(j0) == c6);
     ASSERT(d.posicion(j1) == c3);
-    ASSERT(d.posicion(j2) == c4);
+    ASSERT(d.posicion(j2) == c5);
     ASSERT(d.posicion(j3) == c2);
 }
 
