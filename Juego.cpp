@@ -125,18 +125,13 @@ void Juego::Desconectarse(Jugador j){
 	assert(jugadores[j].conectado);
 	jugadores[j].conectado = false;
 	if(jugadores[j].posicionMapa.HaySiguiente()) {
-		//jugadores[j].posicionMapa.SiguienteSignificado().Borrar(jugadores[j].posicionMapa.SiguienteSignificado());
 		jugadores[j].posicionMapa.EliminarSiguiente();
-		//jugadores[j].posicionMapa = NULL;
-	}else{
-		jugadores[j].posicionMapa.EliminarSiguiente();
-		//jugadores[j].posicionMapa = NULL;
 	}
 };
 
-void Moverse(Jugador j, Coordenada c){
-	//VerCapturas(j, c);
-	//ActualizarJugador(j, c);
+void Juego::Moverse(Jugador j, Coordenada c){
+	VerCapturas(j, c);
+	ActualizarJugadorYcoordenada(j, c);
 };
 
 Juego::IterJugador Juego::Jugadores()const{
@@ -331,49 +326,50 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 };
 
 void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
-	/*
-	if(distanciaEuclidia(c, jugadores[j].pos) > 100 || !(mapa.hayCamino(c, jugadores[j].pos))){
+
+	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !(mapa.HayCamino(c, jugadores[j].pos))){
 		jugadores[j].sanciones = jugadores[j].sanciones +1;
 		if (jugadores[j].sanciones >= 4){
 			jugadores[j].expulsado = true;
 		}
 	}
 
-	if(g.jugadores[j].expulsado == true){
+	if(jugadores[j].expulsado == true){
 		cantidadTotPokemons = cantidadTotPokemons - jugadores[j].cantTotalPoke;
-		Lista<string>::Iterador itPokemons = g.jugadores[j].pokemons.Siguiente().Claves().CrearIt();
-		while(itPokemons.HayMas()) {
-			pokemons.Significado(itPokemons.Siguiente()).second -= jugadores[j].pokemons.Significado(it.Siguiente());
-			itPokemons.EliminarSiguiente();
+		Lista<string>::const_Iterador itPokemons = jugadores[j].pokemons.Siguiente().Claves().CrearIt();
+		while(itPokemons.HaySiguiente()) {
+			pokemons.Significado(itPokemons.Siguiente()).second -= jugadores[j].pokemons.Siguiente().Significado(itPokemons.Siguiente());
+			itPokemons.Avanzar();
 		}
 		jugadores[j].pokemons.EliminarSiguiente();
-		jugadores[j].pokemons = NULL;
 		jugadores[j].cantTotalPoke = 0;
 	}else{
-		if(hayPokemonCercano(jugadores[j].pos)){
-			if(hayPokemonCercano(c)){
-				if(posPokemonCercano(g.jugadores[j].pos) == posPokemonCercano(c, g)){
-					mapaInfo[Latitud(jugadores[j].pos)][Longitud(jugadores[j].pos)].movimientosRestantes = 0;
+		if(HayPokemonCercano(jugadores[j].pos)){
+			if(HayPokemonCercano(c)){
+				if(PosPokemonCercano(jugadores[j].pos) == PosPokemonCercano(c)){
+					mapaInfo[jugadores[j].pos.latitud][jugadores[j].pos.longitud].movimientosRestantes = 0;
 				}
 			}else{
-				mapaInfo[Latitud(g.jugadores[j])][Longitud(g.jugadores[j].pos)].movimientosRestantes = 0;
+				mapaInfo[jugadores[j].pos.latitud][jugadores[j].pos.longitud].movimientosRestantes = 0;
 			}
 		}else{
-			if(hayPokemonCercano(c)){
-				mapaInfo[c.latitud][c.longitud].movimientosRestantes = 0
+			if(HayPokemonCercano(c)){
+				mapaInfo[c.latitud][c.longitud].movimientosRestantes = 0;
 			}
 		}
 	}
 
 	jugadores[j].pos = c;
-	if(HayPokemonCerca(c)){
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadores.DefinirRapido(j, mapaInfo[Latitud(posPokemonCerca(c))][Longitud(posPokemonCerca(c))].jugEspe.Encolar(pair<g.jugadores[j].cantTotalPoke, j>));
+	if(HayPokemonCercano(c)){
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
 		jugadores[j].posicionMapa = itPosicion;
 	}else{
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::const_Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadores.DefinirRapido(j, NULL);
+		ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
 		jugadores[j].posicionMapa = itPosicion;
-	}*/
+	}
 };
+
 
 void Juego::VerCapturas(Jugador j, Coordenada c){
 	//Esto está bien, pero por la mitad

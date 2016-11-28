@@ -28,7 +28,7 @@ private:
 		bool expulsado;
 		Nat sanciones;
 		Coordenada pos;
-		Lista< DiccString<Nat> >::const_Iterador pokemons;
+		Lista< DiccString<Nat> >::Iterador pokemons;
 		Dicc <Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador posicionMapa;
 		Nat cantTotalPoke;
 		InfoJugador(Coordenada& c): pos(c){}
