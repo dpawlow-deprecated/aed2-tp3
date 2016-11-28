@@ -22,6 +22,14 @@ Driver::Driver(const Conj< Coordenada > & cs): proximoIdJugador_(0), coordenadas
 
 Driver::~Driver()
 {
+  //if (mapa_ != NULL) {
+  //  delete mapa_;
+  //  mapa_ = NULL;
+  //}
+  //if (juego_ != NULL) {
+  //  delete juego_;
+  //  juego_ = NULL;
+  //}
 }
 
 void Driver::agregarPokemon(const Pokemon & p, const Coordenada & c)
@@ -78,19 +86,19 @@ Conj< Jugador > Driver::jugadores() const{
 /* Dado el jugador pasado como parametro, retorna si esta conectado o no.
  * Requiere que el jugador este entre jugadores() del juego. */
 bool Driver::estaConectado(const Jugador & j) const{
-
+  return juego_->EstaConectado(j);
 }
 
 /* Dado el jugador pasado como parametro, devuelve la cantidad de sanciones que recibio.
  * Requiere que el jugador este entre jugadores() del juego. */
 Nat Driver::sanciones(const Jugador & j) const{
-
+  return juego_->Sanciones(j);
 }
 
 /* Dado el jugador pasado como parametro, devuelve la coordenada donde se ubica.
  * Requiere que el jugador este entre jugadores() del juego y este conectado. */
 Coordenada Driver::posicion(const Jugador & j) const{
-
+  return juego_->Posicion(j);
 }
 
 /* Dado el jugador pasado como parametro, devuelve un MultiConjunto con los
@@ -109,7 +117,7 @@ Dicc< Pokemon , Nat > Driver::pokemons(const Jugador & j) const{
 
 /* Devuelve los jugadores que fueron expulsados del juego. */
 Conj< Jugador > Driver::expulsados() const{
-
+  return juego_->Expulsados();
 }
 
 /* Devuelve todas las coordenadaes del mapa que tienen un pokemon en ella. */
@@ -126,26 +134,26 @@ Pokemon Driver::pokemonEnPos(const Coordenada & c) const{
 /* Dada una coordenada, devuelve el valor del contador de movimientos fuera del rango.
 * Es requisito que en la coordenada pasada como parametro haya un pokemon. */
 Nat Driver::cantMovimientosParaCaptura(const Coordenada & c) const{
-
+  return juego_->CantMovimientosParaCaptura(c);
 }
 
 /* Dada una coordenada cualquiera, indica si la coordenada existe en el mapa y
  * que hay un pokemon a distancia menor o igual a 5. */
 
 bool Driver::puedoAgregarPokemon(const Coordenada & c) const{
-
+  return juego_->PuedoAgregarPokemon(c);
 }
 
 /* Devuelve si hay un pokemon a distancia menor o igual a 2
  * de la Coordenada pasada como parametro. */
 bool Driver::hayPokemonCercano(const Coordenada & c) const{
-
+  return juego_->HayPokemonCercano(c);
 }
 
 /* Dada una Coordenada, devuelve la coordenada del pokemon cercano.
  * Requiere que haya un pokemon a distancia menor o igual a 2. */
 Coordenada Driver::posPokemonCercano(const Coordenada & c) const{
-
+  return juego_->PosPokemonCercano(c);
 }
 
 /* Devuelve todos los jugadores que esten a distancia menor o igual a 2 de
@@ -158,7 +166,7 @@ Conj<Jugador> Driver::entrenadoresPosibles(const Coordenada & c) const{
 /* Devuelve el indice de rarez del pokemon pasado como parametro.
  * Requiere que haya al menos un pokemon de la especie en el juego. */
 Nat Driver::indiceRareza(const Pokemon & p) const{
-
+  return juego_->IndiceRareza(p);
 }
 
 /* Devuelve la cantidad de pokemons totales en el juego. */
