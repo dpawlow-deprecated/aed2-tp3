@@ -31,7 +31,7 @@ private:
 		Lista< DiccString<Nat> >::Iterador pokemons;
 		Dicc <Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador posicionMapa;
 		Nat cantTotalPoke;
-		InfoJugador(Coordenada& c): pos(c){}
+		InfoJugador(Coordenada& c, Lista< DiccString<Nat> >::Iterador& i): pos(c), pokemons(i){}
 	};
 
 	struct Infocoordenada{
