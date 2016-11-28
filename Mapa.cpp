@@ -1,3 +1,6 @@
+#ifndef MAPA_CPP
+#define MAPA_CPP
+
 #include "Mapa.h"
 #include "Cola.h"
 
@@ -149,3 +152,5 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 Nat Mapa::calcularPosicion(const Coordenada& c) const{
 	return _ancho * c.latitud + c.longitud;
 }
+
+#endif

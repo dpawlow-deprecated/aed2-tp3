@@ -54,10 +54,10 @@ void test_juegoMapa2x2(){
 	Jugador j2 = 2;
 	Jugador j3 = 3;
 	Juego g(m);
-	g.AgregarJugador(j);
-	g.AgregarJugador(j1);
-	g.AgregarJugador(j2);
-	g.AgregarJugador(j3);
+	g.AgregarJugador();
+	g.AgregarJugador();
+	g.AgregarJugador();
+	g.AgregarJugador();
 	g.Conectarse(j, c);
 	g.Conectarse(j1, c1);
 	g.Conectarse(j2, c2);
@@ -168,10 +168,10 @@ void test_conectar_desconectarse() {
 	}
 	Juego g(m);
 
-	g.AgregarJugador(j);
-	g.AgregarJugador(j1);
-	g.AgregarJugador(j2);
-	g.AgregarJugador(j3);
+	g.AgregarJugador();
+	g.AgregarJugador();
+	g.AgregarJugador();
+	g.AgregarJugador();
 
 	g.AgregarPokemon("Poke1", c4);
 	g.Conectarse(j, c);

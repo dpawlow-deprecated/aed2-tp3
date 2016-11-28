@@ -5,6 +5,7 @@
 #include "aed2/Dicc.h"
 #include "aed2/TiposBasicos.h"
 #include "Coordenada.cpp"
+#include "Juego.cpp"
 #include "TiposJuego.h"
 
 using namespace aed2;
@@ -121,6 +122,10 @@ class Driver {
 	 * con el cuál interactuar. Además, pueden declarar todas las		   *
 	 * funciones auxiliares que les hagan falta.							*
 	 ************************************************************************/
+	 Juego* juego_;
+	 Mapa mapa_;
+	 Conj< Coordenada > coordenadasMapa_;
+	 Nat proximoIdJugador_;
 
 }; // class Driver
 

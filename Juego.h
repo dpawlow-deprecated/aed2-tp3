@@ -52,6 +52,7 @@ private:
 	Nat cantidadTotPokemons;
 	Conj<Coordenada> coordenadasConPokemons;
 	Lista< DiccString<Nat> > pokemonesDeJugadores;
+	Nat proximoIdJugador_;
 
 	Lista<Coordenada> CeldasValidas(Coordenada);
 	void ActualizarJugadorYcoordenada(Jugador, Coordenada);
@@ -61,6 +62,7 @@ public:
 	//Declaraciones de las clases de iterador
 	class IterJugador;
 	class IterPokemon;
+	Juego();
 	//Crea un juego vacio pero con mapa
 	Juego(Mapa&);
 	~Juego();
@@ -69,7 +71,7 @@ public:
 	void AgregarPokemon(Pokemon, Coordenada);
 
 	//Agrega un jugador al juego, devuelve un iterador al jugador agregado
-	IterJugador AgregarJugador(Jugador);
+	IterJugador AgregarJugador();
 
 	//Conecta a un jugador al juego en la coordenada pasada por parametros
 	//pre: el jugador debe existir en el juego, y no estar expulsado
@@ -135,6 +137,9 @@ public:
 
 	//Devuelve la coordenada del pokemon mas cercano
 	Coordenada PosPokemonCercano(Coordenada);
+
+	// funcion del TAD, funcion Mapa
+	Mapa const MapaDeJuego() const;
 
 	// Antes de usar este iterador hay que avanzarlo como primer paso
 	class IterJugador{

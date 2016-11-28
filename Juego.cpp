@@ -1,3 +1,6 @@
+#ifndef JUEGO_CPP
+#define JUEGO_CPP
+
 #include "Juego.h"
 #include <iostream>
 
@@ -5,7 +8,10 @@ using namespace std;
 using namespace aed2;
 
 
-Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m){
+Juego::Juego(): cantidadTotPokemons(0), proximoIdJugador_(0) {
+}
+
+Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m), proximoIdJugador_(0){
 
 	Conj<Coordenada>::const_Iterador iter = mapa.Coordenadas().CrearIt();
 
@@ -70,18 +76,20 @@ void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 
 };
 
-Juego::IterJugador Juego::AgregarJugador(Jugador j){
+Juego::IterJugador Juego::AgregarJugador(){
 	DiccString<Nat> dicc;
 	Lista< DiccString<Nat> >::const_Iterador it = pokemonesDeJugadores.AgregarAtras(dicc);
 	Coordenada c(0,0);
 	InfoJugador i(c);
 	i.conectado = false;
 	i.expulsado = false;
-	i.id = j;
+	i.id = proximoIdJugador_;
 	i.sanciones = 0;
 	i.pos = c;
 	i.pokemons = it;
 	i.cantTotalPoke = 0;
+
+	proximoIdJugador_++;
 
 	jugadores.AgregarAtras(i);
 	Juego::IterJugador iter = Jugadores();
@@ -442,3 +450,10 @@ void Juego::IterPokemon::Avanzar(){
 Lista<string> Juego::IterPokemon::Siguientes(){
 	return it.Siguientes();
 }
+
+Mapa const Juego::MapaDeJuego() const {
+	Mapa out(mapa);
+	return out;
+}
+
+#endif
