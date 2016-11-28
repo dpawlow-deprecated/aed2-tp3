@@ -227,7 +227,7 @@ bool Juego::HayPokemonCercano(const Coordenada c) {
 
 Nat Juego::IndiceRareza(Pokemon p){
 	Nat cant = pokemons.Significado(p).second;
-	return (100-((cant/cantidadTotPokemons)*100));
+	return 100-((cant*100)/cantidadTotPokemons);
 };
 
 Nat Juego::CantPokemonsTotales(){
