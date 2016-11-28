@@ -114,13 +114,13 @@ Conj< Jugador > Driver::expulsados() const{
 
 /* Devuelve todas las coordenadaes del mapa que tienen un pokemon en ella. */
 Conj< Coordenada > Driver::posConPokemons() const{
-
+  return juego_->PosConPokemons();
 }
 
 /* Dada una coordenada del mapa, devuelve al pokemon situado en ella.
  * Es requisito que la coordenada exista en el mapa y que exista un pokemon alli. */
 Pokemon Driver::pokemonEnPos(const Coordenada & c) const{
-
+  return juego_->PokemonEnPos(c);
 }
 
 /* Dada una coordenada, devuelve el valor del contador de movimientos fuera del rango.
