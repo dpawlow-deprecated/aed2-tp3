@@ -160,7 +160,7 @@ public:
 
 			const Vector<InfoJugador>* vector;
 
-			IterJugador(const Juego* j): posicion(-1), vector(&j->jugadores) {
+			IterJugador(const Juego* j): posicion(0), vector(&j->jugadores) {
 			};
 
 			friend Juego::IterJugador Juego::Jugadores()const;
