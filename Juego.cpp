@@ -197,19 +197,19 @@ Conj<Jugador> Juego::JugadoresConectados(){
 };
 
 bool Juego::PuedoAgregarPokemon(Coordenada c){
-	bool res = true;
 	if (mapa.PosExistente(c)){
 		coordenadasConPokemons = PosConPokemons();
 		Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
 		while (iter.HaySiguiente()){
-			if (distanciaEuclidea(c, iter.Siguiente()) < 25){
-				res = false;
+			if (distanciaEuclidea(c, iter.Siguiente()) <= 25){
+				return false;
 			}
 			iter.Avanzar();
 		}
+		return true;
 	}
-	return res;
+	return false;
 };
 
 bool Juego::HayPokemonCercano(const Coordenada c) {

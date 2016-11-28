@@ -3,7 +3,6 @@
 
 #include "TiposJuego.h"
 #include "aed2/TiposBasicos.h"
-#include "math.h"
 
 using namespace aed2;
 
@@ -28,7 +27,7 @@ Coordenada coordenadaArriba(Coordenada& otra){
 }
 
 Nat distanciaEuclidea(const Coordenada& c1, const Coordenada& c2){
-	return sqrt((c1.latitud - c2.latitud) * (c1.latitud - c2.latitud) + (c1.longitud - c2.longitud) * (c1.longitud - c2.longitud));
+	return (c1.latitud - c2.latitud) * (c1.latitud - c2.latitud) + (c1.longitud - c2.longitud) * (c1.longitud - c2.longitud);
 }
 
 bool TieneCoordenadaAbajo(Coordenada& c){
