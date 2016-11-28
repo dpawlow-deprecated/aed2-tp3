@@ -660,11 +660,10 @@ void test_poke_catedra(){
     d.moverse(j1, Coordenada(12,1));
 
     d.moverse(j2, Coordenada(12,0));
-    d.moverse(j2, Coordenada(120,0));
     d.moverse(j2, Coordenada(12,0));
-    d.moverse(j2, Coordenada(120,0));
     d.moverse(j2, Coordenada(12,0));
-    std::cout << std::endl << d.indiceRareza("Squirtle") << std::endl;
+    d.moverse(j2, Coordenada(12,0));
+    d.moverse(j2, Coordenada(12,0));
     ASSERT(d.indiceRareza("Squirtle") == 50);
     ASSERT(d.indiceRareza("Ratatta") == 50);
 

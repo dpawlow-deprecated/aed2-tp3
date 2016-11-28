@@ -404,6 +404,7 @@ void Juego::VerCapturas(Jugador j, Coordenada c){
 
 			if (!mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].jugEspe.preguntarVacia()){
 				Jugador jug = mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].jugEspe.proximo().second;
+				jugadores[jug].cantTotalPoke++;
 
 				if (jugadores[jug].pokemons.Siguiente().Definido(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon)){
 					Nat auxIncrementar = jugadores[jug].pokemons.Siguiente().Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon);
