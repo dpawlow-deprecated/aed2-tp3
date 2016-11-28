@@ -20,6 +20,7 @@ Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m){
 Juego::~Juego(){
 	for (int i = 0; i<mapa.Ancho(); i++) {
 		delete [] mapaInfo[i];
+		mapaInfo[i] = NULL;
 	}
 	if (mapaInfo != NULL) {
 		delete [] mapaInfo;
@@ -55,7 +56,8 @@ void Juego::AgregarPokemon(Pokemon p, coordenada c){
 	Lista<coordenada>::const_Iterador itcoordenadas = lc.CrearIt();
 	while(itcoordenadas.HaySiguiente()){
 		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itJugadores = mapaInfo[itcoordenadas.Siguiente().Latitud()][itcoordenadas.Siguiente().Longitud()].jugadoresCoordenada.CrearIt();
-		while(itJugadores.HaySiguiente()){
+		Nat cantidadClaves = mapaInfo[itcoordenadas.Siguiente().Latitud()][itcoordenadas.Siguiente().Longitud()].jugadoresCoordenada.CantClaves();
+		while(cantidadClaves > 0 && itJugadores.HaySiguiente()){
 			pair<Nat, Jugador> aEncolar(jugadores[itJugadores.SiguienteClave()].cantTotalPoke, itJugadores.SiguienteClave());
 			ColaPrioridad< pair<Nat, Jugador> >::Iterador itCola;
 			itCola = mapaInfo[c.Latitud()][c.Longitud()].jugEspe.encolar(aEncolar);
@@ -101,7 +103,7 @@ void Juego::Conectarse(Jugador j, coordenada c){
 
 	if(HayPokemonCercano(c)){
 		coordenada cercano(PosPokemonCercano(c));
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itPosicion = mapaInfo[c.Latitud()][c.Longitud()].jugadoresCoordenada.DefinirRapido(j, mapaInfo[cercano.Latitud()][cercano.Longitud()].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.Latitud()][c.Longitud()].jugadoresCoordenada.DefinirRapido(j, mapaInfo[cercano.Latitud()][cercano.Longitud()].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
 		jugadores[j].posicionMapa = itPosicion;
 	}else{
 		ColaPrioridad< pair<Nat, Jugador> >::Iterador itVacio;
@@ -110,16 +112,18 @@ void Juego::Conectarse(Jugador j, coordenada c){
 	}
 };
 
+//TODO: revisar, creo que tiene sentido asi porque no podemos guardar NULL en las variables
 void Juego::Desconectarse(Jugador j){
+	assert(jugadores[j].conectado);
 	jugadores[j].conectado = false;
-	/*if(jugadores[j].posicionMapa.SiguienteSignificado() == NULL){
-		jugadores[j].posicionMapa.SiguienteSignificado().Borrar(jugadores[j].posicionMapa.SiguienteSignificado());
-		jugadores[j].posicionMapa.EleminarSiguiente();
-		jugadores[j].posicionMapa = NULL;
+	if(jugadores[j].posicionMapa.HaySiguiente()) {
+		//jugadores[j].posicionMapa.SiguienteSignificado().Borrar(jugadores[j].posicionMapa.SiguienteSignificado());
+		jugadores[j].posicionMapa.EliminarSiguiente();
+		//jugadores[j].posicionMapa = NULL;
 	}else{
-		jugadores[j].posicionMapa.EleminarSiguiente();
-		jugadores[j].posicionMapa = NULL;
-	}*/
+		jugadores[j].posicionMapa.EliminarSiguiente();
+		//jugadores[j].posicionMapa = NULL;
+	}
 };
 
 void Moverse(Jugador j, coordenada c){

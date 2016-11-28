@@ -4,6 +4,7 @@
 using namespace std;
 using namespace aed2;
 
+
 void test_juegoVacio(){
 	Mapa m;
 	Juego j(m);
@@ -142,8 +143,66 @@ void test_juegoMapa2x2(){
 
 }
 
+void test_conectar_desconectarse() {
+	coordenada c(1, 1);
+	coordenada c1(1, 0);
+	coordenada c2(0, 1);
+	coordenada c3(0, 0);
+	coordenada c4(2,2);
+	Jugador j =  0;
+	Jugador j1 = 1;
+	Jugador j2 = 2;
+	Jugador j3 = 3;
+	Mapa m;
+	int ancho = 10;
+	int alto = 10;
+	for (int i=0; i < ancho; i++) {
+		if (i != ancho/2) {
+			for (int j=0; j < alto; j++) {
+				if (j != alto/2) {
+					coordenada cc(i,j);
+					m.AgregarCoordenada(cc);
+				}
+			}
+		}
+	}
+	Juego g(m);
+
+	g.AgregarJugador(j);
+	g.AgregarJugador(j1);
+	g.AgregarJugador(j2);
+	g.AgregarJugador(j3);
+
+	g.AgregarPokemon("Poke1", c4);
+	g.Conectarse(j, c);
+	g.Conectarse(j1, c1);
+	g.Conectarse(j2, c2);
+	g.Conectarse(j3, c3);
+
+	g.Desconectarse(j);
+	ASSERT(g.EstaConectado(j)  == false);
+	ASSERT(g.EstaConectado(j1) == true);
+	ASSERT(g.EstaConectado(j2) == true);
+	ASSERT(g.EstaConectado(j3) == true);
+
+	g.Desconectarse(j2);
+	ASSERT(g.EstaConectado(j)  == false);
+	ASSERT(g.EstaConectado(j1) == true);
+	ASSERT(g.EstaConectado(j2) == false);
+	ASSERT(g.EstaConectado(j3) == true);
+
+	g.Conectarse(j, c1);
+	g.Conectarse(j2, c3);
+	ASSERT(g.EstaConectado(j)  == true);
+	ASSERT(g.EstaConectado(j1) == true);
+	ASSERT(g.EstaConectado(j2) == true);
+	ASSERT(g.EstaConectado(j3) == true);
+
+}
+
 int main(){
 	RUN_TEST(test_juegoVacio);
 	RUN_TEST(test_juegoMapa2x2);
+	RUN_TEST(test_conectar_desconectarse);
 	return 0;
 }

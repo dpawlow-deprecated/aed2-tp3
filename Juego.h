@@ -29,7 +29,7 @@ private:
 		Nat sanciones;
 		coordenada pos;
 		Lista< DiccString<Nat> >::const_Iterador pokemons;
-		Dicc <Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador posicionMapa;
+		Dicc <Nat, typename ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador posicionMapa;
 		Nat cantTotalPoke;
 		InfoJugador(coordenada& c): pos(c){}
 	};
