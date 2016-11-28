@@ -53,7 +53,7 @@ void Driver::desconectarse(const Jugador & j) {
 }
 
 void Driver::moverse(const Jugador & j, const Coordenada & c) {
-
+  juego_->Moverse(j, c);
 }
 
 Conj< Coordenada > Driver::mapa() const{

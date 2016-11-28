@@ -359,14 +359,17 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 		}
 	}
 
-	jugadores[j].pos = c;
-	if(HayPokemonCercano(c)){
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
-		jugadores[j].posicionMapa = itPosicion;
-	}else{
-		ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
-		jugadores[j].posicionMapa = itPosicion;
+	if(jugadores[j].expulsado == false){
+		jugadores[j].posicionMapa.EliminarSiguiente();
+		jugadores[j].pos = c;
+		if(HayPokemonCercano(c)){
+			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
+			jugadores[j].posicionMapa = itPosicion;
+		}else{
+			ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
+			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
+			jugadores[j].posicionMapa = itPosicion;
+		}
 	}
 };
 
