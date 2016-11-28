@@ -15,9 +15,9 @@ Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m), proximoIdJugador_(0){
 
 	Conj<Coordenada>::const_Iterador iter = mapa.Coordenadas().CrearIt();
 
-	mapaInfo = new Infocoordenada*[mapa.Ancho()];
- 	for (int i=0; i<mapa.Ancho(); i++) {
-		mapaInfo[i] = new Infocoordenada[mapa.Alto()];
+	mapaInfo = new Infocoordenada*[mapa.Alto()];
+ 	for (int i=0; i<mapa.Alto(); i++) {
+		mapaInfo[i] = new Infocoordenada[mapa.Ancho()];
 	}
 
 }
@@ -454,6 +454,10 @@ Lista<string> Juego::IterPokemon::Siguientes(){
 Mapa const Juego::MapaDeJuego() const {
 	Mapa out(mapa);
 	return out;
+}
+
+Nat Juego::CantidadMismaEspecie(const Pokemon p) const {
+	return pokemons.Significado(p).second;
 }
 
 #endif

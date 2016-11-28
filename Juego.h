@@ -141,6 +141,9 @@ public:
 	// funcion del TAD, funcion Mapa
 	Mapa const MapaDeJuego() const;
 
+	//TODO: agregar al TAD
+	Nat CantidadMismaEspecie(const Pokemon) const;
+
 	// Antes de usar este iterador hay que avanzarlo como primer paso
 	class IterJugador{
 
@@ -165,7 +168,7 @@ public:
 
 	class IterPokemon{
 		public:
-			pair<string, Nat> Actual();
+			pair<Pokemon, Nat> Actual();
 			bool HayMas();
 			void Avanzar();
 			Lista<string> Siguientes();

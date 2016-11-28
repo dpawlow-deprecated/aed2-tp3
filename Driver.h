@@ -123,7 +123,7 @@ class Driver {
 	 * funciones auxiliares que les hagan falta.							*
 	 ************************************************************************/
 	 Juego* juego_;
-	 Mapa mapa_;
+	 Mapa* mapa_;
 	 Conj< Coordenada > coordenadasMapa_;
 	 Nat proximoIdJugador_;
 

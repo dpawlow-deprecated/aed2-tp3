@@ -54,8 +54,8 @@ void ancho_largo_correcto() {
         it.Avanzar();
     }
 
-    ASSERT( m.Ancho() == 11 );
-    ASSERT( m.Alto() == 6 );
+    ASSERT( m.Alto() == 11 );
+    ASSERT( m.Ancho() == 6 );
 }
 
 void constructor_por_copia_mapa(){

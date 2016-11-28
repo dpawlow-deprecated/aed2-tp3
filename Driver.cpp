@@ -11,12 +11,13 @@ using namespace aed2;
 
 Driver::Driver(const Conj< Coordenada > & cs): proximoIdJugador_(0), coordenadasMapa_(cs)
 {
+  mapa_ = new Mapa();
   Conj<Coordenada>::const_Iterador it = cs.CrearIt();
   while (it.HaySiguiente()) {
-    mapa_.AgregarCoordenada(it.Siguiente());
+    mapa_->AgregarCoordenada(it.Siguiente());
     it.Avanzar();
   }
-  juego_ = new Juego(mapa_);
+  juego_ = new Juego(*mapa_);
 }
 
 Driver::~Driver()
@@ -55,17 +56,23 @@ Conj< Coordenada > Driver::mapa() const{
 /* Indica si hay un camino posible entre dos coordenadas
 *  Requiere que las coordenadas existan en el mapa */
 bool Driver::hayCamino(const Coordenada & c1, const Coordenada & c2) const{
-
+  return mapa_->HayCamino(c1, c2);
 }
 
 /* Indica si una coordenada existe o no en el mapa */
 bool Driver::posExistente(const Coordenada & c) const{
-
+  return mapa_->PosExistente(c);
 }
 
 /* Devuelve los jugadores que fueron insertados en el juego y no fueron eliminados. */
 Conj< Jugador > Driver::jugadores() const{
-
+  Conj<Jugador> out;
+  Juego::IterJugador it = juego_->Jugadores();
+  while(it.HayMas()) {
+    out.AgregarRapido(it.Actual());
+    it.Avanzar();
+  }
+  return out;
 }
 
 /* Dado el jugador pasado como parametro, retorna si esta conectado o no.
@@ -90,7 +97,14 @@ Coordenada Driver::posicion(const Jugador & j) const{
  * pokemons que capturo.
  * Requiere que el jugador este entre jugadores() del juego. */
 Dicc< Pokemon , Nat > Driver::pokemons(const Jugador & j) const{
-
+  Dicc<Pokemon, Nat> out;
+  Juego::IterPokemon it = juego_->Pokemons(j);
+  while(it.HayMas()) {
+    pair<Pokemon, Nat> actual = it.Actual();
+    out.Definir(actual.first, actual.second);
+    it.Avanzar();
+  }
+  return out;
 }
 
 /* Devuelve los jugadores que fueron expulsados del juego. */
@@ -149,12 +163,12 @@ Nat Driver::indiceRareza(const Pokemon & p) const{
 
 /* Devuelve la cantidad de pokemons totales en el juego. */
 Nat Driver::cantPokemonsTotales() const{
-
+  return juego_->CantPokemonsTotales();
 }
 
 /* Indica cuantos pokemons de la especie de unPokemon hay en pokemons. */
 Nat Driver::cantMismaEspecie(const Pokemon & p) const{
-
+  return juego_->CantidadMismaEspecie(p);
 }
 
 
