@@ -418,12 +418,20 @@ void Juego::IterJugador::Avanzar(){
 }
 
 Nat Juego::IterJugador::Actual(){
+	if ((*vector)[posicion].expulsado == false) {
+		return posicion;
+	}
+	Nat i = posicion+1;
+	while (i < (*vector).Longitud() && (*vector)[i].expulsado == true){
+		i++;
+	}
+	posicion = i;
 	return posicion;
 }
 
 Lista<Nat> Juego::IterJugador::Siguientes(){
 	Lista<Nat> ls;
-	Nat i = posicion;
+	Nat i = posicion+1;
 	while(i < (*vector).Longitud()){
 		if((*vector)[i].expulsado == false){
 			ls.AgregarAtras(i);
