@@ -1,45 +1,46 @@
 #include "mini_test.h"
 #include "Coordenada.cpp"
+#include "aed2/TiposBasicos.h"
 
 using namespace std;
 
 void test_crearCoordenadas(){
-	coordenada c(5, 4);
-	ASSERT(c.Latitud() == 5);
-	ASSERT(c.Longitud() == 4);
+	Coordenada c(5, 4);
+	ASSERT(c.latitud == 5);
+	ASSERT(c.longitud == 4);
 
-	coordenada c1 (c.coordenadaAbajo (c).Latitud(), c.coordenadaAbajo (c).Longitud());
-	ASSERT(c.Latitud() == 5);
-	ASSERT(c.Longitud() == 4);
-	ASSERT(c1.Latitud() == 4);
-	ASSERT(c1.Longitud() == 4);
-	
-	coordenada c2 (c.coordenadaArriba (c).Latitud(), c.coordenadaArriba (c).Longitud());
-	ASSERT(c.Latitud() == 5);
-	ASSERT(c.Longitud() == 4);
-	ASSERT(c2.Latitud() == 6);
-	ASSERT(c2.Longitud() == 4);
+	Coordenada c1(coordenadaAbajo(c).latitud, coordenadaAbajo(c).longitud);
+	ASSERT(c.latitud == 5);
+	ASSERT(c.longitud == 4);
+	ASSERT(c1.latitud == 4);
+	ASSERT(c1.longitud == 4);
 
-	coordenada c3 (c.coordenadaIzquierda (c).Latitud(), c.coordenadaIzquierda (c).Longitud());
-	ASSERT(c.Latitud() == 5);
-	ASSERT(c.Longitud() == 4);
-	ASSERT(c3.Latitud() == 5);
-	ASSERT(c3.Longitud() == 3);
+	Coordenada c2(coordenadaArriba(c).latitud, coordenadaArriba(c).longitud);
+	ASSERT(c.latitud == 5);
+	ASSERT(c.longitud == 4);
+	ASSERT(c2.latitud == 6);
+	ASSERT(c2.longitud == 4);
 
-	coordenada c4 (c.coordenadaDerecha (c).Latitud(), c.coordenadaDerecha (c).Longitud());
-	ASSERT(c.Latitud() == 5);
-	ASSERT(c.Longitud() == 4);
-	ASSERT(c4.Latitud() == 5);
-	ASSERT(c4.Longitud() == 5);
-	
-	ASSERT(c.TieneCoordenadaAbajo());
-	ASSERT(c.TieneCoordenadaIzquierda());
+	Coordenada c3(coordenadaIzquierda(c).latitud, coordenadaIzquierda(c).longitud);
+	ASSERT(c.latitud == 5);
+	ASSERT(c.longitud == 4);
+	ASSERT(c3.latitud == 5);
+	ASSERT(c3.longitud == 3);
+
+	Coordenada c4(coordenadaDerecha(c).latitud, coordenadaDerecha(c).longitud);
+	ASSERT(c.latitud == 5);
+	ASSERT(c.longitud == 4);
+	ASSERT(c4.latitud == 5);
+	ASSERT(c4.longitud == 5);
+
+	ASSERT(TieneCoordenadaAbajo(c));
+	ASSERT(TieneCoordenadaIzquierda(c));
 }
 
 void test_distaciaEuclidea(){
-	coordenada c(3, 4);
-	coordenada c1(1, 2);
-	ASSERT(c.distanciaEuclidea(c1) == 2);
+	Coordenada c(3, 4);
+	Coordenada c1(1, 2);
+	ASSERT(distanciaEuclidea(c, c1) == 2);
 }
 
 

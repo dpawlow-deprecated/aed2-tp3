@@ -1,12 +1,11 @@
 #ifndef TIPOSJUEGO_H_
 #define TIPOSJUEGO_H_
 
-#include "Modulos-CPP/aed2/TiposBasicos.h"
+#include "aed2/TiposBasicos.h"
+using namespace aed2;
 
 typedef unsigned int Jugador;
 typedef std::string Pokemon;
-typedef unsigned int Nat;
- 
 struct Coordenada
 {
 	Nat latitud;

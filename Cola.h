@@ -1,7 +1,7 @@
 #ifndef COLA_H_
 #define COLA_H_
 
-#include "Modulos-CPP/aed2/Vector.h"
+#include "aed2/Vector.h"
 
 using namespace std;
 using namespace aed2;

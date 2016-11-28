@@ -1,12 +1,11 @@
 #ifndef DICC_STRING_H_
 #define DICC_STRING_H_
 
-#include "Modulos-CPP/aed2/Lista.h"
-#include "Modulos-CPP/aed2/Conj.h"
+#include "aed2/Lista.h"
+#include "aed2/Conj.h"
 #include <string>
 #include <iostream>
 #include <cassert>
-#include "Coordenada.h"
 #include "TiposJuego.h"
 using namespace std;
 using namespace aed2;

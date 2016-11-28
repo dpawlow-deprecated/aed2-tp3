@@ -1,48 +1,42 @@
-#include "Coordenada.h"
+#ifndef COORDENADA_CPP_
+#define COORDENADA_CPP_
 
-coordenada::coordenada(const coordenada& otra){
-	latitud = otra.latitud;
-	longitud = otra.longitud;
-};
+#include "TiposJuego.h"
+#include "aed2/TiposBasicos.h"
+#include "math.h"
 
-coordenada::coordenada(Nat lat, Nat lon):latitud(lat), longitud(lon){};
+using namespace aed2;
 
-coordenada coordenada::coordenadaAbajo(const coordenada otra){
-	coordenada c(otra.latitud -1, otra.longitud);
+Coordenada coordenadaAbajo(Coordenada& otra){
+	Coordenada c(otra.latitud -1, otra.longitud);
 	return c;
 }
 
-coordenada coordenada::coordenadaIzquierda(const coordenada otra){
-	coordenada c(otra.latitud, otra.longitud -1);
+Coordenada coordenadaIzquierda(Coordenada& otra){
+	Coordenada c(otra.latitud, otra.longitud -1);
 	return c;
 }
 
-coordenada coordenada::coordenadaDerecha(const coordenada otra){
-	coordenada c(otra.latitud, otra.longitud +1);
+Coordenada coordenadaDerecha(Coordenada& otra){
+	Coordenada c(otra.latitud, otra.longitud +1);
 	return c;
 }
 
-coordenada coordenada::coordenadaArriba(const coordenada otra){
-	coordenada c(otra.latitud +1, otra.longitud);
+Coordenada coordenadaArriba(Coordenada& otra){
+	Coordenada c(otra.latitud +1, otra.longitud);
 	return c;
 }
 
-Nat coordenada::distanciaEuclidea(const coordenada& c1){
-	return sqrt((c1.latitud - latitud) * (c1.latitud - latitud) + (c1.longitud - longitud) * (c1.longitud - longitud));
+Nat distanciaEuclidea(const Coordenada& c1, const Coordenada& c2){
+	return sqrt((c1.latitud - c2.latitud) * (c1.latitud - c2.latitud) + (c1.longitud - c2.longitud) * (c1.longitud - c2.longitud));
 }
 
-Nat coordenada::Latitud()const{
-	return latitud;
+bool TieneCoordenadaAbajo(Coordenada& c){
+	return (c.latitud > 0);
 }
 
-Nat coordenada::Longitud()const{
-	return longitud;
+bool TieneCoordenadaIzquierda(Coordenada& c){
+	return (c.longitud >0);
 }
 
-bool coordenada::TieneCoordenadaAbajo(){
-	return (latitud >0);
-}
-
-bool coordenada::TieneCoordenadaIzquierda(){
-	return (longitud >0);
-}
+#endif
