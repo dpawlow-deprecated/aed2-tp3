@@ -325,7 +325,7 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 
 	//sanciones
-	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !mapa.PosExistente(c) || !(mapa.HayCamino(c, jugadores[j].pos))){
+	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !(mapa.HayCamino(c, jugadores[j].pos))){
 		jugadores[j].sanciones = jugadores[j].sanciones +1;
 		if (jugadores[j].sanciones > 4){
 			jugadores[j].expulsado = true;
@@ -360,27 +360,34 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 		}
 	}
 
-	jugadores[j].pos = c;
 
-	if (jugadores[j].posicionMapa.SiguienteSignificado().HayMas()) {
-		jugadores[j].posicionMapa.SiguienteSignificado().Borrar();
-	}
-	if (jugadores[j].posicionMapa.HaySiguiente()) {
-		jugadores[j].posicionMapa.EliminarSiguiente();
-	}
 
-	if(HayPokemonCercano(c)){
-		jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
-	}else{
-		ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
-		jugadores[j].posicionMapa = itPosicion;
+	if (distanciaEuclidea(c, jugadores[j].pos) <= 100 && mapa.HayCamino(c, jugadores[j].pos)) {
+		jugadores[j].pos = c;
+
+		if (jugadores[j].posicionMapa.SiguienteSignificado().HayMas()) {
+			jugadores[j].posicionMapa.SiguienteSignificado().Borrar();
+		}
+		if (jugadores[j].posicionMapa.HaySiguiente()) {
+			jugadores[j].posicionMapa.EliminarSiguiente();
+		}
+
+		if(HayPokemonCercano(c)){
+			jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
+		}else{
+			ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
+			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
+			jugadores[j].posicionMapa = itPosicion;
+		}
 	}
 };
 
 
 void Juego::VerCapturas(Jugador j, Coordenada c){
-	//Esto está bien, pero por la mitad
+	// si es sancionado no verificamos nada de capturas
+	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !(mapa.HayCamino(c, jugadores[j].pos))){
+		return;
+	}
 
 	Coordenada coordJugador = jugadores[j].pos;
 	Conj<Coordenada>::Iterador iter = coordenadasConPokemons.CrearIt();
