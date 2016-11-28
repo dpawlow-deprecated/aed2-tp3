@@ -109,9 +109,7 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 	//TODO: hay que reiniciar la cantidad de movimientos restantes?
 
 	if(HayPokemonCercano(c)){
-		Coordenada cercano(PosPokemonCercano(c));
-		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[cercano.latitud][cercano.longitud].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
-		jugadores[j].posicionMapa = itPosicion;
+		jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
 	}else{
 		ColaPrioridad< pair<Nat, Jugador> >::Iterador itVacio;
 		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itVacio);
@@ -326,7 +324,8 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 
 void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 
-	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !(mapa.HayCamino(c, jugadores[j].pos))){
+	//sanciones
+	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !mapa.PosExistente(c) || !(mapa.HayCamino(c, jugadores[j].pos))){
 		jugadores[j].sanciones = jugadores[j].sanciones +1;
 		if (jugadores[j].sanciones > 4){
 			jugadores[j].expulsado = true;
@@ -334,6 +333,7 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 	}
 
 	if(jugadores[j].expulsado == true){
+		// restamos pokemones de pokemones totales cuando expulsamos gente
 		cantidadTotPokemons = cantidadTotPokemons - jugadores[j].cantTotalPoke;
 		Lista<string>::const_Iterador itPokemons = jugadores[j].pokemons.Siguiente().Claves().CrearIt();
 		while(itPokemons.HaySiguiente()) {
@@ -343,7 +343,7 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 		jugadores[j].pokemons.EliminarSiguiente();
 		jugadores[j].cantTotalPoke = 0;
 	}else{
-
+		// actualizamos contadores para capturas
 		if (!HayPokemonCercano(jugadores[j].pos) && !HayPokemonCercano(c)) {
 			// no se hace nada en este caso
 		} else if (HayPokemonCercano(jugadores[j].pos) && !HayPokemonCercano(c)) {
@@ -360,20 +360,22 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 		}
 	}
 
-	/*if(jugadores[j].expulsado == false){
-		if (jugadores[j].posicionMapa.HaySiguiente()) {
-			jugadores[j].posicionMapa.SiguienteSignificado().Borrar();
-		}
+	jugadores[j].pos = c;
+
+	if (jugadores[j].posicionMapa.SiguienteSignificado().HayMas()) {
+		jugadores[j].posicionMapa.SiguienteSignificado().Borrar();
+	}
+	if (jugadores[j].posicionMapa.HaySiguiente()) {
 		jugadores[j].posicionMapa.EliminarSiguiente();
-		jugadores[j].pos = c;
-		if(HayPokemonCercano(c)){
-			jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
-		}else{
-			ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
-			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
-			jugadores[j].posicionMapa = itPosicion;
-		}
-	}*/
+	}
+
+	if(HayPokemonCercano(c)){
+		jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
+	}else{
+		ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
+		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
+		jugadores[j].posicionMapa = itPosicion;
+	}
 };
 
 
@@ -384,21 +386,25 @@ void Juego::VerCapturas(Jugador j, Coordenada c){
 	Conj<Coordenada>::Iterador iter = coordenadasConPokemons.CrearIt();
 
 	while (iter.HaySiguiente()){
-		mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].movimientosRestantes -= 1;
+		if (mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].movimientosRestantes > 0)
+			mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].movimientosRestantes -= 1;
 
 		if (mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].movimientosRestantes == 0){
 			mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].hayPokemon = false;
 			mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].yaSeCapturo = true;
 			mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].movimientosRestantes = 10;
 			pokemons.Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon).first = pokemons.Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon).first - 1;
-			Jugador jug = mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].jugEspe.proximo().second;
 
-			if (jugadores[jug].pokemons.Siguiente().Definido(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon)){
-				Nat auxIncrementar = jugadores[jug].pokemons.Siguiente().Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon);
-				auxIncrementar++;
-				jugadores[jug].pokemons.Siguiente().Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon) = auxIncrementar;
-			} else {
-				jugadores[jug].pokemons.Siguiente().Definir(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon, 1);
+			if (!mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].jugEspe.preguntarVacia()){
+				Jugador jug = mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].jugEspe.proximo().second;
+
+				if (jugadores[jug].pokemons.Siguiente().Definido(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon)){
+					Nat auxIncrementar = jugadores[jug].pokemons.Siguiente().Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon);
+					auxIncrementar++;
+					jugadores[jug].pokemons.Siguiente().Significado(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon) = auxIncrementar;
+				} else {
+					jugadores[jug].pokemons.Siguiente().Definir(mapaInfo[iter.Siguiente().latitud][iter.Siguiente().longitud].pokemon, 1);
+				}
 			}
 
 			iter.EliminarSiguiente();

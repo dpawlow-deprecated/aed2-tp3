@@ -465,17 +465,22 @@ ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>* cola, ColaPrioridad<T>::N
 
 template <class T>
 ColaPrioridad<T>::Iterador::Iterador(ColaPrioridad<T>::Iterador& otro)
-  : nodo_(otro.nodo_){};
+  : nodo_(otro.nodo_){
+    cola_ = otro.cola_;
+};
 
 template <class T>
 ColaPrioridad<T>::Iterador::Iterador(const ColaPrioridad<T>::Iterador& otro)
-  : nodo_(otro.nodo_){};
+  : nodo_(otro.nodo_){
+    cola_ = otro.cola_;
+    
+};
 
 
 
 template <class T>
 bool ColaPrioridad<T>::Iterador::HayMas() const {
-  return nodo_->izq != NULL || nodo_->der != NULL || nodo_->padre != NULL;
+  return nodo_ != NULL;
 }
 
 template <class T>
@@ -486,6 +491,7 @@ T ColaPrioridad<T>::Iterador::Siguiente() {
 template <class T>
 void ColaPrioridad<T>::Iterador::Borrar() {
   cola_->borrar(nodo_);
+  nodo_ = NULL;
 }
 
 

@@ -657,12 +657,14 @@ void test_poke_catedra(){
     d.moverse(j1, Coordenada(12,0));
     d.moverse(j1, Coordenada(12,1));
     d.moverse(j1, Coordenada(12,0));
+    d.moverse(j1, Coordenada(12,1));
 
     d.moverse(j2, Coordenada(12,0));
+    d.moverse(j2, Coordenada(120,0));
     d.moverse(j2, Coordenada(12,0));
+    d.moverse(j2, Coordenada(120,0));
     d.moverse(j2, Coordenada(12,0));
-    d.moverse(j2, Coordenada(12,0));
-    d.moverse(j2, Coordenada(12,0));
+    std::cout << std::endl << d.indiceRareza("Squirtle") << std::endl;
     ASSERT(d.indiceRareza("Squirtle") == 50);
     ASSERT(d.indiceRareza("Ratatta") == 50);
 
@@ -1109,7 +1111,7 @@ void test_mover_jugador_asigna_correcta_coordenada(){
 
     ASSERT(d.posicion(j0) == c6);
     ASSERT(d.posicion(j1) == c3);
-    ASSERT(d.posicion(j2) == c5);
+    ASSERT(d.posicion(j2) == c4);
     ASSERT(d.posicion(j3) == c2);
 }
 
@@ -1257,10 +1259,10 @@ int main(int argc, char **argv)
 
 
 
-    //*******************************************************************************************//
-    //Las funciones de arriba segun valgrind no pieden memoria. Las de abajo no las testee porque//
-    //todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
-    //*******************************************************************************************//
+    ////*******************************************************************************************//
+    ////Las funciones de arriba segun valgrind no pieden memoria. Las de abajo no las testee porque//
+    ////todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
+    ////*******************************************************************************************//
 
 
     RUN_TEST(test_coordenada_en_el_limite);
