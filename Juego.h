@@ -84,7 +84,7 @@ public:
 	//Mapa Mapa();
 
 	//Devuelve los jugadores actuaes del juego (no expulsados)
-	IterJugador Jugadores()const;
+	IterJugador Jugadores() const;
 
 	//Pregunta si un jugador esta conectado
 	//pre: el jugador tiene que existir
@@ -135,7 +135,7 @@ public:
 	Coordenada PosPokemonCercano(Coordenada);
 
 	// funcion del TAD, funcion Mapa
-	Mapa const MapaDeJuego() const;
+	const Mapa& MapaDeJuego() const;
 
 	//TODO: agregar al TAD
 	Nat CantidadMismaEspecie(const Pokemon) const;

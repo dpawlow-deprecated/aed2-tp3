@@ -114,18 +114,20 @@ ColaPrioridad<T>::Nodo::Nodo(const T& v)
 template <class T>
 ColaPrioridad<T>::ColaPrioridad(){
     this->raiz_ = NULL;
-    this->ultimo_ = this->raiz_;
+    this->ultimo_ = NULL;
 }
 
 template <class T>
 ColaPrioridad<T>& ColaPrioridad<T>::operator=(const ColaPrioridad<T>& otro) {
   if(this != &otro) {
     if (raiz_ != NULL) {
+      liberar(raiz_);
+    }
+    raiz_ = NULL;
+    ultimo_ = NULL;
+    if (otro.raiz_ != NULL) {
       Nodo** nuevoUltimo = &ultimo_;
       raiz_ = CopiarNodo(otro.raiz_, otro.ultimo_, nuevoUltimo);
-    } else {
-      raiz_ = NULL;
-      ultimo_ = NULL;
     }
   }
   return *this;
@@ -166,7 +168,9 @@ void ColaPrioridad<T>::liberar(Nodo* nodo) {
   if (nodo->izq != NULL) {
     liberar(nodo->izq);
   }
-  delete nodo;
+  if (nodo != NULL) {
+    delete nodo;
+  }
 }
 
 template <class T>

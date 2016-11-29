@@ -1434,7 +1434,9 @@ void test_algo(){
 	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteClave() == "TuVieja");
 	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteSignificado() == 1);
 
-
+  ASSERT(d.puedoAgregarPokemon(Coordenada(0,0)));
+  d.agregarPokemon("papapapa", Coordenada(0,0));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
 }
 
 

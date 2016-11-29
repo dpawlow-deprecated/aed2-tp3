@@ -152,12 +152,39 @@ void test_borrar_desencolar() {
 }
 
 
+void test_operator_igual() {
+  ColaPrioridad <int> c;
+  c.encolar(424);
+  ColaPrioridad<int>::Iterador a(c.encolar(4513));
+  ColaPrioridad<int>::Iterador b(c.encolar(-41));
+  ColaPrioridad<int>::Iterador c2(c.encolar(-141));
+  c.encolar(20);
+
+  ColaPrioridad<int> d = c;
+}
+
+void test_operator_igual2() {
+  ColaPrioridad<int> d;
+
+  ColaPrioridad <int> c;
+  c.encolar(424);
+  ColaPrioridad<int>::Iterador a(c.encolar(4513));
+  ColaPrioridad<int>::Iterador b(c.encolar(-41));
+  ColaPrioridad<int>::Iterador c2(c.encolar(-141));
+  c.encolar(20);
+
+  c = d;
+}
+
+
 int main() {
     RUN_TEST(test_encolar);
     RUN_TEST(test_desencolar3);
     RUN_TEST(test_desencolar);
     RUN_TEST(test_iterador);
     RUN_TEST(test_borrar_desencolar);
+    RUN_TEST(test_operator_igual);
+    //RUN_TEST(test_operator_igual2);
 
     return 0;
 }
