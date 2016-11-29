@@ -176,59 +176,18 @@ void test_Moverse_Ivan(){
 
 void test_Ivan()
 {
-	
+
     RUN_TEST(test_constructor_con_mapa_Ivan);
     RUN_TEST(test_agregar_jugadores_Ivan);
     RUN_TEST(test_agregar_pokemones_Ivan);
     RUN_TEST(test_puedo_agregar_pokemones_Ivan);
     RUN_TEST(test_Moverse_Ivan);
-	
+
 }
 
-
-void test_coordenada_corrida(){
-    /*
-    Coordenada coordenada = Coordenada(0,0);
-
-    Coordenada corr0 = coordenada.coordenadaCorrida(0);
-    Coordenada corr1 = coordenada.coordenadaCorrida(1);
-    Coordenada corr2 = coordenada.coordenadaCorrida(2);
-    Coordenada corr3 = coordenada.coordenadaCorrida(3);
-
-    ASSERT(corr0 == Coordenada(0,0));
-    ASSERT(corr1 == Coordenada(0,0));
-    ASSERT(corr2 == Coordenada(1,0));
-    ASSERT(corr3 == Coordenada(0,1));
-    */
-}
-
-void test_particion_mapa()
-{
-    /*
-    Conj<Coordenada> cc;
-    Coordenada c1(0,0);
-    Coordenada c2(0,1);
-    Coordenada c3(0,2);
-    Coordenada c4(0,10);
-    cc.AgregarRapido(c1);
-    cc.AgregarRapido(c2);
-    cc.AgregarRapido(c3);
-    cc.AgregarRapido(c4);
-    Conj<Coordenada>::Iterador it = cc.CrearIt();
-    Mapa m;
-    while(it.HaySiguiente()){
-        Coordenada c = it.Siguiente();
-        m.AgregarCoordenada(c);
-        it.Avanzar();
-    }
-    ASSERT(m.verParticion(c1) == m.verParticion(c2));
-    ASSERT(m.verParticion(c1) == m.verParticion(c3));
-    ASSERT(m.verParticion(c1) != m.verParticion(c4));
-    */
-}
 
 void agregar_coodenadas_a_mapa() {
-   /*
+
     Conj<Coordenada> cc;
     cc.AgregarRapido(Coordenada(0,0));
     cc.AgregarRapido(Coordenada(0,1));
@@ -246,11 +205,9 @@ void agregar_coodenadas_a_mapa() {
     Driver d = Driver(cc);
     ASSERT( m.Coordenadas() == cc );
     ASSERT( d.mapa() == cc );
-    */
 }
 
 void ancho_largo_correcto() {
-    /*
     Conj<Coordenada> cc;
     Mapa m;
     cc.AgregarRapido(Coordenada(0,0));
@@ -266,13 +223,11 @@ void ancho_largo_correcto() {
         it.Avanzar();
     }
 
-    ASSERT( m.ancho() == 11 );
-    ASSERT( m.alto() == 6 );
-    */
+    ASSERT( m.Ancho() == 6 );
+    ASSERT( m.Alto() == 11 );
 }
 
 void constructor_por_copia_mapa(){
-    /*
     Conj<Coordenada> cc;
     cc.AgregarRapido(Coordenada(0,0));
     cc.AgregarRapido(Coordenada(0,1));
@@ -289,12 +244,11 @@ void constructor_por_copia_mapa(){
     }
 
     Mapa m2 = Mapa(m);
-    ASSERT( m2.posExistente(Coordenada(1,4)) == m.posExistente(Coordenada(1,4)) );
-    ASSERT( m2.posExistente(Coordenada(11,0)) == m.posExistente(Coordenada(11,0)) );
-    ASSERT( m2.alto() == m.alto() );
-    ASSERT( m2.ancho() == m.ancho() );
+    ASSERT( m2.PosExistente(Coordenada(1,4)) == m.PosExistente(Coordenada(1,4)) );
+    ASSERT( m2.PosExistente(Coordenada(11,0)) == m.PosExistente(Coordenada(11,0)) );
+    ASSERT( m2.Alto() == m.Alto() );
+    ASSERT( m2.Ancho() == m.Ancho() );
     ASSERT( m2.Coordenadas() == cc );
-    */
 }
 
 void test_agregar_pokemones(){
@@ -1248,12 +1202,14 @@ void test_Moverse_expulsar(){
     Nat i = 2;
     while (i > 0){
         j.Moverse(0, Coordenada(7,7));
-        j.Moverse(0, Coordenada(5,5));
+        j.Moverse(0, Coordenada(7,6));
         i--;
     }
     j.Moverse(0, Coordenada(7,7));
-    //ASSERT(j.expulsados().HaySiguiente());
-    //ASSERT(j.expulsados().Siguiente().Id_ == 0);
+    Conj<Jugador> exp = j.Expulsados();
+    Conj<Jugador>::Iterador expIt = exp.CrearIt();
+    ASSERT(expIt.HaySiguiente());
+    ASSERT(expIt.Siguiente() == 0);
 }
 
 void test_expulsados(){
@@ -1433,7 +1389,7 @@ void test_algo(){
 	cc.Agregar(Coordenada(2,0));
 	cc.Agregar(Coordenada(12,0));
 	cc.Agregar(Coordenada(12,1));
-	
+
 	Driver d(cc);
 
 	d.agregarPokemon("TuVieja", Coordenada(0,0));
@@ -1445,13 +1401,13 @@ void test_algo(){
 	d.conectarse(j1, Coordenada(0,0));
 	d.conectarse(j2, Coordenada(2,0));
 	d.conectarse(j4, Coordenada(12,0));
-	
+
     Conj<Jugador> ep = d.entrenadoresPosibles(Coordenada(0,0));
-	Conj<Jugador>::const_Iterador it = ep.CrearIt(); 
+	Conj<Jugador>::const_Iterador it = ep.CrearIt();
 	ASSERT(it.HaySiguiente() && it.Siguiente() == j1);
 	it.Avanzar();
 	ASSERT(!it.HaySiguiente());
-	
+
 	d.moverse(j4, Coordenada(12,1));
 	d.moverse(j4, Coordenada(12,0));
 	d.moverse(j4, Coordenada(12,1));
@@ -1490,19 +1446,17 @@ void Tests_Dario()
     RUN_TEST(test_hay_pokemon_cercano);
     RUN_TEST(test_Moverse_caso1);
     RUN_TEST(test_Moverse_caso2);
-    RUN_TEST(test_Moverse_caso3);
-    RUN_TEST(test_Moverse_expulsar);*/
+    RUN_TEST(test_Moverse_caso3);*/
+    RUN_TEST(test_Moverse_expulsar);
 
     /**
      * Tests pasan ok 0 errores de valgrind
      */
 
-     
+
     RUN_TEST(test_valgrind);
     RUN_TEST(test_atrapar_pokemon_test_simple);
     RUN_TEST(agregar_coodenadas_a_mapa);
-    RUN_TEST(test_coordenada_corrida);
-    RUN_TEST(test_particion_mapa);
     RUN_TEST(ancho_largo_correcto);
     RUN_TEST(constructor_por_copia_mapa);
     RUN_TEST(test_hay_camino);
@@ -1530,7 +1484,7 @@ void Tests_Dario()
     RUN_TEST(test_pos_pokemons);
     RUN_TEST(test_entrenadoresPosibles);
     RUN_TEST(test_Moverse_con_camino_sin_pokes);
-    
+
     RUN_TEST(test_algo);
 
 
@@ -1540,12 +1494,12 @@ void Tests_Dario()
     //todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
     //*******************************************************************************************//
 
-    
+
     RUN_TEST(test_coordenada_en_el_limite);
     RUN_TEST(test_expulsados);
     RUN_TEST(test_mover_jugador_asigna_correcta_coordenada);
     RUN_TEST(test_poke_catedra);
-	
+
 }
 
 

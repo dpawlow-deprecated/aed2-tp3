@@ -271,11 +271,11 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 	Nat i = 4;
 	while(i > 0){
 		ls.AgregarAtras(Coordenada(c.latitud+i, c.longitud));
-		if(c.latitud>i){
+		if(c.latitud>=i){
 			ls.AgregarAtras(Coordenada(c.latitud-i, c.longitud));
 		}
 		ls.AgregarAtras(Coordenada(c.latitud, c.longitud+i));
-		if(c.longitud >i){
+		if(c.longitud >=i){
 			ls.AgregarAtras(Coordenada(c.latitud, c.longitud-i));
 		}
 		i--;
