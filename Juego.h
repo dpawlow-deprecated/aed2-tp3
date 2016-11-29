@@ -139,6 +139,8 @@ public:
 	//TODO: agregar al TAD
 	Nat CantidadMismaEspecie(const Pokemon) const;
 
+	Conj<Jugador> EntrenadoresPosibles(const Coordenada&);
+
 	// Antes de usar este iterador hay que avanzarlo como primer paso
 	class IterJugador{
 

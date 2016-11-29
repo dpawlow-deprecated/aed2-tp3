@@ -156,8 +156,7 @@ Coordenada Driver::posPokemonCercano(const Coordenada & c) const{
  * la coordenada indicada, que tengan un camino hasta ella.
  * Requiere que haya un pokemon a distancia menor o igual a 2 de la Coordenada. */
 Conj<Jugador> Driver::entrenadoresPosibles(const Coordenada & c) const{
-  Conj<Jugador> out;
-  return out;
+  return juego_->EntrenadoresPosibles(c);
 }
 
 /* Devuelve el indice de rarez del pokemon pasado como parametro.
