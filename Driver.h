@@ -14,6 +14,8 @@ class Driver {
 	/* Inicializa un juego con un mapa fijo. */
 	Driver(const Conj< Coordenada > & cs);
 
+	Driver& operator=(const Driver&);
+
 	/* Destruye el contenido del juego, liberando la memoria dinámica alocada. */
 	~Driver();
 

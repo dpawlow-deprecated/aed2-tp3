@@ -26,17 +26,34 @@ Mapa::Mapa(const Mapa& otro): _ancho(otro._ancho), _alto(otro._alto), _relacionC
 	}
 }
 
-Mapa::~Mapa() {
-	if (_relacionCoordenadas != NULL) {
-		for (Nat i = 0; i < _ancho*_alto; i++) {
-			if (_relacionCoordenadas[i] != NULL) {
-				delete [] _relacionCoordenadas[i];
-				_relacionCoordenadas[i] = NULL;
+Mapa& Mapa::operator=(const Mapa& otro) {
+    if(this != &otro) {
+			_ancho = otro._ancho;
+			_alto = otro._ancho;
+			_coordenadas = Conj<Coordenada>(otro._coordenadas);
+
+			int tamanioArreglo = _ancho*_alto;
+
+			_relacionCoordenadas = new bool*[tamanioArreglo];
+			for (int i = 0; i < tamanioArreglo; i++) {
+				_relacionCoordenadas[i] = new bool[tamanioArreglo];
+				for (int j = 0; j < tamanioArreglo; j++) {
+					_relacionCoordenadas[i][j] = otro._relacionCoordenadas[i][j];
+				}
 			}
+    }
+    return *this;
+}
+
+Mapa::~Mapa() {
+	for (Nat i = 0; i < _ancho*_alto; i++) {
+		if (_relacionCoordenadas[i] != NULL) {
+			delete [] _relacionCoordenadas[i];
+			_relacionCoordenadas[i] = NULL;
 		}
-		delete [] _relacionCoordenadas;
-		_relacionCoordenadas = NULL;
 	}
+	delete [] _relacionCoordenadas;
+	_relacionCoordenadas = NULL;
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {

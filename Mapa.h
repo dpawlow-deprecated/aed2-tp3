@@ -12,6 +12,7 @@ class Mapa {
 public:
 	Mapa(); //CrearMapa()
 	Mapa(const Mapa&);
+	Mapa& operator=(const Mapa&);
 	~Mapa();
 	Conj<Coordenada> Coordenadas();
 	void AgregarCoordenada (const Coordenada&);

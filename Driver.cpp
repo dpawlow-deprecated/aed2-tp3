@@ -16,16 +16,22 @@ Driver::Driver(const Conj< Coordenada > & cs): proximoIdJugador_(0), coordenadas
   juego_ = new Juego(*mapa_);
 }
 
+Driver& Driver::operator=(const Driver& otro) {
+	if(this != &otro) {
+    coordenadasMapa_ = Conj< Coordenada >(otro.coordenadasMapa_);
+    proximoIdJugador_ = otro.proximoIdJugador_;
+    mapa_ = new Mapa(*otro.mapa_);
+    juego_ = new Juego(*mapa_);
+	}
+	return *this;
+}
+
 Driver::~Driver()
 {
-  //if (mapa_ != NULL) {
-  //  delete mapa_;
-  //  mapa_ = NULL;
-  //}
-  //if (juego_ != NULL) {
-  //  delete juego_;
-  //  juego_ = NULL;
-  //}
+  delete mapa_;
+  mapa_ = NULL;
+  delete juego_;
+  juego_ = NULL;
 }
 
 void Driver::agregarPokemon(const Pokemon & p, const Coordenada & c)

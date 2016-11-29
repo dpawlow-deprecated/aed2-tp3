@@ -1,9 +1,7 @@
 #include <iostream>
 #include <fstream>
-#include "Mapa.cpp"
 #include "mini_test.h"
-#include "TiposJuego.h"
-#include "aed2/TiposBasicos.h"
+#include "Mapa.h"
 
 using namespace std;
 using namespace aed2;
@@ -134,6 +132,16 @@ void test_copias_locas(){
     Mapa m3(m2);
     Coordenada c(1,5);
     m3.AgregarCoordenada(c);
+}
+
+void test_tonto() {
+  Mapa m;
+  Coordenada c1 = Coordenada(0,0);
+  Coordenada c2 = Coordenada(0,1);
+  Coordenada c3 = Coordenada(0,10);
+  m.AgregarCoordenada(c1);
+  m.AgregarCoordenada(c2);
+  m.AgregarCoordenada(c3);
 }
 
 int test_mapa() {

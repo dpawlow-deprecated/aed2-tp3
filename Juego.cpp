@@ -20,16 +20,35 @@ Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){
 
 }
 
+Juego& Juego::operator=(const Juego& otro) {
+	if(this != &otro) {
+		mapa = otro.mapa;
+		pokemons = DiccString< pair<Nat, Nat> >(otro.pokemons);
+		jugadores = otro.jugadores;
+		cantidadTotPokemons = otro.cantidadTotPokemons;
+		coordenadasConPokemons = otro.coordenadasConPokemons;
+		pokemonesDeJugadores = otro.pokemonesDeJugadores;
+		proximoIdJugador_ = otro.proximoIdJugador_;
+
+		mapaInfo = new Infocoordenada*[mapa.Alto()];
+		for (Nat i=0; i<mapa.Alto(); i++) {
+			mapaInfo[i] = new Infocoordenada[mapa.Ancho()];
+			for (Nat j=0; j < mapa.Ancho(); j++) {
+				mapaInfo[i][j] = otro.mapaInfo[i][j];
+			}
+		}
+	}
+	return *this;
+}
+
 
 Juego::~Juego(){
-	for (Nat i = 0; i<mapa.Ancho(); i++) {
+	for (Nat i = 0; i<mapa.Alto(); i++) {
 		delete [] mapaInfo[i];
 		mapaInfo[i] = NULL;
 	}
-	if (mapaInfo != NULL) {
-		delete [] mapaInfo;
-		mapaInfo = NULL;
-	}
+	delete [] mapaInfo;
+	mapaInfo = NULL;
 };
 
 
@@ -219,7 +238,7 @@ bool Juego::HayPokemonCercano(const Coordenada c) {
 		}
 		iter.Avanzar();
 	}
-	
+
 	return res;
 };
 

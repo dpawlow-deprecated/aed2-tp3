@@ -49,6 +49,7 @@ class ColaPrioridad{
         // este borrar es el que llama el iterador para borrar el elemento que apunta
         void borrar(Nodo*);
 
+        Nodo* CopiarNodo(const Nodo*, const Nodo*, Nodo**);
     public:
         class Iterador {
             public:
@@ -82,6 +83,8 @@ class ColaPrioridad{
         //Constructor. Genera una cola de prioridad vacía.
         ColaPrioridad();
 
+        ColaPrioridad<T>& operator=(const ColaPrioridad<T>& otro);
+
         //Destructor. Debe dejar limpia la memoria.
         ~ColaPrioridad();
 
@@ -113,6 +116,38 @@ ColaPrioridad<T>::ColaPrioridad(){
     this->raiz_ = NULL;
     this->ultimo_ = this->raiz_;
 }
+
+template <class T>
+ColaPrioridad<T>& ColaPrioridad<T>::operator=(const ColaPrioridad<T>& otro) {
+  if(this != &otro) {
+    if (raiz_ != NULL) {
+      Nodo** nuevoUltimo = &ultimo_;
+      raiz_ = CopiarNodo(otro.raiz_, otro.ultimo_, nuevoUltimo);
+    } else {
+      raiz_ = NULL;
+      ultimo_ = NULL;
+    }
+  }
+  return *this;
+}
+
+template <class T>
+typename ColaPrioridad<T>::Nodo* ColaPrioridad<T>::CopiarNodo(const typename ColaPrioridad<T>::Nodo* nodo, const typename ColaPrioridad<T>::Nodo* ultimo, typename ColaPrioridad<T>::Nodo** nuevoUltimo) {
+  Nodo* nuevo = new Nodo(nodo->valor);
+  if (nodo->der != NULL) {
+    nuevo->der = CopiarNodo(nodo->der, ultimo, nuevoUltimo);
+  }
+  if (nodo->izq != NULL) {
+    nuevo->izq = CopiarNodo(nodo->izq, ultimo, nuevoUltimo);
+  }
+
+  if (nodo == ultimo) {
+    *nuevoUltimo = nuevo;
+  }
+  return nuevo;
+}
+
+
 
 template <class T>
 ColaPrioridad<T>::~ColaPrioridad(){
@@ -473,7 +508,7 @@ template <class T>
 ColaPrioridad<T>::Iterador::Iterador(const ColaPrioridad<T>::Iterador& otro)
   : nodo_(otro.nodo_){
     cola_ = otro.cola_;
-    
+
 };
 
 

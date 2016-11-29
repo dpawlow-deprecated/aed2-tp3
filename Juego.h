@@ -60,6 +60,7 @@ public:
 	Juego();
 	//Crea un juego vacio pero con mapa
 	Juego(Mapa&);
+	Juego& operator=(const Juego&);
 	~Juego();
 	//Agrega un pokemon p en la coordenada c, si es posible
 	//pre: es una coordenada valida para agregar
