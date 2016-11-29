@@ -176,11 +176,13 @@ void test_Moverse_Ivan(){
 
 void test_Ivan()
 {
+	/*
     RUN_TEST(test_constructor_con_mapa_Ivan);
     RUN_TEST(test_agregar_jugadores_Ivan);
     RUN_TEST(test_agregar_pokemones_Ivan);
     RUN_TEST(test_puedo_agregar_pokemones_Ivan);
     RUN_TEST(test_Moverse_Ivan);
+	*/
 }
 
 
@@ -1424,6 +1426,59 @@ void test_valgrind()
 
 }
 
+void test_algo(){
+	Conj<Coordenada> cc;
+
+	cc.Agregar(Coordenada(0,0));
+	cc.Agregar(Coordenada(2,0));
+	cc.Agregar(Coordenada(12,0));
+	cc.Agregar(Coordenada(12,1));
+	
+	Driver d(cc);
+
+	d.agregarPokemon("TuVieja", Coordenada(0,0));
+
+	Nat j1 = d.agregarJugador();
+	Nat j2 = d.agregarJugador();
+	Nat j4 = d.agregarJugador();
+
+	d.conectarse(j1, Coordenada(0,0));
+	d.conectarse(j2, Coordenada(2,0));
+	d.conectarse(j4, Coordenada(12,0));
+	
+	Conj<Jugador>::Iterador it = d.entrenadoresPosibles(Coordenada(0,0)).CrearIt(); 
+	ASSERT(it.HaySiguiente() && it.Siguiente() == j1);
+	it.Avanzar();
+	ASSERT(!it.HaySiguiente());
+	
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+	d.moverse(j4, Coordenada(12,1));
+	d.moverse(j4, Coordenada(12,0));
+
+	Dicc<Pokemon, Nat>::Iterador itDicc = d.pokemons(j1).CrearIt();
+	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteClave() == "TuVieja");
+	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteSignificado() == 1);
+
+
+}
+
 void Tests_Dario()
 {
 /**
@@ -1440,7 +1495,7 @@ void Tests_Dario()
      * Tests pasan ok 0 errores de valgrind
      */
 
-
+     /*
     RUN_TEST(test_valgrind);
     RUN_TEST(test_atrapar_pokemon_test_simple);
     RUN_TEST(agregar_coodenadas_a_mapa);
@@ -1473,6 +1528,8 @@ void Tests_Dario()
     RUN_TEST(test_pos_pokemons);
     RUN_TEST(test_entrenadoresPosibles);
     RUN_TEST(test_Moverse_con_camino_sin_pokes);
+    */
+    RUN_TEST(test_algo);
 
 
 
@@ -1481,11 +1538,12 @@ void Tests_Dario()
     //todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
     //*******************************************************************************************//
 
-
+    /*
     RUN_TEST(test_coordenada_en_el_limite);
     RUN_TEST(test_expulsados);
     RUN_TEST(test_mover_jugador_asigna_correcta_coordenada);
     RUN_TEST(test_poke_catedra);
+	*/
 }
 
 
@@ -1580,6 +1638,7 @@ Driver* test_crearDrive()
 }
 
 
+
 void test_driver()
 {
     Driver* d = test_crearDrive();
@@ -1599,7 +1658,7 @@ int main()
 {
     test_Ivan();
     Tests_Dario();
-    RUN_TEST(test_driver);
+    //RUN_TEST(test_driver);
 
     return 0;
 }
