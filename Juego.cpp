@@ -22,7 +22,7 @@ Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){  
 
 Juego& Juego::operator=(const Juego& otro) {								//Complejidad: O(ancho * alto + |J| + |P| * (PC + PS))
 	if(this != &otro) {
-		mapa = otro.mapa;a									//O(ancho * alto)
+		mapa = otro.mapa;									//O(ancho * alto)
 		pokemons = DiccString< pair<Nat, Nat> >(otro.pokemons);					//O(|P| * PS)
 		jugadores = otro.jugadores;								//O(|J|)
 		cantidadTotPokemons = otro.cantidadTotPokemons;						//O(1)
@@ -191,15 +191,15 @@ Conj<Jugador> Juego::Expulsados(){
 	return c;
 };
 
-Conj<Coordenada> Juego::PosConPokemons(){								//O(1)
+Conj<Coordenada>& Juego::PosConPokemons(){								//O(1)
 	return coordenadasConPokemons;
 };
 
-Pokemon Juego::PokemonEnPos(Coordenada c){
+Pokemon Juego::PokemonEnPos(Coordenada c){								//O(1)
 	return mapaInfo[c.latitud][c.longitud].pokemon;
 };
 
-Nat Juego::CantMovimientosParaCaptura(Coordenada c){
+Nat Juego::CantMovimientosParaCaptura(Coordenada c){							//O(1)
 	return mapaInfo[c.latitud][c.longitud].movimientosRestantes;
 
 };
