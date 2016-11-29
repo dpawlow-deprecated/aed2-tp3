@@ -113,7 +113,7 @@ void test_juegoMapa2x2(){
 	ASSERT(!g.Pokemons(j2).HayMas());
 	ASSERT(!g.Pokemons(j3).HayMas());
 	Juego::IterJugador itj = g.Jugadores();
-	itj.Avanzar(); // por definicion antes de usarlo hay que avanzarlo
+	 // por definicion antes de usarlo hay que avanzarlo
 	ASSERT(itj.HayMas() && itj.Actual() == j);
 	itj.Avanzar();
 	ASSERT(itj.HayMas() && itj.Actual() == j1);
