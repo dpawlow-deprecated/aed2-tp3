@@ -176,13 +176,13 @@ void test_Moverse_Ivan(){
 
 void test_Ivan()
 {
-	/*
+	
     RUN_TEST(test_constructor_con_mapa_Ivan);
     RUN_TEST(test_agregar_jugadores_Ivan);
     RUN_TEST(test_agregar_pokemones_Ivan);
     RUN_TEST(test_puedo_agregar_pokemones_Ivan);
     RUN_TEST(test_Moverse_Ivan);
-	*/
+	
 }
 
 
@@ -1446,7 +1446,8 @@ void test_algo(){
 	d.conectarse(j2, Coordenada(2,0));
 	d.conectarse(j4, Coordenada(12,0));
 	
-	Conj<Jugador>::Iterador it = d.entrenadoresPosibles(Coordenada(0,0)).CrearIt(); 
+    Conj<Jugador> ep = d.entrenadoresPosibles(Coordenada(0,0));
+	Conj<Jugador>::const_Iterador it = ep.CrearIt(); 
 	ASSERT(it.HaySiguiente() && it.Siguiente() == j1);
 	it.Avanzar();
 	ASSERT(!it.HaySiguiente());
@@ -1472,7 +1473,8 @@ void test_algo(){
 	d.moverse(j4, Coordenada(12,1));
 	d.moverse(j4, Coordenada(12,0));
 
-	Dicc<Pokemon, Nat>::Iterador itDicc = d.pokemons(j1).CrearIt();
+    Dicc<Pokemon, Nat> p1 = d.pokemons(j1);
+	Dicc<Pokemon, Nat>::Iterador itDicc = p1.CrearIt();
 	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteClave() == "TuVieja");
 	ASSERT(itDicc.HaySiguiente() && itDicc.SiguienteSignificado() == 1);
 
@@ -1495,7 +1497,7 @@ void Tests_Dario()
      * Tests pasan ok 0 errores de valgrind
      */
 
-     /*
+     
     RUN_TEST(test_valgrind);
     RUN_TEST(test_atrapar_pokemon_test_simple);
     RUN_TEST(agregar_coodenadas_a_mapa);
@@ -1528,7 +1530,7 @@ void Tests_Dario()
     RUN_TEST(test_pos_pokemons);
     RUN_TEST(test_entrenadoresPosibles);
     RUN_TEST(test_Moverse_con_camino_sin_pokes);
-    */
+    
     RUN_TEST(test_algo);
 
 
@@ -1538,12 +1540,12 @@ void Tests_Dario()
     //todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
     //*******************************************************************************************//
 
-    /*
+    
     RUN_TEST(test_coordenada_en_el_limite);
     RUN_TEST(test_expulsados);
     RUN_TEST(test_mover_jugador_asigna_correcta_coordenada);
     RUN_TEST(test_poke_catedra);
-	*/
+	
 }
 
 
@@ -1658,7 +1660,7 @@ int main()
 {
     test_Ivan();
     Tests_Dario();
-    //RUN_TEST(test_driver);
+    RUN_TEST(test_driver);
 
     return 0;
 }

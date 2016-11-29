@@ -452,12 +452,14 @@ void Juego::VerCapturas(Jugador j, Coordenada c){
 
 Conj<Jugador> Juego::EntrenadoresPosibles(const Coordenada& c){
 	Conj<Jugador> res;
-	Lista<Coordenada>::Iterador itCoord = CeldasValidas(c).CrearIt();
+	Lista<Coordenada> coord = CeldasValidas(c);
+	Lista<Coordenada>::const_Iterador itCoord = coord.CrearIt();
 	while(itCoord.HaySiguiente()){
 		if(mapa.HayCamino(itCoord.Siguiente(), c)){
 			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itDicc = mapaInfo[itCoord.Siguiente().latitud][itCoord.Siguiente().longitud].jugadoresCoordenada.CrearIt();
 			while(itDicc.HaySiguiente()){
-				res.Agregar(itDicc.SiguienteClave());
+				Jugador j = itDicc.SiguienteClave();
+				res.Agregar(j);
 				itDicc.Avanzar();
 			}
 		}
