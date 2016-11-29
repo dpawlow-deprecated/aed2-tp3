@@ -1437,6 +1437,36 @@ void test_algo(){
 
 }
 
+
+void test_no_puede_agregar_pokemon() {
+  Conj<Coordenada> cc;
+
+	cc.Agregar(Coordenada(0,0));
+	cc.Agregar(Coordenada(1,0));
+	cc.Agregar(Coordenada(2,0));
+	cc.Agregar(Coordenada(12,0));
+	cc.Agregar(Coordenada(12,1));
+
+	Driver d(cc);
+
+	d.agregarPokemon("TuVieja", Coordenada(0,0));
+
+	Nat j1 = d.agregarJugador();
+	Nat j2 = d.agregarJugador();
+	Nat j4 = d.agregarJugador();
+
+	d.conectarse(j1, Coordenada(0,0));
+	d.conectarse(j2, Coordenada(2,0));
+	d.conectarse(j4, Coordenada(12,0));
+
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(1,0)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(2,0)));
+  ASSERT(d.puedoAgregarPokemon(Coordenada(12,0)));
+  ASSERT(d.puedoAgregarPokemon(Coordenada(12,1)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(12,12)));
+}
+
 void Tests_Dario()
 {
 /**
@@ -1454,6 +1484,7 @@ void Tests_Dario()
      */
 
 
+    RUN_TEST(test_no_puede_agregar_pokemon);
     RUN_TEST(test_valgrind);
     RUN_TEST(test_atrapar_pokemon_test_simple);
     RUN_TEST(agregar_coodenadas_a_mapa);

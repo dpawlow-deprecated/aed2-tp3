@@ -72,7 +72,6 @@ void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 	//Luego me arma una lista con todas las coordenadas que existan cerca de la coordenada pasada por parametros y agrego a c a la lista
 	Lista<Coordenada> lc;
 	lc = CeldasValidas(c);
-	lc.AgregarAtras(c);
 	cantidadTotPokemons++;
 
 	//Recorro todas las coordenadas y por cada una, me fijo los jugadores en el radio de captura y defino sus interadores a la nueva cola
