@@ -106,7 +106,7 @@ public:
 	Conj<Jugador> Expulsados();
 
 	//Devuelve las posiciones con pokemons
-	Conj<Coordenada> PosConPokemons();
+	Conj<Coordenada>& PosConPokemons();
 
 	//Devuelve el pokemon en la coordenada
 	//pre: la coordenada tiene que existir en PosConPokemon

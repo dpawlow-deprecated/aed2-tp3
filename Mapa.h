@@ -14,7 +14,7 @@ public:
 	Mapa(const Mapa&);
 	Mapa& operator=(const Mapa&);
 	~Mapa();
-	Conj<Coordenada> Coordenadas();
+	Conj<Coordenada>& Coordenadas();
 	void AgregarCoordenada (const Coordenada&);
 	bool HayCamino(const Coordenada&, const Coordenada&);
 	bool PosExistente(const Coordenada&);

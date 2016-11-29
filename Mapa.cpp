@@ -63,7 +63,7 @@ bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
 }
 
 // TODO: devolver referencia
-Conj<Coordenada> Mapa::Coordenadas(){
+Conj<Coordenada>& Mapa::Coordenadas(){
 	return _coordenadas;
 }
 

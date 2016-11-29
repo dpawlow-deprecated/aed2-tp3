@@ -184,7 +184,7 @@ Conj<Jugador> Juego::Expulsados(){
 	return c;
 };
 
-Conj<Coordenada> Juego::PosConPokemons(){
+Conj<Coordenada>& Juego::PosConPokemons(){
 	return coordenadasConPokemons;
 };
 
@@ -211,7 +211,7 @@ Conj<Jugador> Juego::JugadoresConectados(){
 
 bool Juego::PuedoAgregarPokemon(Coordenada c){
 	if (mapa.PosExistente(c)){
-		coordenadasConPokemons = PosConPokemons();
+		Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
 		Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
 		while (iter.HaySiguiente()){
