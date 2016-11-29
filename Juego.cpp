@@ -271,11 +271,11 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 	Nat i = 4;
 	while(i > 0){
 		ls.AgregarAtras(Coordenada(c.latitud+i, c.longitud));
-		if(c.latitud-i>=0){
+		if(c.latitud>i){
 			ls.AgregarAtras(Coordenada(c.latitud-i, c.longitud));
 		}
 		ls.AgregarAtras(Coordenada(c.latitud, c.longitud+i));
-		if(c.longitud-i >=0){
+		if(c.longitud >i){
 			ls.AgregarAtras(Coordenada(c.latitud, c.longitud-i));
 		}
 		i--;
@@ -283,44 +283,44 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 
 	i = 3;
 	while(i > 0){
-		if(c.longitud-(i-1)>0){
+		if(c.longitud>(i-1)){
 			ls.AgregarAtras(Coordenada(c.latitud+3, c.longitud-(i-1)));
 		}
-		if(c.latitud-(i-1)>0){
+		if(c.latitud>(i-1)){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+3));
 		}
-		if(c.latitud-3>0 && c.longitud-(i-1)){
+		if(c.latitud>3 && c.longitud>(i-1)){
 			ls.AgregarAtras(Coordenada(c.latitud-3, c.longitud-(i-1)));
 		}
-		if(c.latitud-(i-1) >0 && c.longitud-3 >0){
+		if(c.latitud>(i-1) && c.longitud>3){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-3));
 		}
-		if(c.latitud-3 > 0){
+		if(c.latitud>3){
 			ls.AgregarAtras(Coordenada(c.latitud-3, c.longitud+(i-1)));
 		}
-		if(c.longitud-3 > 0){
+		if(c.longitud>3){
 			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-3));
 		}
 		ls.AgregarAtras(Coordenada(c.latitud+3, c.longitud+(i-1)));
 		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+3));
 		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+2));
 		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+1));
-		if(c.longitud-2 > 0){
+		if(c.longitud>2){
 			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-2));
 		}
-		if(c.longitud-1 > 0){
+		if(c.longitud>1){
 			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-1));
 		}
-		if(c.latitud-(i-1) > 0 && c.longitud-2 >0){
+		if(c.latitud>(i-1) && c.longitud>2){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-2));
 		}
-		if(c.latitud-(i-1)>0 && c.longitud-1 >0){
+		if(c.latitud>(i-1) && c.longitud>1){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-1));
 		}
-		if(c.latitud-(i-1) > 0){
+		if(c.latitud>(i-1)){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+2));
 		}
-		if(c.latitud-(i-1) >0){
+		if(c.latitud>(i-1)){
 			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+1));
 		}
 		i--;
