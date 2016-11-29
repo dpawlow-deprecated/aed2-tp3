@@ -11,24 +11,24 @@ using namespace aed2;
 Juego::Juego(): cantidadTotPokemons(0), proximoIdJugador_(0) {
 }
 
-Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){
-
-	mapaInfo = new Infocoordenada*[mapa.Alto()];
- 	for (Nat i=0; i<mapa.Alto(); i++) {
-		mapaInfo[i] = new Infocoordenada[mapa.Ancho()];
-	}
-
+Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){  			//Complejidad O(ancho * alto)
+													//Copiar el mapa es O(ancho * alto)
+	mapaInfo = new Infocoordenada*[mapa.Alto()];							
+ 	for (Nat i=0; i<mapa.Alto(); i++) {								//crear el arreglo mapa info O(ancho * alto)
+		mapaInfo[i] = new Infocoordenada[mapa.Ancho()];						//El constructor por defecto de info coordenada tiene complejidad O(1)
+	}												//Implicitamente se construyen por defecto el diccionario de pokemons O(1)
+													//El vector de jugadores O(1) y la lista de pokemones de jugadores O(1)
 }
 
-Juego& Juego::operator=(const Juego& otro) {
+Juego& Juego::operator=(const Juego& otro) {								//Complejidad: O(ancho * alto + |J| + |P| * (PC + PS))
 	if(this != &otro) {
-		mapa = otro.mapa;
-		pokemons = DiccString< pair<Nat, Nat> >(otro.pokemons);
-		jugadores = otro.jugadores;
-		cantidadTotPokemons = otro.cantidadTotPokemons;
-		coordenadasConPokemons = otro.coordenadasConPokemons;
-		pokemonesDeJugadores = otro.pokemonesDeJugadores;
-		proximoIdJugador_ = otro.proximoIdJugador_;
+		mapa = otro.mapa;a									//O(ancho * alto)
+		pokemons = DiccString< pair<Nat, Nat> >(otro.pokemons);					//O(|P| * PS)
+		jugadores = otro.jugadores;								//O(|J|)
+		cantidadTotPokemons = otro.cantidadTotPokemons;						//O(1)
+		coordenadasConPokemons = otro.coordenadasConPokemons;					//O(PS)
+		pokemonesDeJugadores = otro.pokemonesDeJugadores;					//O(|P| * PC)
+		proximoIdJugador_ = otro.proximoIdJugador_;						//O(1)
 
 		if (mapaInfo != NULL) {
 			for (Nat i=0; i<mapa.Alto(); i++) {
@@ -39,7 +39,7 @@ Juego& Juego::operator=(const Juego& otro) {
 
 		mapaInfo = new Infocoordenada*[mapa.Alto()];
 		for (Nat i=0; i<mapa.Alto(); i++) {
-			mapaInfo[i] = new Infocoordenada[mapa.Ancho()];
+			mapaInfo[i] = new Infocoordenada[mapa.Ancho()];					//Crear el arreglo de mapa info es O(ancho * alto)
 			for (Nat j=0; j < mapa.Ancho(); j++) {
 				mapaInfo[i][j] = otro.mapaInfo[i][j];
 			}
@@ -50,21 +50,21 @@ Juego& Juego::operator=(const Juego& otro) {
 
 
 Juego::~Juego(){
-	for (Nat i = 0; i<mapa.Alto(); i++) {
-		delete [] mapaInfo[i];
-		mapaInfo[i] = NULL;
+	for (Nat i = 0; i<mapa.Alto(); i++) {								//Liberas toda la memoria del arreglo info coordenada
+		delete [] mapaInfo[i];									//Los destructores de mapa, jugadores, Coordenadas con Pokemon
+		mapaInfo[i] = NULL;									//y pokemones de jugadores se llaman implicitamente
 	}
 	delete [] mapaInfo;
 	mapaInfo = NULL;
 };
 
 
-void Juego::AgregarPokemon(Pokemon p, Coordenada c){
+void Juego::AgregarPokemon(Pokemon p, Coordenada c){							//O(EC * log(EC) + |P|)
 	//Defino el nuevo pokemon en todos lados, en el dicc y en el conjunto de coordenadas
-	coordenadasConPokemons.AgregarRapido(c);
-	if(!pokemons.Definido(p)){
+	coordenadasConPokemons.AgregarRapido(c);							//O(1)
+	if(!pokemons.Definido(p)){									//O(|p|) * 2
 		pokemons.Definir(p, pair<Nat, Nat> (1, 1));
-	}else{
+	}else{												//O(|p|) * 3
 		Nat k = pokemons.Significado(p).first;
 		Nat b = pokemons.Significado(p).second;
 		pokemons.Definir(p, pair<Nat, Nat> (k+1, b+1));
@@ -78,12 +78,12 @@ void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 
 	//Luego me arma una lista con todas las coordenadas que existan cerca de la coordenada pasada por parametros y agrego a c a la lista
 	Lista<Coordenada> lc;
-	lc = CeldasValidas(c);
+	lc = CeldasValidas(c);										//O(1)
 	cantidadTotPokemons++;
 
 	//Recorro todas las coordenadas y por cada una, me fijo los jugadores en el radio de captura y defino sus interadores a la nueva cola
 	Lista<Coordenada>::const_Iterador itcoordenadas = lc.CrearIt();
-	while(itcoordenadas.HaySiguiente()){
+	while(itcoordenadas.HaySiguiente()){    							//O(EC * log(EC))
 		if(mapa.HayCamino(itcoordenadas.Siguiente(), c)){
 			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::const_Iterador itJugadores = mapaInfo[itcoordenadas.Siguiente().latitud][itcoordenadas.Siguiente().longitud].jugadoresCoordenada.CrearIt();
 			Nat cantidadClaves = mapaInfo[itcoordenadas.Siguiente().latitud][itcoordenadas.Siguiente().longitud].jugadoresCoordenada.CantClaves();
@@ -101,7 +101,7 @@ void Juego::AgregarPokemon(Pokemon p, Coordenada c){
 
 };
 
-Juego::IterJugador Juego::AgregarJugador(){
+Juego::IterJugador Juego::AgregarJugador(){								//O(J)
 	DiccString<Nat> dicc;
 	Lista< DiccString<Nat> >::Iterador it = pokemonesDeJugadores.AgregarAtras(dicc);
 	Coordenada c(0,0);
@@ -115,10 +115,10 @@ Juego::IterJugador Juego::AgregarJugador(){
 
 	proximoIdJugador_++;
 
-	jugadores.AgregarAtras(i);
+	jugadores.AgregarAtras(i);									//O(J)
 	Juego::IterJugador iter = Jugadores();
 	Nat q = 0;
-	while(q < jugadores.Longitud()){
+	while(q < jugadores.Longitud()){								//O(J)
 		iter.Avanzar();
 		q++;
 	}
@@ -143,14 +143,14 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 };
 
 //TODO: revisar, creo que tiene sentido asi porque no podemos guardar NULL en las variables
-void Juego::Desconectarse(Jugador j){
+void Juego::Desconectarse(Jugador j){									//O(log(EC))
 	assert(jugadores[j].conectado);
 	jugadores[j].conectado = false;
-	if(jugadores[j].posicionMapa.HaySiguiente() && jugadores[j].posicionMapa.SiguienteSignificado().HayMas()){
-		jugadores[j].posicionMapa.SiguienteSignificado().Borrar();
+	if(jugadores[j].posicionMapa.HaySiguiente() && jugadores[j].posicionMapa.SiguienteSignificado().HayMas()){		
+		jugadores[j].posicionMapa.SiguienteSignificado().Borrar();				//O(log(EC))
 	}
 	if(jugadores[j].posicionMapa.HaySiguiente()) {
-		jugadores[j].posicionMapa.EliminarSiguiente();
+		jugadores[j].posicionMapa.EliminarSiguiente();						//O(1)
 	}
 };
 
@@ -159,28 +159,28 @@ void Juego::Moverse(Jugador j, Coordenada c){
 	ActualizarJugadorYcoordenada(j, c);
 };
 
-Juego::IterJugador Juego::Jugadores()const{
+Juego::IterJugador Juego::Jugadores()const{								//O(1)
 	return IterJugador(this);
 };
 
-bool Juego::EstaConectado(Jugador j){
+bool Juego::EstaConectado(Jugador j){									//O(1)
 	return jugadores[j].conectado;
 };
 
-Nat Juego::Sanciones(Jugador j){
+Nat Juego::Sanciones(Jugador j){									//O(1)
 	return jugadores[j].sanciones;
 };
 
-Coordenada Juego::Posicion(Jugador j){
+Coordenada Juego::Posicion(Jugador j){									//O(1)
 	return jugadores[j].pos;
 };
 
-Juego::IterPokemon Juego::Pokemons(Jugador j){
+Juego::IterPokemon Juego::Pokemons(Jugador j){								//O(1)
 	return IterPokemon(this, j);
 };
 
 Conj<Jugador> Juego::Expulsados(){
-	typename Vector<InfoJugador>::const_Iterador it = jugadores.CrearIt();
+	typename Vector<InfoJugador>::const_Iterador it = jugadores.CrearIt();				//O(J)
 	Conj<Jugador> c;
 	while(it.HaySiguiente()){
 		if(it.Siguiente().expulsado == true){
@@ -191,7 +191,7 @@ Conj<Jugador> Juego::Expulsados(){
 	return c;
 };
 
-Conj<Coordenada>& Juego::PosConPokemons(){
+Conj<Coordenada> Juego::PosConPokemons(){								//O(1)
 	return coordenadasConPokemons;
 };
 
