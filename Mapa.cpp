@@ -2,7 +2,7 @@
 #define MAPA_CPP
 
 #include "Mapa.h"
-#include "Cola.h"
+#include "Cola.cpp"
 
 Mapa::Mapa(): _ancho(0), _alto(0), _relacionCoordenadas(NULL){
 	_coordenadas = Conj<Coordenada>();
@@ -28,7 +28,7 @@ Mapa::Mapa(const Mapa& otro): _ancho(otro._ancho), _alto(otro._alto), _relacionC
 
 Mapa::~Mapa() {
 	if (_relacionCoordenadas != NULL) {
-		for (int i = 0; i < _ancho*_alto; i++) {
+		for (Nat i = 0; i < _ancho*_alto; i++) {
 			if (_relacionCoordenadas[i] != NULL) {
 				delete [] _relacionCoordenadas[i];
 				_relacionCoordenadas[i] = NULL;
@@ -103,7 +103,7 @@ Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
 }
 
 void Mapa::AgregarCoordenada(const Coordenada& c){
-	for (int i = 0; i < _ancho*_alto; i++) {
+	for (Nat i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
 		_relacionCoordenadas[i] = NULL;
 	}
@@ -122,11 +122,11 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 
 	_coordenadas.Agregar(c);
 
-	int tamanioArreglo = _ancho*_alto;
+	Nat tamanioArreglo = _ancho*_alto;
 	_relacionCoordenadas = new bool*[tamanioArreglo];
-	for (int i = 0; i < tamanioArreglo; i++) {
+	for (Nat i = 0; i < tamanioArreglo; i++) {
 		_relacionCoordenadas[i] = new bool[tamanioArreglo];
-		for (int j = 0; j < tamanioArreglo; j++) {
+		for (Nat j = 0; j < tamanioArreglo; j++) {
 			_relacionCoordenadas[i][j] = false;
 		}
 	}

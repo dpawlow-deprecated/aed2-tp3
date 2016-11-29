@@ -40,7 +40,7 @@ void test_crearCoordenadas(){
 void test_distaciaEuclidea(){
 	Coordenada c(3, 4);
 	Coordenada c1(1, 2);
-	ASSERT(distanciaEuclidea(c, c1) == 2);
+	ASSERT(distanciaEuclidea(c, c1) == 8);
 }
 
 

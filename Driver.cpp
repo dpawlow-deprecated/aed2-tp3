@@ -1,8 +1,4 @@
 #include "Driver.h"
-#include "Juego.cpp"
-#include "TiposJuego.h"
-#include "Coordenada.cpp"
-#include "aed2.h"
 
 using namespace std;
 using namespace aed2;
@@ -160,7 +156,8 @@ Coordenada Driver::posPokemonCercano(const Coordenada & c) const{
  * la coordenada indicada, que tengan un camino hasta ella.
  * Requiere que haya un pokemon a distancia menor o igual a 2 de la Coordenada. */
 Conj<Jugador> Driver::entrenadoresPosibles(const Coordenada & c) const{
-
+  Conj<Jugador> out;
+  return out;
 }
 
 /* Devuelve el indice de rarez del pokemon pasado como parametro.

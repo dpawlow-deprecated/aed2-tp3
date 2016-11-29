@@ -1,11 +1,9 @@
 #ifndef MAPA_H
 #define MAPA_H
 
-#include "aed2/TiposBasicos.h"
-#include "aed2/Conj.h"
 #include <iostream>
+#include "aed2.h"
 #include "TiposJuego.h"
-#include "Coordenada.cpp"
 
 using namespace std;
 using namespace aed2;

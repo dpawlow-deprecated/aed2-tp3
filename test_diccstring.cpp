@@ -85,13 +85,13 @@ void test_borrar2() {
 	ASSERT( d.Definido("hola") );
 	ASSERT( d.Definido("casanova") );
 	ASSERT(!d.Definido("casa") );
-	
+
 	d.Borrar("casanova");
 	ASSERT( d.Definido("cas") );
 	ASSERT( d.Definido("hola") );
 	ASSERT(!d.Definido("casanova") );
 	ASSERT(!d.Definido("casa") );
-	
+
 	d.Borrar("cas");
 	ASSERT(!d.Definido("cas") );
 	ASSERT( d.Definido("hola") );
@@ -105,7 +105,7 @@ void test_borrar2() {
 	ASSERT(!d.Definido("casa") );
 
 	ASSERT(d.Claves().Longitud() == 0);
-	
+
 }
 
 void test_copia_referencia2() {
@@ -136,16 +136,16 @@ void test_todos_prefijos2() {
 	d.Definir("hola", 1);
 	d2.Definir("uno", d);
 	d.Definir("hola", 2);
-	
+
 	ASSERT(d2.Significado("uno").Significado("hola") == 1);
 	ASSERT(d.Significado("hola") == 2);
 	ASSERT(d2.Claves().Longitud() == 1);
-	
+
 	typename Lista<string>::const_Iterador it = d2.Claves().CrearIt();
 	while(it.HaySiguiente() && it.Siguiente() != "uno"){
 		it.Avanzar();
 	}
-	
+
 	ASSERT(it.HaySiguiente() && it.Siguiente() == "uno");
 	ASSERT(d2.Significado("uno").Significado("hola")     == 1);
 	ASSERT(d2.Significado("uno").Definido("holas")   == false);
@@ -154,7 +154,7 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("unodos")  == false);
 	ASSERT(d2.Definido("unodostres") == false);
 
-	
+
 	d.Definir("holas", 2);
 	d2.Definir("unodos", d);
 	ASSERT(d2.Claves().Longitud() == 2);
@@ -200,7 +200,7 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("uno")  == true);
 	ASSERT(d2.Definido("unodos")  == true);
 	ASSERT(d2.Definido("unodostres") == true);
-	
+
 	d2.Borrar("uno");
 
 	ASSERT(d2.Claves().Longitud() == 2);
@@ -224,7 +224,7 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("uno") == false);
 	ASSERT(d2.Definido("unodos") == true);
 	ASSERT(d2.Definido("unodostres") == true);
-	
+
 	d2.Borrar("unodos");
 	ASSERT(d2.Claves().Longitud() == 1);
 	it = d2.Claves().CrearIt();
@@ -251,7 +251,7 @@ void test_todos_prefijos2() {
 	ASSERT(d2.Definido("uno") == false);
 	ASSERT(d2.Definido("unodos") == false);
 	ASSERT(d2.Definido("unodostres") == true);
-	
+
 	d2.Borrar("unodostres");
 	ASSERT(d2.Claves().Longitud() == 0);
 	it = d2.Claves().CrearIt();
@@ -279,7 +279,7 @@ void test_todos_prefijos2() {
 	ASSERT(d.Significado("holas") == 2);
 	ASSERT(d.Significado("holasa") == 3);
 	ASSERT(d2.Claves().Longitud() == 0);
-	
+
 }
 
 void test_doble_definicion2() {
@@ -375,12 +375,12 @@ void test_definir_definido() {
 	ASSERT( d.Definido("hola") );
 	ASSERT( d.Definido("casona") );
   	ASSERT( d.Definido("casa") );
-  	
+
   	d.Borrar("casa");
   	ASSERT( d.Definido("hola") );
 	ASSERT( d.Definido("casona") );
  	ASSERT( !d.Definido("casa") );
-  	
+
   	d.Borrar("casona");
   	ASSERT( d.Definido("hola") );
 	ASSERT( !d.Definido("casona") );
@@ -389,7 +389,7 @@ void test_definir_definido() {
   	ASSERT( !d.Definido("hola") );
 	ASSERT( !d.Definido("casona") );
  	ASSERT( !d.Definido("casa") );
-	
+
 }
 
 
@@ -448,26 +448,26 @@ void test_borrar() {
 	//Verificar que al borrar una palabra, esta deja de estar definida en el diccionario
 	//Chequear que si dos palabras comparten prefijos y una de ellas se borrar, la otra debe seguir estando definida
 	//Analizar que el borrado funciona bien si el diccionario tiene definido una sola palabra y esta se borra.
-	
+
 	DiccString<int> d;
 	d.Definir("hola",42);
 	d.Definir("casa",22);
 	d.Definir("casas",22);
 	d.Definir("cascada",22);
- 	
+
  	d.Borrar("casa");
 	ASSERT( d.Definido("hola") );
 	ASSERT(!d.Definido("casa") );
 	ASSERT(!d.Definido("c"));
 	ASSERT( d.Definido("casas") );
 	ASSERT( d.Definido("cascada") );
-	
+
 	d.Borrar("hola");
 	ASSERT(!d.Definido("hola"));
-	
+
 	d.Definir("casa", 22);
 	d.Borrar("casas");
-	
+
 	ASSERT(d.Definido("casa"));
 	ASSERT(d.Definido("cascada"));
 	d.Borrar("cascada");
@@ -477,7 +477,7 @@ void test_borrar() {
 	ASSERT(!d.Definido("c"));
 	ASSERT( !d.Definido("casas") );
 	ASSERT( !d.Definido("cascada") );
-	
+
 	DiccString<int> d2;
 	d2.Definir("h", 5);
 	ASSERT(d2.Definido("h"));
@@ -495,7 +495,7 @@ void test_claves(){
 	d.Definir("gato",10);
 	d.Definir("cascada",3);
 	ASSERT(d.Claves().Longitud() == 6);
-	
+
 	typename Lista<string>::const_Iterador it = d.Claves().CrearIt();
 	while(it.HaySiguiente() && it.Siguiente() != "hola"){
 		it.Avanzar();
@@ -526,7 +526,7 @@ void test_claves(){
 		it.Avanzar();
 	}
 	ASSERT(!(it.HaySiguiente()));
-	
+
 	d.Borrar("hola");
 	ASSERT(d.Claves().Longitud() == 5);
 	d.Borrar("casa");
@@ -542,7 +542,7 @@ void test_claves(){
 	DiccString<int> d3;
 	DiccString<int> d4(d3);
 	ASSERT(d3.Claves().Longitud() == d4.Claves().Longitud())
-	
+
 }
 
 void test_constructor_por_copia(){
@@ -594,7 +594,7 @@ void test_crearIterado(){
 	ASSERT(it.HayMas());
 	Lista<string> l1 = it.Siguientes();
 	ASSERT(l1.Longitud() == d.Claves().Longitud());
-	int i = 0;
+	Nat i = 0;
 	while(i < l1.Longitud()){
 		ASSERT(l1[i] == d.Claves()[i]);
 		i++;
@@ -608,7 +608,7 @@ void test_crearIterado(){
 }
 
 int main() {
-	
+
 	RUN_TEST(test_claves_dicc_vacio);
 	RUN_TEST(test_claves_dicc_vacio2);
 	RUN_TEST(test_definir_definido2);

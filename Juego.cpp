@@ -11,12 +11,10 @@ using namespace aed2;
 Juego::Juego(): cantidadTotPokemons(0), proximoIdJugador_(0) {
 }
 
-Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m), proximoIdJugador_(0){
-
-	Conj<Coordenada>::const_Iterador iter = mapa.Coordenadas().CrearIt();
+Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){
 
 	mapaInfo = new Infocoordenada*[mapa.Alto()];
- 	for (int i=0; i<mapa.Alto(); i++) {
+ 	for (Nat i=0; i<mapa.Alto(); i++) {
 		mapaInfo[i] = new Infocoordenada[mapa.Ancho()];
 	}
 
@@ -24,7 +22,7 @@ Juego::Juego(Mapa& m): cantidadTotPokemons(0), mapa(m), proximoIdJugador_(0){
 
 
 Juego::~Juego(){
-	for (int i = 0; i<mapa.Ancho(); i++) {
+	for (Nat i = 0; i<mapa.Ancho(); i++) {
 		delete [] mapaInfo[i];
 		mapaInfo[i] = NULL;
 	}
@@ -392,7 +390,6 @@ void Juego::VerCapturas(Jugador j, Coordenada c){
 		return;
 	}
 
-	Coordenada coordJugador = jugadores[j].pos;
 	Conj<Coordenada>::Iterador iter = coordenadasConPokemons.CrearIt();
 
 	while (iter.HaySiguiente()){

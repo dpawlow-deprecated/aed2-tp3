@@ -4,10 +4,7 @@
 #include "aed2/Conj.h"
 #include "aed2/Dicc.h"
 #include "aed2/TiposBasicos.h"
-#include "Coordenada.cpp"
-#include "Juego.cpp"
-#include "TiposJuego.h"
-
+#include "Juego.h"
 using namespace aed2;
 
 class Driver {
@@ -124,8 +121,8 @@ class Driver {
 	 ************************************************************************/
 	 Juego* juego_;
 	 Mapa* mapa_;
-	 Conj< Coordenada > coordenadasMapa_;
 	 Nat proximoIdJugador_;
+	 Conj< Coordenada > coordenadasMapa_;
 
 }; // class Driver
 

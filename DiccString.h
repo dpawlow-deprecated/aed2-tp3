@@ -1,12 +1,10 @@
 #ifndef DICC_STRING_H_
 #define DICC_STRING_H_
 
-#include "aed2/Lista.h"
-#include "aed2/Conj.h"
+#include "aed2.h"
 #include <string>
 #include <iostream>
 #include <cassert>
-#include "TiposJuego.h"
 using namespace std;
 using namespace aed2;
 
@@ -131,7 +129,7 @@ void DiccString<T>::Borrar(const string& clave) {
     Nodo* padreHDE = NULL;
     Nat iHDE = 0;
     //Contador para recorrer la clave
-    int i = 0;
+    Nat i = 0;
     while (i < clave.size()){
     	//Me guardo hasta donde guardar, el segundo if sirve para algunos casos en donde se recetea las variables, los casos en que el nodo actual tenga
         //mas de 1 hijo o que tenga alguna definicion

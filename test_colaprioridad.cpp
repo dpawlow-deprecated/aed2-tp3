@@ -1,7 +1,7 @@
 #include <iostream>
 #include "mini_test.h"
 
-#include "colaPrioridadMin.hpp"
+#include "colaPrioridadMin.cpp"
 
 
 void test_encolar(){

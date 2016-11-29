@@ -1,6 +1,6 @@
 #include <iostream>
 #include <fstream>
-#include "Cola.h"
+#include "Cola.cpp"
 #include "mini_test.h"
 
 using namespace std;
@@ -70,7 +70,7 @@ void test_muchas_cosas() {
 
     Cola<Nat> c;
 
-    for (int i = 1; i <= 200; i++) {
+    for (Nat i = 1; i <= 200; i++) {
         Nat e = i;
         c.Encolar(e);
         ASSERT(c.Proximo() == e);

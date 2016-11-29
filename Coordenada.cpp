@@ -2,7 +2,6 @@
 #define COORDENADA_CPP_
 
 #include "TiposJuego.h"
-#include "aed2/TiposBasicos.h"
 
 using namespace aed2;
 

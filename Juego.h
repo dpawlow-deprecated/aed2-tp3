@@ -1,21 +1,16 @@
 #ifndef JUEGO_H
 #define JUEGO_H
 
-#include "Mapa.cpp"
-#include "TiposJuego.h"
+#include "Mapa.h"
 #include "DiccString.h"
-#include "Coordenada.cpp"
-#include "colaPrioridadMin.hpp"
-#include "aed2/Vector.h"
-#include "aed2/Dicc.h"
-#include "aed2/Arreglo.h"
-#include <iostream>
+#include "colaPrioridadMin.cpp"
+#include "aed2.h"
 
 
 using namespace std;
 using namespace aed2;
 
-bool operator<(pair<Nat, Jugador> p1, pair<Nat, Jugador> p2){
+inline bool operator<(pair<Nat, Jugador> p1, pair<Nat, Jugador> p2){
 	return p1.first < p2.first;
 }
 
