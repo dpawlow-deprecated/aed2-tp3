@@ -135,6 +135,7 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 
 	if(HayPokemonCercano(c) && mapa.HayCamino(PosPokemonCercano(c), c)){
 		jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
+		mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].movimientosRestantes = 10;
 	}else{
 		ColaPrioridad< pair<Nat, Jugador> >::Iterador itVacio;
 		Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador >::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itVacio);
@@ -217,19 +218,16 @@ Conj<Jugador> Juego::JugadoresConectados(){
 };
 
 bool Juego::PuedoAgregarPokemon(Coordenada c){
-	//if (mapa.PosExistente(c)){
-		Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
-		Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
+	Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
+	Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
-		while (iter.HaySiguiente()){
-			if (distanciaEuclidea(c, iter.Siguiente()) <= 25){
-				return false;
-			}
-			iter.Avanzar();
+	while (iter.HaySiguiente()){
+		if (distanciaEuclidea(c, iter.Siguiente()) <= 25){
+			return false;
 		}
-		return true;
-	//}
-	//return false;
+		iter.Avanzar();
+	}
+	return true;
 };
 
 bool Juego::HayPokemonCercano(const Coordenada c) {
@@ -274,7 +272,7 @@ Coordenada Juego::PosPokemonCercano(Coordenada c){
 Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 	Lista<Coordenada> ls;
 	ls.AgregarAtras(c);
-	Nat i = 4;
+	Nat i = 2;
 	while(i > 0){
 		ls.AgregarAtras(Coordenada(c.latitud+i, c.longitud));
 		if(c.latitud>=i){
@@ -287,47 +285,17 @@ Lista<Coordenada> Juego::CeldasValidas(Coordenada c){
 		i--;
 	}
 
-	i = 3;
+	i = 1;
 	while(i > 0){
-		if(c.longitud>(i-1)){
-			ls.AgregarAtras(Coordenada(c.latitud+3, c.longitud-(i-1)));
+		ls.AgregarAtras(Coordenada(c.latitud+i, c.longitud+i));
+		if(c.latitud >= i){
+			ls.AgregarAtras(Coordenada(c.latitud-i, c.longitud+i));
 		}
-		if(c.latitud>(i-1)){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+3));
+		if(c.latitud>=i && c.longitud >=i){
+			ls.AgregarAtras(Coordenada(c.latitud-i, c.longitud-i));
 		}
-		if(c.latitud>3 && c.longitud>(i-1)){
-			ls.AgregarAtras(Coordenada(c.latitud-3, c.longitud-(i-1)));
-		}
-		if(c.latitud>(i-1) && c.longitud>3){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-3));
-		}
-		if(c.latitud>3){
-			ls.AgregarAtras(Coordenada(c.latitud-3, c.longitud+(i-1)));
-		}
-		if(c.longitud>3){
-			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-3));
-		}
-		ls.AgregarAtras(Coordenada(c.latitud+3, c.longitud+(i-1)));
-		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+3));
-		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+2));
-		ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud+1));
-		if(c.longitud>2){
-			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-2));
-		}
-		if(c.longitud>1){
-			ls.AgregarAtras(Coordenada(c.latitud+(i-1), c.longitud-1));
-		}
-		if(c.latitud>(i-1) && c.longitud>2){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-2));
-		}
-		if(c.latitud>(i-1) && c.longitud>1){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud-1));
-		}
-		if(c.latitud>(i-1)){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+2));
-		}
-		if(c.latitud>(i-1)){
-			ls.AgregarAtras(Coordenada(c.latitud-(i-1), c.longitud+1));
+		if(c.longitud>=i){
+			ls.AgregarAtras(Coordenada(c.latitud+i, c.longitud-i));
 		}
 		i--;
 	}
