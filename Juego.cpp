@@ -373,6 +373,7 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 
 		if(HayPokemonCercano(c) && mapa.HayCamino(PosPokemonCercano(c), c)){
 			jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
+			mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].movimientosRestantes = 10;
 		}else{
 			ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
 			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
