@@ -106,15 +106,8 @@ void test_puedo_agregar_pokemones_Ivan(){
 
   Nat distancia = 5;
 
-<<<<<<< HEAD
-  //ASSERT(!d.puedoAgregarPokemon(Coordenada(10,4)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(10,4)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
-  //ASSERT(!d.puedoAgregarPokemon(Coordenada(200,100)));
-=======
-  ASSERT(d.puedoAgregarPokemon(Coordenada(10,4)));
-  ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
->>>>>>> master
   ASSERT(d.puedoAgregarPokemon(Coordenada(200,100)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(1,4)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(10,0)));
@@ -183,13 +176,13 @@ void test_Moverse_Ivan(){
 
 void test_Ivan()
 {
-    
+
     RUN_TEST(test_constructor_con_mapa_Ivan);
     RUN_TEST(test_agregar_jugadores_Ivan);
     RUN_TEST(test_agregar_pokemones_Ivan);
     RUN_TEST(test_puedo_agregar_pokemones_Ivan);
     RUN_TEST(test_Moverse_Ivan);
-    
+
 }
 
 
@@ -1479,8 +1472,6 @@ void test_no_puede_agregar_pokemon() {
   ASSERT(!d.puedoAgregarPokemon(Coordenada(2,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,1)));
-<<<<<<< HEAD
-  //ASSERT(!d.puedoAgregarPokemon(Coordenada(12,12)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,12)));
 }
 
@@ -1497,7 +1488,6 @@ void test_altoguiso_de_mapa() {
     }
   }
   Driver d(cc);
-=======
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,12)));
 }
 
@@ -1513,11 +1503,11 @@ void test_pruebaHayPokemonCercano(){
     cc.Agregar(Coordenada(3,0));
     cc.Agregar(Coordenada(0,3));
     cc.Agregar(Coordenada(3,3));
-    
+
     Driver d(cc);
 
     d.agregarPokemon("Hola", Coordenada(0,0));
-    
+
     ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
     ASSERT(!d.puedoAgregarPokemon(Coordenada(1,0)));
     ASSERT(!d.puedoAgregarPokemon(Coordenada(0,1)));
@@ -1534,7 +1524,7 @@ void test_pruebaHayPokemonCercano(){
     ASSERT(d.posPokemonCercano(Coordenada(1,1)) == Coordenada(0,0));
     ASSERT(d.hayPokemonCercano(Coordenada(0,0)));
     ASSERT(d.posPokemonCercano(Coordenada(0,0)) == Coordenada(0,0));
-    
+
     Conj<Coordenada>cc2;
     cc2.Agregar(Coordenada(0,0));
     cc2.Agregar(Coordenada(1,0));
@@ -1555,7 +1545,6 @@ void test_pruebaHayPokemonCercano(){
     ASSERT(d2.hayPokemonCercano(Coordenada(4,0)));
     ASSERT(d2.posPokemonCercano(Coordenada(4,0)) == Coordenada(3,0));
 
->>>>>>> master
 }
 
 void Tests_Dario()
@@ -1574,7 +1563,7 @@ void Tests_Dario()
      * Tests pasan ok 0 errores de valgrind
      */
 
-    
+
     RUN_TEST(test_no_puede_agregar_pokemon);
     RUN_TEST(test_valgrind);
     RUN_TEST(test_atrapar_pokemon_test_simple);
@@ -1607,11 +1596,7 @@ void Tests_Dario()
     RUN_TEST(test_entrenadoresPosibles);
     RUN_TEST(test_Moverse_con_camino_sin_pokes);
     RUN_TEST(test_algo);
-<<<<<<< HEAD
     RUN_TEST(test_altoguiso_de_mapa);
-=======
-    
->>>>>>> master
 
 
     //*******************************************************************************************//
@@ -1619,12 +1604,12 @@ void Tests_Dario()
     //todavia no estan terminadas ni validadas. (sin embargo, aparentemente tampoco pierden).    //
     //*******************************************************************************************//
 
-    
+
     RUN_TEST(test_coordenada_en_el_limite);
     RUN_TEST(test_expulsados);
     RUN_TEST(test_mover_jugador_asigna_correcta_coordenada);
     RUN_TEST(test_poke_catedra);
-    
+
     RUN_TEST(test_pruebaHayPokemonCercano);
 }
 
