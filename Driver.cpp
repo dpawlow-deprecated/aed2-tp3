@@ -13,6 +13,7 @@ Driver::Driver(const Conj< Coordenada > & cs): proximoIdJugador_(0), coordenadas
     mapa_->AgregarCoordenada(it.Siguiente());
     it.Avanzar();
   }
+  mapa_->calcular();
   juego_ = new Juego(*mapa_);
 }
 
