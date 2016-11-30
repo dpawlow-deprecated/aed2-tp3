@@ -106,9 +106,9 @@ void test_puedo_agregar_pokemones_Ivan(){
 
   Nat distancia = 5;
 
-  ASSERT(!d.puedoAgregarPokemon(Coordenada(10,4)));
+  ASSERT(d.puedoAgregarPokemon(Coordenada(10,4)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
-  ASSERT(!d.puedoAgregarPokemon(Coordenada(200,100)));
+  ASSERT(d.puedoAgregarPokemon(Coordenada(200,100)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(1,4)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(10,0)));
 }
@@ -1466,7 +1466,7 @@ void test_no_puede_agregar_pokemon() {
   ASSERT(!d.puedoAgregarPokemon(Coordenada(2,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,1)));
-  ASSERT(!d.puedoAgregarPokemon(Coordenada(12,12)));
+  ASSERT(d.puedoAgregarPokemon(Coordenada(12,12)));
 }
 
 void Tests_Dario()

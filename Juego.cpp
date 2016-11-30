@@ -13,7 +13,7 @@ Juego::Juego(): cantidadTotPokemons(0), proximoIdJugador_(0) {
 
 Juego::Juego(Mapa& m):  mapa(m), cantidadTotPokemons(0), proximoIdJugador_(0){  			//Complejidad O(ancho * alto)
 													//Copiar el mapa es O(ancho * alto)
-	mapaInfo = new Infocoordenada*[mapa.Alto()];							
+	mapaInfo = new Infocoordenada*[mapa.Alto()];
  	for (Nat i=0; i<mapa.Alto(); i++) {								//crear el arreglo mapa info O(ancho * alto)
 		mapaInfo[i] = new Infocoordenada[mapa.Ancho()];						//El constructor por defecto de info coordenada tiene complejidad O(1)
 	}												//Implicitamente se construyen por defecto el diccionario de pokemons O(1)
@@ -146,7 +146,7 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 void Juego::Desconectarse(Jugador j){									//O(log(EC))
 	assert(jugadores[j].conectado);
 	jugadores[j].conectado = false;
-	if(jugadores[j].posicionMapa.HaySiguiente() && jugadores[j].posicionMapa.SiguienteSignificado().HayMas()){		
+	if(jugadores[j].posicionMapa.HaySiguiente() && jugadores[j].posicionMapa.SiguienteSignificado().HayMas()){
 		jugadores[j].posicionMapa.SiguienteSignificado().Borrar();				//O(log(EC))
 	}
 	if(jugadores[j].posicionMapa.HaySiguiente()) {
@@ -217,19 +217,16 @@ Conj<Jugador> Juego::JugadoresConectados(){
 };
 
 bool Juego::PuedoAgregarPokemon(Coordenada c){
-	if (mapa.PosExistente(c)){
-		Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
-		Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
+	Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
+	Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
-		while (iter.HaySiguiente()){
-			if (distanciaEuclidea(c, iter.Siguiente()) <= 25){
-				return false;
-			}
-			iter.Avanzar();
+	while (iter.HaySiguiente()){
+		if (distanciaEuclidea(c, iter.Siguiente()) <= 25){
+			return false;
 		}
-		return true;
+		iter.Avanzar();
 	}
-	return false;
+	return true;
 };
 
 bool Juego::HayPokemonCercano(const Coordenada c) {
