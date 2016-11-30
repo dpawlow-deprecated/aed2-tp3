@@ -144,6 +144,21 @@ void test_tonto() {
   m.AgregarCoordenada(c3);
 }
 
+void test_enorme() {
+  Mapa m;
+  for (int i=0; i < 20; i++) {
+    if (i%4 != 0) {
+      for (int j=0; j < 20; j++) {
+        if (j%4 != 0) {
+          m.AgregarCoordenada(Coordenada(i, j));
+        }
+      }
+    }
+  }
+  ASSERT(m.Ancho() == 20);
+  ASSERT(m.Alto() == 20);
+}
+
 int test_mapa() {
 	RUN_TEST(test_crearmapa);
 	RUN_TEST(test_mapa_4x4);
@@ -151,6 +166,7 @@ int test_mapa() {
     RUN_TEST(test_CrearCopia);
     RUN_TEST(test_free);
     RUN_TEST(test_copias_locas);
+    RUN_TEST(test_enorme);
     return 0;
 }
 

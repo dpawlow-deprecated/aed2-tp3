@@ -57,17 +57,19 @@ Mapa::~Mapa() {
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
+	calcular();
 	int pos1 = calcularPosicion(c1);
 	int pos2 = calcularPosicion(c2);
 	return _relacionCoordenadas[pos1][pos2];
 }
 
-// TODO: devolver referencia
+
 Conj<Coordenada>& Mapa::Coordenadas(){
 	return _coordenadas;
 }
 
 bool Mapa::PosExistente(const Coordenada& c) {
+	calcular();
 	if (c.latitud < _alto && c.longitud < _ancho) {
 		int pos = calcularPosicion(c);
 		return _relacionCoordenadas[pos][pos];
@@ -75,8 +77,61 @@ bool Mapa::PosExistente(const Coordenada& c) {
 	return false;
 }
 
+Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) {
+	// solo para mejorar complejidad y probar el bot, despues volvemos a lo original
+	Conj< Conj<Coordenada> >::const_Iterador conectadasIt = conectadasA.CrearIt();
+	while (conectadasIt.HaySiguiente()) {
+		if (conectadasIt.Siguiente().Pertenece(c1)) {
+			return conectadasIt.Siguiente();
+		}
+		conectadasIt.Avanzar();
+	}
 
-Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
+	Conj<Coordenada> visitadas;
+	Cola<Coordenada> aVisitar;
+	aVisitar.Encolar(c1);
+	Conj<Coordenada> coordenadas;
+	coordenadas.Agregar(c1);
+
+	while (aVisitar.EsVacia() == false) {
+		Coordenada coor = aVisitar.Proximo();
+		aVisitar.Desencolar();
+
+		visitadas.Agregar(coor);
+
+		if (coor.latitud > 0) {
+			Coordenada coorAbajo = coordenadaAbajo(coor);
+			if (!visitadas.Pertenece(coorAbajo) && _coordenadas.Pertenece(coorAbajo)) {
+				coordenadas.Agregar(coorAbajo);
+				aVisitar.Encolar(coorAbajo);
+			}
+		}
+
+		if (coor.longitud > 0) {
+			Coordenada coorIzq = coordenadaIzquierda(coor);
+			if (!visitadas.Pertenece(coorIzq) && _coordenadas.Pertenece(coorIzq)) {
+				coordenadas.Agregar(coorIzq);
+				aVisitar.Encolar(coorIzq);
+			}
+		}
+
+		Coordenada coorDer = coordenadaDerecha(coor);
+		if (!visitadas.Pertenece(coorDer) && _coordenadas.Pertenece(coorDer)) {
+			coordenadas.Agregar(coorDer);
+			aVisitar.Encolar(coorDer);
+		}
+
+		Coordenada coorArriba = coordenadaDerecha(coor);
+		if (!visitadas.Pertenece(coorArriba) && _coordenadas.Pertenece(coorArriba)) {
+			coordenadas.Agregar(coorArriba);
+			aVisitar.Encolar(coorArriba);
+		}
+	}
+	conectadasA.AgregarRapido(coordenadas);
+	return coordenadas;
+}
+
+/*Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
 	Conj<Coordenada> visitadas;
 	Cola<Coordenada> aVisitar;
 	aVisitar.Encolar(c1);
@@ -118,9 +173,14 @@ Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
 		}
 	}
 	return coordenadas;
-}
+}*/
 
-void Mapa::AgregarCoordenada(const Coordenada& c){
+void Mapa::calcular() {
+	if (_relacionCoordenadas != NULL) {
+		return;
+	}
+	Conj< Conj<Coordenada> > cs;
+	conectadasA = cs;
 	for (Nat i = 0; i < _ancho*_alto; i++) {
 		delete [] _relacionCoordenadas[i];
 		_relacionCoordenadas[i] = NULL;
@@ -130,15 +190,18 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 		_relacionCoordenadas = NULL;
 	}
 
+	Conj<Coordenada>::Iterador iter2 = _coordenadas.CrearIt();
+	while (iter2.HaySiguiente()) {
+		Coordenada c = iter2.Siguiente();
 
-	if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
-		_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
+			_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		if ((c.latitud+1) > _alto) {
+			_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		iter2.Avanzar();
 	}
-	if ((c.latitud+1) > _alto) {
-		_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
-	}
-
-	_coordenadas.Agregar(c);
 
 	Nat tamanioArreglo = _ancho*_alto;
 	_relacionCoordenadas = new bool*[tamanioArreglo];
@@ -167,7 +230,12 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 	}
 }
 
-Nat Mapa::calcularPosicion(const Coordenada& c) const{
+void Mapa::AgregarCoordenada(const Coordenada& c){
+	_coordenadas.Agregar(c);
+}
+
+Nat Mapa::calcularPosicion(const Coordenada& c) {
+	calcular();
 	return _ancho * c.latitud + c.longitud;
 }
 

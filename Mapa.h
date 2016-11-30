@@ -22,12 +22,14 @@ public:
 	Nat Alto() const { return _alto; };
 	void Mostrar();
 private:
-	Conj<Coordenada> CoordenadasConectadasA(Coordenada&) const;
+	void calcular();
+	Conj<Coordenada> CoordenadasConectadasA(Coordenada&);
 	Conj<Coordenada> _coordenadas;
+	Conj< Conj<Coordenada> > conectadasA;
 	Nat _ancho;
 	Nat _alto;
 	bool** _relacionCoordenadas;
-	Nat calcularPosicion(const Coordenada&) const;
+	Nat calcularPosicion(const Coordenada&);
 };
 
 #endif
