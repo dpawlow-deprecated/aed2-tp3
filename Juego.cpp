@@ -133,7 +133,7 @@ void Juego::Conectarse(Jugador j, Coordenada c){
 
 	//TODO: hay que reiniciar la cantidad de movimientos restantes?
 
-	if(HayPokemonCercano(c) && mapa.HayCamino(PosPokemonCercano(c), c)){
+	if(HayPokemonCercano(c)){
 		jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador>(jugadores[j].cantTotalPoke, j)));
 		mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].movimientosRestantes = 10;
 	}else{
@@ -156,8 +156,8 @@ void Juego::Desconectarse(Jugador j){									//O(log(EC))
 };
 
 void Juego::Moverse(Jugador j, Coordenada c){
-	VerCapturas(j, c);
 	ActualizarJugadorYcoordenada(j, c);
+	VerCapturas(j, c);
 };
 
 Juego::IterJugador Juego::Jugadores()const{								//O(1)
@@ -218,6 +218,9 @@ Conj<Jugador> Juego::JugadoresConectados(){
 };
 
 bool Juego::PuedoAgregarPokemon(Coordenada c){
+	if(!mapa.PosExistente(c)){
+		return false;
+	}
 	Conj<Coordenada> coordenadasConPokemons = PosConPokemons();
 	Conj<Coordenada>::const_Iterador iter = coordenadasConPokemons.CrearIt();
 
@@ -371,9 +374,8 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 			jugadores[j].posicionMapa.EliminarSiguiente();
 		}
 
-		if(HayPokemonCercano(c) && mapa.HayCamino(PosPokemonCercano(c), c)){
+		if(HayPokemonCercano(c)){
 			jugadores[j].posicionMapa = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].jugEspe.encolar(pair<Nat, Jugador> (jugadores[j].cantTotalPoke, j)));
-			mapaInfo[PosPokemonCercano(c).latitud][PosPokemonCercano(c).longitud].movimientosRestantes = 10;
 		}else{
 			ColaPrioridad< pair<Nat, Jugador> >::Iterador itq;
 			Dicc<Jugador, ColaPrioridad< pair<Nat, Jugador> >::Iterador>::Iterador itPosicion = mapaInfo[c.latitud][c.longitud].jugadoresCoordenada.DefinirRapido(j, itq);
@@ -385,7 +387,7 @@ void Juego::ActualizarJugadorYcoordenada(Jugador j, Coordenada c){
 
 void Juego::VerCapturas(Jugador j, Coordenada c){
 	// si es sancionado no verificamos nada de capturas
-	if(distanciaEuclidea(c, jugadores[j].pos) > 100 || !(mapa.HayCamino(c, jugadores[j].pos))){
+	if(jugadores[j].pos != c){
 		return;
 	}
 
