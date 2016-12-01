@@ -57,6 +57,7 @@ Mapa::~Mapa() {
 }
 
 bool Mapa::HayCamino(const Coordenada& c1, const Coordenada& c2) {
+	calcular();
 	int pos1 = calcularPosicion(c1);
 	int pos2 = calcularPosicion(c2);
 	return _relacionCoordenadas[pos1][pos2];
@@ -68,6 +69,7 @@ Conj<Coordenada>& Mapa::Coordenadas(){
 }
 
 bool Mapa::PosExistente(const Coordenada& c) {
+	calcular();
 	if (c.latitud < _alto && c.longitud < _ancho) {
 		int pos = calcularPosicion(c);
 		return _relacionCoordenadas[pos][pos];
@@ -173,7 +175,10 @@ Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) {
 	return coordenadas;
 }*/
 
-void Mapa::AgregarCoordenada(const Coordenada& c){
+void Mapa::calcular() {
+	if (_relacionCoordenadas != NULL) {
+		return;
+	}
 	Conj< Conj<Coordenada> > cs;
 	conectadasA = cs;
 	for (Nat i = 0; i < _ancho*_alto; i++) {
@@ -185,15 +190,18 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 		_relacionCoordenadas = NULL;
 	}
 
+	Conj<Coordenada>::Iterador iter2 = _coordenadas.CrearIt();
+	while (iter2.HaySiguiente()) {
+		Coordenada c = iter2.Siguiente();
 
-	if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
-		_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
+			_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		if ((c.latitud+1) > _alto) {
+			_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		iter2.Avanzar();
 	}
-	if ((c.latitud+1) > _alto) {
-		_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
-	}
-
-	_coordenadas.Agregar(c);
 
 	Nat tamanioArreglo = _ancho*_alto;
 	_relacionCoordenadas = new bool*[tamanioArreglo];
@@ -222,7 +230,12 @@ void Mapa::AgregarCoordenada(const Coordenada& c){
 	}
 }
 
+void Mapa::AgregarCoordenada(const Coordenada& c){
+	_coordenadas.Agregar(c);
+}
+
 Nat Mapa::calcularPosicion(const Coordenada& c) {
+	calcular();
 	return _ancho * c.latitud + c.longitud;
 }
 

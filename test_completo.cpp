@@ -1472,10 +1472,10 @@ void test_no_puede_agregar_pokemon() {
 void test_altoguiso_de_mapa() {
   Conj<Coordenada> cc;
 
-  for (int i=0; i < 20; i++) {
-    if (i%4 != 0) {
-      for (int j=0; j < 20; j++) {
-        if (j%4 != 0) {
+  for (int i=0; i < 120; i++) {
+    if (i%8 != 0) {
+      for (int j=0; j < 120; j++) {
+        if (j%12 != 0) {
           cc.AgregarRapido(Coordenada(i, j));
         }
       }
