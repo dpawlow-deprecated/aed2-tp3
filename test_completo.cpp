@@ -108,7 +108,7 @@ void test_puedo_agregar_pokemones_Ivan(){
 
   ASSERT(!d.puedoAgregarPokemon(Coordenada(10,4)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
-  ASSERT(d.puedoAgregarPokemon(Coordenada(200,100)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(200,100)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(1,4)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(10,0)));
 }
@@ -1472,9 +1472,9 @@ void test_no_puede_agregar_pokemon() {
 void test_altoguiso_de_mapa() {
   Conj<Coordenada> cc;
 
-  for (int i=0; i < 120; i++) {
+  for (int i=0; i < 30; i++) {
     if (i%8 != 0) {
-      for (int j=0; j < 120; j++) {
+      for (int j=0; j < 30; j++) {
         if (j%12 != 0) {
           cc.AgregarRapido(Coordenada(i, j));
         }

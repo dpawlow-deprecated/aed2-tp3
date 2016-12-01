@@ -21,7 +21,6 @@ public:
 	Nat Ancho() const { return _ancho; };
 	Nat Alto() const { return _alto; };
 	void Mostrar();
-	void calcular();
 private:
 	Conj<Coordenada> CoordenadasConectadasA(Coordenada&);
 	Conj<Coordenada> _coordenadas;
