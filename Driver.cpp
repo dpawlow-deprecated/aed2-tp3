@@ -137,7 +137,7 @@ Pokemon Driver::pokemonEnPos(const Coordenada & c) const{
 /* Dada una coordenada, devuelve el valor del contador de movimientos fuera del rango.
 * Es requisito que en la coordenada pasada como parametro haya un pokemon. */
 Nat Driver::cantMovimientosParaCaptura(const Coordenada & c) const{
-  return juego_->CantMovimientosParaCaptura(c);
+  return 10 - juego_->CantMovimientosParaCaptura(c);
 }
 
 /* Dada una coordenada cualquiera, indica si la coordenada existe en el mapa y
