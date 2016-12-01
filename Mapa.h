@@ -12,6 +12,7 @@ class Mapa {
 public:
 	Mapa(); //CrearMapa()
 	Mapa(const Mapa&);
+	Mapa(const Conj<Coordenada>&);
 	Mapa& operator=(const Mapa&);
 	~Mapa();
 	Conj<Coordenada>& Coordenadas();
@@ -22,7 +23,7 @@ public:
 	Nat Alto() const { return _alto; };
 	void Mostrar();
 private:
-	Conj<Coordenada> CoordenadasConectadasA(Coordenada&);
+	Conj<Coordenada> CoordenadasConectadasA(Coordenada&) const;
 	Conj<Coordenada> _coordenadas;
 	Conj< Conj<Coordenada> > conectadasA;
 	Nat _ancho;

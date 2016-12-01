@@ -8,6 +8,24 @@ Mapa::Mapa(): _ancho(0), _alto(0), _relacionCoordenadas(NULL){
 	_coordenadas = Conj<Coordenada>();
 }
 
+Mapa::Mapa(const Conj<Coordenada>& coordenadas): _ancho(0), _alto(0), _relacionCoordenadas(NULL), _coordenadas(coordenadas) {
+	Conj<Coordenada>::const_Iterador it = coordenadas.CrearIt();
+	while (it.HaySiguiente()) {
+		Coordenada c = it.Siguiente();
+		if ((c.longitud+1) > _ancho) { //Actualizo el ancho y alto del mapa
+			_ancho = c.longitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		if ((c.latitud+1) > _alto) {
+			_alto = c.latitud+1; // este uno es porque hay que tener en cuenta la posicion 0
+		}
+		it.Avanzar();
+	}
+	it = coordenadas.CrearIt();
+	if (it.HaySiguiente()) {
+		AgregarCoordenada(it.Siguiente());
+	}
+}
+
 Mapa::Mapa(const Mapa& otro): _ancho(otro._ancho), _alto(otro._alto), _relacionCoordenadas(NULL) {
 	Conj<Coordenada>::const_Iterador it = otro._coordenadas.CrearIt();
 
@@ -75,16 +93,7 @@ bool Mapa::PosExistente(const Coordenada& c) {
 	return false;
 }
 
-Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) {
-	// solo para mejorar complejidad y probar el bot, despues volvemos a lo original
-	Conj< Conj<Coordenada> >::const_Iterador conectadasIt = conectadasA.CrearIt();
-	while (conectadasIt.HaySiguiente()) {
-		if (conectadasIt.Siguiente().Pertenece(c1)) {
-			return conectadasIt.Siguiente();
-		}
-		conectadasIt.Avanzar();
-	}
-
+Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
 	Conj<Coordenada> visitadas;
 	Cola<Coordenada> aVisitar;
 	aVisitar.Encolar(c1);
@@ -125,63 +134,16 @@ Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) {
 			aVisitar.Encolar(coorArriba);
 		}
 	}
-	conectadasA.AgregarRapido(coordenadas);
 	return coordenadas;
 }
 
-/*Conj<Coordenada> Mapa::CoordenadasConectadasA(Coordenada& c1) const {
-	Conj<Coordenada> visitadas;
-	Cola<Coordenada> aVisitar;
-	aVisitar.Encolar(c1);
-	Conj<Coordenada> coordenadas;
-	coordenadas.Agregar(c1);
-
-	while (aVisitar.EsVacia() == false) {
-		Coordenada coor = aVisitar.Proximo();
-		aVisitar.Desencolar();
-
-		visitadas.Agregar(coor);
-
-		if (coor.latitud > 0) {
-			Coordenada coorAbajo = coordenadaAbajo(coor);
-			if (!visitadas.Pertenece(coorAbajo) && _coordenadas.Pertenece(coorAbajo)) {
-				coordenadas.Agregar(coorAbajo);
-				aVisitar.Encolar(coorAbajo);
-			}
-		}
-
-		if (coor.longitud > 0) {
-			Coordenada coorIzq = coordenadaIzquierda(coor);
-			if (!visitadas.Pertenece(coorIzq) && _coordenadas.Pertenece(coorIzq)) {
-				coordenadas.Agregar(coorIzq);
-				aVisitar.Encolar(coorIzq);
-			}
-		}
-
-		Coordenada coorDer = coordenadaDerecha(coor);
-		if (!visitadas.Pertenece(coorDer) && _coordenadas.Pertenece(coorDer)) {
-			coordenadas.Agregar(coorDer);
-			aVisitar.Encolar(coorDer);
-		}
-
-		Coordenada coorArriba = coordenadaDerecha(coor);
-		if (!visitadas.Pertenece(coorArriba) && _coordenadas.Pertenece(coorArriba)) {
-			coordenadas.Agregar(coorArriba);
-			aVisitar.Encolar(coorArriba);
-		}
-	}
-	return coordenadas;
-}*/
-
 
 void Mapa::AgregarCoordenada(const Coordenada& c){
-	Conj< Conj<Coordenada> > cs;
-	conectadasA = cs;
-	for (Nat i = 0; i < _ancho*_alto; i++) {
-		delete [] _relacionCoordenadas[i];
-		_relacionCoordenadas[i] = NULL;
-	}
 	if (_relacionCoordenadas != NULL) {
+		for (Nat i = 0; i < _ancho*_alto; i++) {
+			delete [] _relacionCoordenadas[i];
+			_relacionCoordenadas[i] = NULL;
+		}
 		delete [] _relacionCoordenadas;
 		_relacionCoordenadas = NULL;
 	}

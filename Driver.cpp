@@ -7,12 +7,12 @@ using namespace aed2;
 
 Driver::Driver(const Conj< Coordenada > & cs): proximoIdJugador_(0), coordenadasMapa_(cs)
 {
-  mapa_ = new Mapa();
-  Conj<Coordenada>::const_Iterador it = cs.CrearIt();
-  while (it.HaySiguiente()) {
-    mapa_->AgregarCoordenada(it.Siguiente());
-    it.Avanzar();
-  }
+  mapa_ = new Mapa(cs);
+  //Conj<Coordenada>::const_Iterador it = cs.CrearIt();
+  //while (it.HaySiguiente()) {
+  //  mapa_->AgregarCoordenada(it.Siguiente());
+  //  it.Avanzar();
+  //}
   juego_ = new Juego(*mapa_);
 }
 
