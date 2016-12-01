@@ -106,7 +106,7 @@ void test_puedo_agregar_pokemones_Ivan(){
 
   Nat distancia = 5;
 
-  ASSERT(d.puedoAgregarPokemon(Coordenada(10,4)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(10,4)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(0,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(200,100)));
   ASSERT(!d.puedoAgregarPokemon(Coordenada(1,4)));
@@ -202,7 +202,6 @@ void agregar_coodenadas_a_mapa() {
         m.AgregarCoordenada(c);
         it.Avanzar();
     }
-    m.calcular();
     Driver d = Driver(cc);
     ASSERT( m.Coordenadas() == cc );
     ASSERT( d.mapa() == cc );
@@ -223,7 +222,6 @@ void ancho_largo_correcto() {
         m.AgregarCoordenada(c);
         it.Avanzar();
     }
-    m.calcular();
 
     ASSERT( m.Ancho() == 6 );
     ASSERT( m.Alto() == 11 );
@@ -244,10 +242,8 @@ void constructor_por_copia_mapa(){
         m.AgregarCoordenada(c);
         it.Avanzar();
     }
-    m.calcular();
 
     Mapa m2 = Mapa(m);
-    m2.calcular();
     ASSERT( m2.PosExistente(Coordenada(1,4)) == m.PosExistente(Coordenada(1,4)) );
     ASSERT( m2.PosExistente(Coordenada(11,0)) == m.PosExistente(Coordenada(11,0)) );
     ASSERT( m2.Alto() == m.Alto() );
@@ -1185,7 +1181,6 @@ void test_coordenada_en_el_limite(){
     Mapa m;
     m.AgregarCoordenada(Coordenada(7,7));
     m.AgregarCoordenada(Coordenada(6,6));
-    m.calcular();
     Juego j (m);
     j.AgregarPokemon("pepe", Coordenada(6,6));
 
@@ -1200,7 +1195,6 @@ void test_Moverse_expulsar(){
     m.AgregarCoordenada(Coordenada(7,7));
     m.AgregarCoordenada(Coordenada(7,6));
     m.AgregarCoordenada(Coordenada(5,5));
-    m.calcular();
     Juego j (m);
     j.AgregarJugador();
     j.AgregarPokemon("r", Coordenada(5,5));
@@ -1472,7 +1466,7 @@ void test_no_puede_agregar_pokemon() {
   ASSERT(!d.puedoAgregarPokemon(Coordenada(2,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,0)));
   ASSERT(d.puedoAgregarPokemon(Coordenada(12,1)));
-  ASSERT(d.puedoAgregarPokemon(Coordenada(12,12)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(12,12)));
 }
 
 void test_altoguiso_de_mapa() {
@@ -1488,7 +1482,7 @@ void test_altoguiso_de_mapa() {
     }
   }
   Driver d(cc);
-  ASSERT(d.puedoAgregarPokemon(Coordenada(12,12)));
+  ASSERT(!d.puedoAgregarPokemon(Coordenada(12,12)));
 }
 
 void test_pruebaHayPokemonCercano(){
